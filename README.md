@@ -115,3 +115,39 @@ b.)如果num[middle]<=num[right],则说明middle在右子数组中，所以应�
 
 如果num[left]==num[right] 并且 num[left]==num[middle]，则说明在left到right区间内，无法通过上述规则找出最小数，例如{1,1,1,1,1,0,1}。应该通过线性搜索，找到最小数字。
 
+### 2.4.3 回朔法
+
+回朔法适合有多个步骤组成的问题，并且每一个步骤都有多个选项需要尝试。如果下一次尝试不满足约束条件，那么只好回溯到上一个问题，如果上一个节点所有可能的选项都已经试过了，并不能达到满足约束条件的终结状态，则再次回溯到上一个节点。
+回溯法经常采用递归的方式实现。
+
+
+#### 面试题 12： 矩阵中的路径
+**题目**：设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串的所有字符的路径。路劲可以从矩阵的任意一格开始，每一步可以在矩阵中向上，左，右和下移动。如果一条路径经过了矩阵的某一格子，则不能再次进入。
+
+
+解题思路：在每一步中，都访问节点附近的邻近4个节点，查找下一个字符是否等于字符串中的字符。
+若匹配上，则继续查找，若四个节点都没有匹配上，则回退到上一层。
+'''
+def hashPath(matrix, str):
+    chars = str.tochar()
+    visited = boolean[matrix.shape[0]][matrix.shape[1]]
+    for(i in range(matrix.shape[0])):
+        for(j in range(matrix.shape[1]))):
+	    if(hashPathCore(matrix, i, j, chars, 0, visited))
+	        return true
+    return false
+   
+def hashPathCore(matrix, i, j, chars, index, visited):
+    if index == chars.length:
+        return true
+    if i>=0 and i< matrix.shape[1] and j>=0 and j < matrix.shape[1] and chars[index] == matrix[i][j] and ~visited[i][j]:
+        visited[i][j] = true
+        result = hashPathCore(matrix, i+1, j , chars, index+1, visited) ||
+		hashPathCore(matrix, i-1, j , chars, index+1, visited) ||
+		hashPathCore(matrix, i, j+1 , chars, index+1, visited) ||
+		hashPathCore(matrix, i, j-1 , chars, index+1, visited)
+	if result == false:
+	    visited[i][j] = false
+	return ture
+    return false
+'''
