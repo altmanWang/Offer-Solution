@@ -143,9 +143,9 @@ def hashPathCore(matrix, i, j, chars, index, visited):
         return true
     if i>=0 and i< matrix.shape[1] and j>=0 and j < matrix.shape[1] and chars[index] == matrix[i][j] and ~visited[i][j]:
         visited[i][j] = true
-        result = hashPathCore(matrix, i+1, j , chars, index+1, visited) ||
-		hashPathCore(matrix, i-1, j , chars, index+1, visited) ||
-		hashPathCore(matrix, i, j+1 , chars, index+1, visited) ||
+        result = hashPathCore(matrix, i+1, j , chars, index+1, visited) or
+		hashPathCore(matrix, i-1, j , chars, index+1, visited) or
+		hashPathCore(matrix, i, j+1 , chars, index+1, visited) or
 		hashPathCore(matrix, i, j-1 , chars, index+1, visited)
 	if result == false:
 	    visited[i][j] = false
