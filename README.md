@@ -128,7 +128,7 @@ b.)如果num[middle]<=num[right],则说明middle在右子数组中，所以应�
 解题思路：在每一步中，都访问节点附近的邻近4个节点，查找下一个字符是否等于字符串中的字符。
 若匹配上，则继续查找，若四个节点都没有匹配上，则回退到上一层。
 
-'''python
+```python
 def hashPath(matrix, str):
     chars = str.tochar()
     visited = boolean[matrix.shape[0]][matrix.shape[1]]
@@ -150,4 +150,4 @@ def hashPathCore(matrix, i, j, chars, index, visited):
 	if result == false:
 	    visited[i][j] = false
 	return ture
-    return false'''
+    return false```
