@@ -150,4 +150,5 @@ def hashPathCore(matrix, i, j, chars, index, visited):
 	if result == false:
 	    visited[i][j] = false
 	return ture
-    return false```
+    return false
+ ```
