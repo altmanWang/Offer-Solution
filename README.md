@@ -159,3 +159,41 @@ def hashPathCore(matrix, i, j, chars, index, visited):
 但是不能进入(35,38),因为3+5+3+8=19。
 
 解题思路：从坐标(0,0)开始回溯计算可以移动范围。在每一步骤中，包含四个选项需要尝试，向上、向下，向左和向右。如果递归中不满足约束条件，则回退。
+
+### 2.4.4 动态规划与贪婪算法
+
+动态规划：
+- 求解一个问题的最优解；
+- 整体问题的最优解依赖各个子问题的最优解；
+- 小问题之间有相互重叠的更小子问题；
+- 从上往下分析问题，从下往上求解问题。（**在应用动态规划解决问题的时候，我们总是从解决最小问题开始，并把已经解决的子问题的最优解存储下来，并把子问题的最优解组合起来来逐步解决大的问题。**）
+
+#### 面试题 14：剪绳子
+**题目**：给定一根长度为n的绳子，请把绳子剪成m段(m和n都是整数)，每段绳子的长度为k[0],k[1],...,k[m]。请问各个绳子长度连乘最大是多少。
+
+解题思路：利用动态规划来求解。用一个数组来存储计算过程中的子问题的最优解。
+设计目标函数f(n)=max(f(i)*f(n-i)),我们求该目标函数的最大值即可。
+在计算过程中，我们会不断的计算重复的子问题。因此，我们从下往上计算，我们先得到小问题的答案，并保存起来，再逐步解决大问题的答案。
+
+```python
+def maxProductAfterCutting(int length):
+    if(length<2):
+	return 0
+    if(length==2):
+        return 1
+    if(length==3):
+        return 2
+    products = [0 for _ in range(length+1)]
+    prodcuts[0] = 0
+    prodcuts[1] = 1
+    prodcuts[2] = 2
+    prodcuts[3] = 3
+    for i in range(4,length+1):
+        max = -1
+	for j in range(1,i/2+1):
+	    score = prodcuts[j]*prodcuts[j-j]
+	    if score > max:
+	        max = score
+	prodcuts[i] = max
+    return prodcuts[length]
+ ```
