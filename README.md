@@ -1,5 +1,5 @@
 # 剑指OFFER面试题编程练习
-
+#面试需要的基础知识
 ## 2.3数据结构
 - 数组
 - 字符串
@@ -197,3 +197,49 @@ def maxProductAfterCutting(int length):
 	prodcuts[i] = max
     return prodcuts[length]
  ```
+
+
+#高质量的代码
+## 3.1面试官谈代码质量
+## 3.2 代码的规范性
+- 代码书写清晰
+- 代码布局清洗
+- 代码明明合理
+## 3.3 代码的完整性
+- 功能测试（完成基本功能）
+- 边界测试（代码中右循环和迭代，结束条件是否正确）
+- 负面测试（错误输入）
+
+
+### 面试题：16
+### 面试题：17
+### 面试题：18
+
+#### 题目一：
+#### 题目二：删除链表中重复的节点
+**解题思路**: 遇到重复的节点，跳过，直到遇见空节点或者不相等节点.
+```python
+def DeleteDuplication(ListNode pHead):
+    if pHead == null or pHead.next == null:
+        return pHead
+    ListNode curNode = pHead
+    ListNode preNode = null
+    while(curNode == None or curNode.next == None):
+        if(curNode.val == curNode.next.val):
+            preNode = curNode
+	    curNode = curNode.next
+	else:
+	    val = curNode.val
+	    curNode = curNode.next
+	    while(curNode != None and curNode.val == val):
+                curNode = curNode.next
+	    if preNode == null:
+	        pHead = curNode
+	    else:
+	        preNode.next = curNode
+    
+    return pHead
+
+
+ ```
+## 3.4 代码的鲁棒性
