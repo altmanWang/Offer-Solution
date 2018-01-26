@@ -198,6 +198,26 @@ def maxProductAfterCutting(int length):
     return prodcuts[length]
  ```
 
+### 2.4.5 位运算
+- 与： &
+- 或： |
+- 异或： ^
+- 左移：<<
+- 右移：>>
+### 面试题：15 二进制中1的个数
+**题目**:输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。
+**解题思路**：把一个整数减去1，再和原整数做与运算，会把该整数最右边的1变为0.
+```python
+def NumberOf1(int n):
+    int count = 0
+    while(n!=0){
+        count += 1
+        n = n & (n-1)
+    }
+    return count
+```
+
+
 
 #高质量的代码
 ## 3.1面试官谈代码质量
@@ -209,6 +229,10 @@ def maxProductAfterCutting(int length):
 - 功能测试（完成基本功能）
 - 边界测试（代码中右循环和迭代，结束条件是否正确）
 - 负面测试（错误输入）
+
+
+
+
 
 
 ### 面试题：16
@@ -225,7 +249,7 @@ def DeleteDuplication(ListNode pHead):
     ListNode curNode = pHead
     ListNode preNode = null
     while(curNode == None or curNode.next == None):
-        if(curNode.val == curNode.next.val):
+        if(curNode.val != curNode.next.val):
             preNode = curNode
 	    curNode = curNode.next
 	else:
@@ -239,7 +263,5 @@ def DeleteDuplication(ListNode pHead):
 	        preNode.next = curNode
     
     return pHead
-
-
  ```
 ## 3.4 代码的鲁棒性
