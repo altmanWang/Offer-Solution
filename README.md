@@ -206,7 +206,10 @@ def maxProductAfterCutting(int length):
 - 右移：>>
 ### 面试题：15 二进制中1的个数
 **题目**:输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。
+
 **解题思路**：把一个整数减去1，再和原整数做与运算，会把该整数最右边的1变为0.
+
+
 ```python
 def NumberOf1(int n):
     int count = 0
