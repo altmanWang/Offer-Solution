@@ -207,8 +207,7 @@ def maxProductAfterCutting(int length):
 ### 面试题：15 二进制中1的个数
 **题目**:输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。
 
-**解题思路**：把一个整数减去1，再和原整数做与运算，会把该整数最右边的1变为0.
-
+解题思路：把一个整数减去1，再和原整数做与运算，会把该整数最右边的1变为0.
 
 ```python
 def NumberOf1(int n):
@@ -218,12 +217,7 @@ def NumberOf1(int n):
         n = n & (n-1)
     }
     return count
-```
-
-
-
-
-
+ ```
 #高质量的代码
 
 ## 3.1面试官谈代码质量
@@ -246,8 +240,10 @@ def NumberOf1(int n):
 ### 面试题：18
 
 #### 题目一：
+
 #### 题目二：删除链表中重复的节点
-**解题思路**: 遇到重复的节点，跳过，直到遇见空节点或者不相等节点.
+
+解题思路: 遇到重复的节点，跳过，直到遇见空节点或者不相等节点.
 ```python
 def DeleteDuplication(ListNode pHead):
     if pHead == null or pHead.next == null:
