@@ -1,5 +1,4 @@
 # 剑指OFFER面试题编程练习
-#面试需要的基础知识
 ## 2.3数据结构
 - 数组
 - 字符串
@@ -282,4 +281,16 @@ def DeleteDuplication(ListNode pHead):
 - 判断是否有环（快指针的速度是慢指针的2倍）
 - 计算环长m
 - 快指针先走m步；然后快慢指针一起走，相遇时的节点即为入口节点。设总长度为n。（n-m=l，第l个节点即为入口节点）
+
+
+### 面试题：24 反转列表（多指针，3个指针）
+**题目**:定义一个函数，输入一链表的头节点，反转该链表并输出反转后链表的头节点。
+
+解题思路：定义三个指针，即前指针（preNode）指向前一个节点，当前指针（curNode）指向当前节点和后指针（nexNode）指向后一个节点。
+反转的过程如下（收敛依据，curNodex！=null）：
+- 首先用nexNode保存curNode.next；
+- 然后断开连接，curNode.next = preNode;
+- 其次反转连接，用preNode保存curNode，preNode=curNode；
+- 最后替换curNode，curNode = nexNode.
+- 返回preNode；
 ## 3.4 代码的鲁棒性
