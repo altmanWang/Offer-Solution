@@ -293,4 +293,27 @@ def DeleteDuplication(ListNode pHead):
 - 其次反转连接，用preNode保存curNode，preNode=curNode；
 - 最后替换curNode，curNode = nexNode.
 - 返回preNode；
+
+
+
+### 面试题：25 合并两个排序的链表
+**题目**:输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序。
+
+例子：
+```python
+def Merge(head1, head2):
+    if(head1 == null)
+        return head2
+    elif(head2 == null)
+        return head1
+    mergeNode = None
+    if(head1.val <= head2.val)
+        mergeNode = head1
+	mergeNode.next = Merge(head1.next, head2)
+    else
+        mergeNode = head2
+	mergeNode.next = Merge(head1, head.next)
+    return mergeNode
+ ```
+
 ## 3.4 代码的鲁棒性
