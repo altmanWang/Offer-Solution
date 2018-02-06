@@ -167,7 +167,7 @@ def hashPathCore(matrix, i, j, chars, index, visited):
 - 小问题之间有相互重叠的更小子问题；
 - 从上往下分析问题，从下往上求解问题。（**在应用动态规划解决问题的时候，我们总是从解决最小问题开始，并把已经解决的子问题的最优解存储下来，并把子问题的最优解组合起来来逐步解决大的问题。**）
 
-#### 面试题 14：剪绳子
+#### 面试题 14：剪绳子(利用额外的数组保存子问题的最优解)
 **题目**：给定一根长度为n的绳子，请把绳子剪成m段(m和n都是整数)，每段绳子的长度为k[0],k[1],...,k[m]。请问各个绳子长度连乘最大是多少。
 
 解题思路：利用动态规划来求解。用一个数组来存储计算过程中的子问题的最优解。
@@ -190,12 +190,35 @@ def maxProductAfterCutting(int length):
     for i in range(4,length+1):
         max = -1
 	for j in range(1,i/2+1):
-	    score = prodcuts[j]*prodcuts[j-j]
+	    score = prodcuts[j]*prodcuts[i-j]
 	    if score > max:
 	        max = score
 	prodcuts[i] = max
     return prodcuts[length]
  ```
+
+#### 附加面试题：连续子数组的最大和（利用额外的数组保存子问题的最优解）
+**题目**：输入一个整型数组nums，数组里有正数也有负数。数组中一个或连续的多个整数组成一个子数组。求所有子数组的和的最大值。要求时间复杂度为 O(n)。
+
+解题思路：
+可以用动态规划的思想来分析这个问题。如果用函数 f(n)表示以第 n 个数字结尾的子数组的最大和，那么我们需要求出 max[f(n)].
+
+若f(n-1)<=0，则f(n) = nums[n];否则,f(n) = f(n-1) + nums[n].
+
+```python
+def findGreatestSumOfSubArray(nums):
+    if nums == None or len(nums) == 0:
+        return 0;
+    curSum = [0 for i in range(len(nums))]
+    curSum = nums[0]
+    for i in range(len(nums)):
+        if(curSum[i-1]<=0):
+	    curSum[i] = nums[i]
+	else:
+	    curSum[i] = curSum[i-1] + nums[i]
+    return max(curSum)
+ ```
+
 
 ### 2.4.5 位运算
 - 与： &
