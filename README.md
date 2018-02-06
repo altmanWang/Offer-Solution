@@ -272,7 +272,8 @@ def DeleteDuplication(ListNode pHead):
 - 如果模式中的字符ch不是“.”，而且字符串中的字符也是ch，那么他们互相匹配。
 - 如果模式中的下一个字符ch是“*”，则需要考虑下列情况：（1）匹配0次，则字符不动，模式向后移动两位；（2）匹配1次，则字符串向后移动一位，模式向后移动两位；（3）匹配m次，则字符串向后移动一位，模式保持不变。
 
-
+## 3.4 代码的鲁棒性
+提高代码的鲁棒性的有效途径是进行防御性编程。防御性编程指预见在什么地方可能会出现问题，并为这些可能出现的问题制定处理方式。在面试时，最简单也最实用的防御性编程就是在函数入口添加代码以验证用户输入是否符号要求。
 
 ### 面试题：23 链表中环的入口节点（快慢指针）
 **题目**:如果一个链表中包含环，如何找出环的入口节点？
@@ -346,4 +347,28 @@ def IsSubtree(head1, head2):
 	return IsSubtree(head1.left, head2.left) and IsSubtree(head1.right, head2.right)
     return False
  ```
-## 3.4 代码的鲁棒性
+# 解决面试思路
+在编程前解释思路。应聘者如果没有想清楚就动手，则本身就不是太好。
+## 4.2 画图让抽象问题形象化
+有不少与数据结构相关的问题，比如二叉树、二维数组、链表等问题都可以采用画图的方式来分析。
+
+### 面试题：27 二叉树镜像
+**题目**:请完成一个函数，输入一颗二叉树，该函数的输出它的镜像。
+
+解题思路：递归地交换左子树和右子树。
+
+```python
+def Mirror(root):
+    if root == None:
+        return
+    left = root.left
+    right = root.right
+
+    root.left = right
+    root.right = left
+
+    if(root.left!=None)
+        return Mirror(root.left)
+    if(root.right!=None)
+        retrun Mirror(root.right)
+ ```
