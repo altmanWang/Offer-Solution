@@ -312,8 +312,38 @@ def Merge(head1, head2):
 	mergeNode.next = Merge(head1.next, head2)
     else
         mergeNode = head2
-	mergeNode.next = Merge(head1, head.next)
+	mergeNode.next = Merge(head1, head2.next)
     return mergeNode
  ```
+### 面试题：26 树的子结构
+**题目**:输入两颗二叉树A和B，判断B是不是A的子结构。
 
+解题思路：DFS+BFS。
+- 首先利用DFS寻找A和B相等的节点；
+- 在找到相等的节点后，利用BFS同时匹配left和right子节点是否相等；
+
+```python
+def HasSubtree(head1, head2):
+    if head1 == None or head2 == None:
+        return false;
+    result = False
+    if(head1.val == head2.val):
+        result = IsSubtree(head1, head2)
+    #DFS分别搜索left和right
+    if(!result):
+        result = HasSubtree(head1.left, head2)
+    if(!result):
+        result = HasSubtree(head1.right, head2)
+    return result
+
+def IsSubtree(head1, head2):
+    if(head2 == null)
+        return True
+    if(head1 == null)
+        return False
+    if(head1.val == head2.val)
+        #BFS同时搜索left和right
+	return IsSubtree(head1.left, head2.left) and IsSubtree(head1.right, head2.right)
+    return False
+ ```
 ## 3.4 代码的鲁棒性
