@@ -395,3 +395,37 @@ def Mirror(root):
     if(root.right!=None)
         retrun Mirror(root.right)
  ```
+ 
+### 面试题：28 对称二叉树
+**题目**:请实现一个函数，用来判断一颗二叉树是不是对称的。
+解题思路：
+- 前序遍历：先根节点，左节点和右节点；
+- 自定义前序遍历：先根节点，右节点和左节点。
+通过比较上述两种遍历的节点是否相同，即可判断该二叉树是否为对称二叉树。
+```python
+def isSymmetrical(root):
+    if root == None:
+        return True
+    return isSymmetricalCore(root1, root2):
+def isSymmetricalCore(root1, root2):
+    if(root1 == null && root2 == null):
+        return True
+    if(root1 == null || root2 == null):
+        return False
+    if(root1.val != root2.val)
+        return False
+    return isSymmetricalCore(root1.left, root2.right) &&
+           isSymmetricalCore(root1.right, root2.left)
+ ```
+### 面试题：55 二叉树的深度
+**题目**:输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+解题思路：分别递归地计算左子树与右子树深度，并且比较两个子树的深度，选择深度较大的为返回值。
+
+```python
+def TreeDepth(root):
+    if root == None:
+        return 0
+    leftHigh = TreeDepth(root.left)
+    rightHigh = TreeDepth(root.right)
+    return leftHigh >= rightHigh : leftHigh + 1 : rightHigh + 1
+ ```
