@@ -40,8 +40,37 @@
 
 树的遍历方式：
 - 前序遍历：先访问根节点，再访问左子节点，最后访问右子节点。
+```python
+def preOrder(root):
+    if root is None:
+        return
+    //operation on root
+    preOrder(root.left)
+    preOrder(root.right)
+    
+ ```
+
 - 中序遍历：先访问左子节点，再访问根节点，最后访问右子节点。
+```python
+def inOrder(root):
+    if root is None:
+        return
+    inOrder(root.left)
+    //operation on root
+    inOrder(root.right)
+    
+ ``` 
+
 - 后序遍历：先访问左子节点，再访问右子节点，最后访问跟节点。
+```python
+def postOrder(root):
+    if root is None:
+        return
+    postOrder(root.left)
+    postOrder(root.right)
+    //operation on root
+    
+ ``` 
 
 二叉树的两个特例：堆和红黑树。
 
@@ -456,6 +485,12 @@ def isSymmetricalCore(root1, root2):
 解题思路：在后序遍历中，最后一个节点总是root节点。将整个数组可以划分为两组，一组为root的左子树，在该子树中，所有的节点都是小于root；另一组为root的右子树，在该子树中所有的节点都大于root。用递归的方法可以解决该问题，不断的取数组的最后一位为root，并且不断分割对比。
 
 Trick：如果右子树中存在小于root的节点则直接返回false。
+
+
+### 面试题:34 二叉树中和为某一值的路径
+**题目**：输入一颗二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
+
+解题思路：可以利用先序遍历，先跟，后左，再右。创建一个辅助stack用以保存路径，当所走路径满足要求后遍历打印stack中节点的值。记得在利用完节点后，在stack中删除该节点。
 
 ### 面试题：55 二叉树的深度
 **题目**:输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
