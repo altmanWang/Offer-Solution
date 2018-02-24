@@ -228,7 +228,7 @@ def maxProductAfterCutting(int length):
 	    score = prodcuts[j]*prodcuts[i-j]
 	    if score > max:
 	        max = score
-	prodcuts[i] = max
+	    prodcuts[i] = max
     return prodcuts[length]
  ```
 
@@ -245,12 +245,12 @@ def findGreatestSumOfSubArray(nums):
     if nums == None or len(nums) == 0:
         return 0;
     curSum = [0 for i in range(len(nums))]
-    curSum = nums[0]
-    for i in range(len(nums)):
+    curSum[0] = nums[0]
+    for i in range(1,len(nums)):
         if(curSum[i-1]<=0):
-	    curSum[i] = nums[i]
-	else:
-	    curSum[i] = curSum[i-1] + nums[i]
+	        curSum[i] = nums[i]
+	    else:
+	        curSum[i] = curSum[i-1] + nums[i]
     return max(curSum)
  ```
 
@@ -538,11 +538,30 @@ Trick：如果右子树中存在小于root的节点则直接返回false。
 解题思路：nlog(k)。用一个PriorityQueue额外空间存储k个最小的数集合。我们需要自定义一个PriorityQueue用的Compotor。遍历数组时，如果队列的大小小于k，则直接将该数存入队列中；如果队列大小等于k，则比较队列的第一个数字是否比该数大，如果大于则删除队列第一个数，并将数组中的数字加入到队列中。
 
 
-#### 面试题：45 把数组排成最小的树
+#### 面试题：45 把数组排成最小的数
 **题目**：输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
 
 解题思路：参考面试题38. 需要注意的是，拼接数字时有可能溢出，所以我们将拼接后的数字转化为字符串，直接比较字符串即可。
 
+#### 面试题：47 礼物最大价值（动态规划，数组+循环）
+**题目**：在一个m*n的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（大于0）。你可以从棋盘上的左上角开始拿格子里的礼物，并每一次可以向下或者向右移动一格，直到到达棋盘的右下角。给定一个棋盘及上面的礼物，请计算你最多拿多少价值的礼物？
+
+解题思路：目标函数 f(i,j) = max(f(i,j)+f(i-1,j), f(i,j)+f(i,j-1)).
+利用二位数组存储中间变量，再利用循环遍历整个棋盘获得每个位置上的最大值。最后返回二维数组的右下角的值即可。
+```python
+def getMaxValue(values):
+    if values == None:
+        return 0
+    maxValues = copy.deepcopy(values)
+    for i in range(len(values)):
+        for j in range(len(values[0])):
+            if(i > 0):
+                up = values[i-1][j]
+            if(j > 0):
+                left = values[i][j-1]
+            maxValues[i][j] = max(maxValues[i][j] + up, maxValues[i][j]+left)
+    return maxValues[-1][-1]
+ ```     
 
 
 #### 面试题：55 二叉树的深度
