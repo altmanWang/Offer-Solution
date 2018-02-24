@@ -562,6 +562,32 @@ def getMaxValue(values):
             maxValues[i][j] = max(maxValues[i][j] + up, maxValues[i][j]+left)
     return maxValues[-1][-1]
  ```     
+#### 面试题：48 最长不含重复字符的子字符串（动态规划）
+**题目**：请从字符串中找出一个最长的不包含重复字符的子字符串。
+
+解题思路：目标函数，
+- f(i) = f(i-1)+1， 如果第i个字符从未出现或者两次出现距离d大于f(i-1)；
+- f(i) = d, 如果第i个字符两次出现距离d小于f(i-1)。
+
+关于d的计算，利用辅助数组position计算，该数组的长度为26，记录每个字符上一次出现的位置，如果从未出现过默认为-1.
+```python
+def longestSubstringWithoutDuplication(str):
+    if str == None:
+        return 0
+    maxLength = -1
+    curLength = 0
+    position = [-1 for i i range(len(26))]
+    for i in range(len(str)):
+        if position[str[i]-'a'] < 0 or i - position[str[i]-'a'] > curLength:
+            curLength += 1
+        else
+            maxLength = max(maxLength, curLength)
+            curLength = i - position[str[i]-'a']
+        position[str[i]-'a'] = i
+        maxLength = max(maxLength, curLength)
+    return maxLength
+ ```  
+
 
 
 #### 面试题：55 二叉树的深度
