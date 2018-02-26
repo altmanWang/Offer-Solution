@@ -589,7 +589,7 @@ def longestSubstringWithoutDuplication(str):
  ```  
 
 ### 5.3 时间效率与空间效率的平衡
-==空间换时间、时间换空间==
+空间换时间、时间换空间。
 
 #### 面试题：49 丑数
 **题目**：把只包含因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。
@@ -600,6 +600,47 @@ def longestSubstringWithoutDuplication(str):
 **题目**：在一个字符串(1<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置。
 
 解题思路：我们可以利用辅助HashMap保存每个字符出现的次数，Key为字符串中的字符，Value为各个字符出现的次数。在保存完所有字符后，再次遍历字符串，找出第一个只出现一次的字符，返回其位置即可。
+
+#### 面试题：51 数组中的逆序对（归并排序）
+**题目**：在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。
+
+解题思路：归并排序。先把数组分割成子数组，统计出子数组内部的逆序对的数目，然后再统计两个相邻子数组之间的逆序对的数目。在统计逆序对的过程中还需要对数组进行排序。
+
+归并排序是能够保证任意长度为N的数组排序所要时间和NlogN成正比；它的主要缺点是需要额外的空间O(N)。
+
+```python
+def InversePair(nums):
+    if nums == None:
+        return 0
+    aux = None
+    count = InversePair(nums, aux, 0, len(nums)-1)
+    return count
+def InversePair(nums, aux, start, end):
+    if start >= end:
+        return 0
+    length = (end-start)/2
+    left = InversePair(nums, aux, start, start+length)
+    right = InversePair(nums, aux, start+length+1, end)
+    count = Merge()
+    return count + left + right
+def Merge(nums, aux, start, mid, end):
+    for i in range(start, end+1):
+        aux = nums[i]
+    i = mid
+    j = end
+    count = 0
+    for k in range(start, end+1):
+        if i < start:
+            nums[k] = aux[i--]
+        elif j < mid+1:
+            nums[k] = aux[j--]
+        elif aux[i] > aux[j]:
+            nums[k] = aux[i--]
+            count += (j - mid)
+        else:
+            nums[k] = aux[j--]
+    return count
+ ```
 
 #### 面试题：55 二叉树的深度
 **题目**:输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
