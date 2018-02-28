@@ -660,19 +660,15 @@ def Merge(nums, aux, start, mid, end):
 
 **题目**：0~n-1中缺失的数字。（二分查找，第一个下标与数字不同）
 
+#### 面试题：54 二叉搜索树的第k大节点（中序搜索）
+**题目**：给定一颗二叉搜索树，请找出其中的第k大的结点。
+
+解题思路：用中序遍历的书序遍历一颗二叉树，则遍历序列的数值是递增排序的。从而可以获得第k大节点。
+
 #### 面试题：55 二叉树的深度
 **题目**:输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
 
 解题思路：分别递归地计算左子树与右子树深度，并且比较两个子树的深度，选择深度较大的为返回值。
-
-```python
-def TreeDepth(root):
-    if root == None:
-        return 0
-    leftHigh = TreeDepth(root.left)
-    rightHigh = TreeDepth(root.right)
-    return leftHigh >= rightHigh : leftHigh + 1 : rightHigh + 1
- ```
 
 ```python
 def TreeDepth(root):
