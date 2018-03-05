@@ -594,7 +594,7 @@ def longestSubstringWithoutDuplication(str):
 #### 面试题：49 丑数
 **题目**：把只包含因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含因子7。 习惯上我们把1当做是第一个丑数。求按从小到大的顺序的第N个丑数。
 
-解题思路：我们可以利用辅助数组保存中间变量（即，丑数）。一个丑数，一定是由前面已经得到的丑数计算的得到的，即Min(tmp2\*2,tmp3\*3,tmp5\*5)。其中，tmp2\*2大于已计算得出的最大丑数M，tmp3和tmp5类似。
+解题思路：我们可以利用辅助数组保存中间变量（即，丑数）。一个丑数，一定是由前面已经得到的丑数计算的得到的，即N=Min(tmp2\*2,tmp3\*3,tmp5\*5)。将丑数中最大的值记作M，通过N更新M。若tmp2\*2 >= M,则更新tmp2，tmp2++，tmp3与tmp5类似。
 
 #### 面试题：50 第一个只出现一次的字符
 **题目**：在一个字符串(1<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置。
@@ -679,6 +679,29 @@ def TreeDepth(root):
     return leftHigh >= rightHigh : leftHigh + 1 : rightHigh + 1
  ```
  
+**题目**:输入一棵二叉树，判断该二叉树是否是平衡二叉树。如果二叉树中任意节点的左、右子树的深度相差不超过1，那么它就是二叉树。
+
+解题思路：后续遍历，在遍历的过程中返回各个子树的深度，进行比较。
+```python
+def IsBalanced_Solution(root):
+    if root == None:
+        return True
+    return IsBalanced_SolutionCore(root)!=-1
+def IsBalanced_SolutionCore(root):
+    if root == None:
+        return 0
+    left = IsBalanced_SolutionCore(root.left)
+    right = IsBalanced_SolutionCore(root.right)
+    
+    if left!=-1 and right!=-1:
+        diff = abs(left-right)
+        if(diff <= 1):
+            return 1 + (left>right?left:right)
+    return -1
+ ```
+
+ 
+ 
 #### 面试题：56 数组中数字出现的次数
 **题目**:一个整型数组里除了两个数字之外，其他的数字都出现了两次。请写程序找出这两个只出现一次的数字。
 
@@ -708,6 +731,7 @@ def TreeDepth(root):
 **题目二**：字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。
 
 解题思路：首先将前n个字符翻转；再将剩余字符串翻转；最后将整个字符串翻转。
+
 
 # 附加：
 #### 1.BitMap算法
