@@ -735,7 +735,7 @@ def IsBalanced_SolutionCore(root):
 #### 面试题：59队列的最大值
 **题目一**：给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}。
 
-解题思路：用一个两端开口的队列（LinkedList）来存储。队头存储滑窗中最大的值，队尾存储滑窗中可能的最大值。注意，队列存储的是数组的下标，因为要比较下标，来判断队列中的数字是否已经超出滑窗大小。
+解题思路：用一个两端开口的队列（LinkedList）来存储。队头存储滑窗中最大的值，队尾存储滑窗中可能的最大值。即队头存储最大值，队尾存储次大值。注意，队列存储的是数组的下标，因为要比较下标，来判断队列中的数字是否已经超出滑窗大小。
 
 # 附加：
 #### 1.BitMap算法
@@ -788,3 +788,129 @@ int a[N]    |0000000000000000000000000000000000000|
 - 将int型变量a[i]的第j位置1，即a[i]=a[i]|(1<<j)。
 
 [参考:海量数据处理算法—Bit-Map](http://blog.csdn.net/hguisu/article/details/7880288)
+
+#### 2.各个排序比较
+##### 冒泡排序
+数组中两两邻近的数字比较，如果前面的数字大于后面的数字，则二者交换。
+```python
+def bubleSort(nums):
+    for i in range(len(nums)):
+        for j in range(len(nums)-i):
+            if nums[j] > nums[j+1]:
+                tmp = nums[j]
+                nums[j] = nums[j+1]
+                nums[j+1] = tmp
+ ```
+##### 选择排序
+首先找到数组中最小的元素，其次，将它和数组的第一个元素交换。再次，在剩下的元素中找到最小的元素，将它与数组的第二个元素交换位置。如此往复，直到整个数组排序。
+```python
+def selectSort(nums):
+    for i in range(len(nums)):
+        minIndex = i
+        for j in range(i,len(nums)):
+            if num[minIndex] > nums[j]:
+                minIndex = j
+        tmp = nums[minIndex]
+        nums[minIndex] = nums[i]
+        nums[i] = tmp
+ ```
+ 
+##### 插入排序
+始终确保左子数组(num[0]~-num[i-1])是有序的，将新的数字(num[i])插入到有序的左子数组中。
+```python
+def insertSort(nums):
+    for i in range(1,len(nums)):
+        j = i
+        while j > 0 and nums[j] < nums[j-1]:
+            tmp = nums[j]
+            nums[j] = nums[j-1]
+            nums[j-1] = tmp
+ ```
+##### 归并排序
+可以递归地将数组分成两半分别排序，然后将结果归并起来。归并排序能够保证将任意长度为N的数组排序所需时间和NlogN成正比。它主要的缺点是需要一个辅助数组，导致需要O(N)的空间复杂度。
+
+归并排序是一种从下往上的算法。递归调用发生在整理数组之前。先逐步分开，再逐步整理数组。
+```python
+def mergeSort(nums):
+    backup = [0 for _ in range(len(nums))]
+    mergeSort(nums, backup, 0, len(nums)-1)
+def mergeSort(nums, backup, start, end):
+    if start >= end:
+        return;
+    length = (end - start)/2
+    mergeSort(nums, backup, start,start+length)
+    mergeSort(nums, backup, start+length+1, end)
+    merge(nums, backup, strat, start+length, end)
+def merge(nums, backup, start, mid, end):
+    for i in range(start,end+1):
+        backup[i] = nums[i]
+    i = mid
+    j = end
+    for k in range(end,start-1,-1):
+        if i < start:
+            j -=1
+            nums[k] = backup[j]
+        elif j < mid+1:
+            i -=1 
+            nums[k] = backup[i]
+        elif backup[i] > backup[j]:
+            i -=1
+            nums[k] = backup[i]
+        else:
+            j -=1
+            nums[k] = backup[j]
+ ```
+ 
+##### 快速排序
+快速排序是一种分治的排序算法。它将一个数组分成两个子数组，将两部分独立地排序。这是一种从上往下的递归排序方法。在大数组中先局部有序，再切分子数组，依次保证子数组内局部有序，从而达到全局有序。递归调用发生在处理整个数组之后。在快速排序中，切分的位置取决于数组的内容。
+
+在子数组中，以第一个数字为比较对象。从左到右扫描直到找到一个大于等于它的元素，再从右到左开始向左扫描直到找到一个小于等于他元素，将这两个元素交换位置。直到左指针遇到右指针，则提停止扫描。随后将第一个元素与右指针指向的元素交换位置。最后返回右指针作为切分点。依据该切分点，递归地调用切分数组。
+
+
+```python
+def quickSort(nums):
+    quickSort(nums,0,len(nums)-1)
+def quickSort(nums,start,end):
+    if start >= end:
+        return;
+    j = partition(nums, start, end)
+    quickSort(nums, start, j-1)
+    quickSort(nums, j+1, end)
+def partition(nums, start, end):
+    i = start
+    j = end+1
+    v = nums[i]
+    while true:
+        while(nums[++i] < v) if(i==end) break;
+        while(nums[--j] > v) if(j==start) break;
+        if(i>=j)
+            break;
+        tmp = nums[i]
+        nums[i] = nums[j]
+        nums[j] = nums[i]
+    
+    tmp = nums[j]
+    nums[j] = v
+    nums[start] = tmp
+    return j
+ ```
+ 
+#####  计数排序
+类似bit-map排序方法。只不过在这里需要一个辅助数组，用来存储各个数出现的次数。在遍历后，即可知道每个数子出现的次数，依次遍历该辅助数组，依次输出辅助数组中位置上不为0的下标，出现m次，则该下标输出m次。
+
+#### 桶排序
+用hash的方式，将整个数组中的元素映射到各个桶中，再在各个桶依次利用快速排序，最后依次输出各个桶中的有序数组即可。
+
+n个数据，m个桶，则每个桶平均n/m，在每个桶上用快速排序时间复杂度(n/m)log(n/m)。所以总的是件复杂度是，
+O(n+m*(n/m)log(n/m))
+
+算法 | 平均时间复杂度 | 空间复杂度
+---|---|---
+冒泡排序 | O(n*n) | O(1)
+选择排序 | O(n*n) | O(1)
+插入排序 | O(n*n) | O(1)
+递归排序 | O(nlogn) | O(n)
+快排排序 | O(nlogn) | O(1)
+计数排序 | O(n) | O(n)
+桶排序   | O(n+m*(n/m)log(n/m)) | O(m+n)
+
