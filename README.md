@@ -946,3 +946,67 @@ Trie树的基本性质可以归纳为：
 
 
 [Trie树参考](http://www.cnblogs.com/huangxincheng/archive/2012/11/25/2788268.html)
+
+# leetcode高频题编程练习
+#### 1. Two Sum
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+利用HashMap存储键值对，key存储当前数字，value存储下标。通过判断HashMap中是否存在（target-maps[nums[i]]），即可判断出是否有满足要求的解。
+```python
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        if(nums == null || nums.length == 0)
+            return null;
+        HashMap<Integer, Integer> maps = new HashMap<Integer, Integer>();
+        int[] results = new int[2];
+        for(int i = 0; i < nums.length; i++){
+            if(!maps.containsKey(nums[i]))
+                maps.put(nums[i],i);
+            if(maps.containsKey(target-nums[i]) && maps.get(target-nums[i])!=i){
+                results[0] = maps.get(target-nums[i]);
+                results[1] = i;
+                return results;
+            }
+        }
+        return results;
+    }
+}
+```
+
+#### 2. Add Two Numbers
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+分别遍历两个链表，用flag作为标志位，代表是否进位。
+```python
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if(l1 == null || l2 == null)
+            return null;
+        ListNode head = new ListNode(-1);
+        ListNode index = head;
+        int flag = 0;
+        while(l1!=null || l2!=null){
+            int x = l1!=null ? l1.val : 0;
+            int y = l2!=null ? l2.val : 0;
+            int tmp = x + y + flag;
+            index.next = new ListNode(tmp%10);
+            if(tmp >= 10)
+                flag =1;
+            else
+                flag =0;
+            if(l1 != null)
+                l1 = l1.next;
+            if(l2 != null)
+                l2 = l2.next;
+            index = index.next;
+        }
+        if(flag == 1)
+            index.next = new ListNode(1);
+        return head.next;
+    }
+}
+```
