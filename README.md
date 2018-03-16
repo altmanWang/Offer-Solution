@@ -1010,3 +1010,31 @@ class Solution {
     }
 }
 ```
+#### 3. Longest Substring Without Repeating Characters
+Given a string, find the length of the longest substring without repeating characters.
+
+利用256整形数组，存储字符出现的下标。一个指针指（left）向子字符串起始的位置，当前下标i-left+1即当前子字符串的长度。
+分别遍历两个链表，用flag作为标志位，代表是否进位。
+```python
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if(s == null || s.length() ==0)
+            return 0;
+        int[] chars = new int[256];
+        char[] str = s.toCharArray();
+        int max_length = 0;
+        int length = 0;
+        int left = 0;
+        for(int i = 0 ; i < str.length; i++){
+            if(chars[str[i]] == 0 ||  chars[str[i]] < left){
+                max_length = max_length > i - left + 1 ? max_length : i - left +1;
+            }else{
+                left = chars[str[i]];
+            }
+            chars[str[i]] = i+1;
+        }
+        return max_length;
+    }
+}
+```
+其中，chars[str[i]] < left，当left的下标已经大于该字符串第一次出现的位置时，也应该重新计算最大长度。例如“abbca”，当left指向第一个b，i指向最后一个a，chars[str[i]]指向第一个a，由于chars[str[i]] < left，说明第一个a已经不在子字符串中，应该重新计算最大长度。
