@@ -1038,3 +1038,50 @@ public class Solution {
 }
 ```
 其中，chars[str[i]] < left，当left的下标已经大于该字符串第一次出现的位置时，也应该重新计算最大长度。例如“abbca”，当left指向第一个b，i指向最后一个a，chars[str[i]]指向第一个a，由于chars[str[i]] < left，说明第一个a已经不在子字符串中，应该重新计算最大长度。
+
+#### 4. Median of Two Sorted Arrays
+There are two sorted arrays nums1 and nums2 of size m and n respectively.
+
+Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+
+
+
+等效于在两个排序的数组中找到第k小的数字。首先先假设数组A和B的元素个数都大于k/2，我们比较A[k/2-1]和B[k/2-1]两个元素，这两个元素分别表示A的第k/2小的元素和B的第k/2小的元素。这两个元素比较共有三种情况：>、<和=。如果A[k/2-1]<B[k/2-1]，这表示A[0]到A[k/2-1]的元素都在A和B合并之后的前k小的元素中。换句话说，A[k/2-1]不可能大于两数组合并之后的第k小值，所以我们可以将其抛弃。反之亦然。当A[k/2-1]=B[k/2-1]时，我们已经找到了第k小的数，也即这个相等的元素，我们将其记为m。由于在A和B中分别有k/2-1个元素小于m，所以m即是第k小的数。
+
+记得在比较数组中的值时，下标记得加偏置，即start+k/2-1。
+
+
+```python
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int total = nums1.length + nums2.length;
+        if(total%2==1)
+            return findMedianSortedArrays(nums1, 0, nums1.length, nums2, 0, nums2.length, total/2+1);
+        else{
+            int a = findMedianSortedArrays(nums1, 0, nums1.length, nums2, 0, nums2.length, total/2);
+            int b = findMedianSortedArrays(nums1, 0, nums1.length, nums2, 0, nums2.length, total/2+1);
+            return (findMedianSortedArrays(nums1, 0, nums1.length, nums2, 0, nums2.length, total/2) +
+                    findMedianSortedArrays(nums1, 0, nums1.length, nums2, 0, nums2.length, total/2 + 1)) / 2.0;
+        }
+    }
+    public int findMedianSortedArrays(int[] nums1, int start1, int end1, int[] nums2, int start2, int end2, int k){
+        if(end1 - start1 > end2 - start2)
+            return findMedianSortedArrays(nums2, start2, end2, nums1, start1, end1, k);
+        if(end1- start1 == 0)
+            return nums2[k - 1];
+        if(k == 1)
+            return Math.min(nums1[start1], nums2[start2]);
+
+        int ma = Math.min(k/2, end1-start1);
+        int mb = k - ma;
+
+        if(nums1[start1 +  ma - 1] < nums2[start2 + mb - 1]){
+            return findMedianSortedArrays(nums1, start1 + ma, end1, nums2, start2, end2, k-ma);
+        }else if(nums1[start1 + ma - 1] > nums2[start2 + mb - 1]){
+            return findMedianSortedArrays(nums1, start1, end1, nums2, start2 + mb, end2, k-mb);
+        }else{
+            return nums1[start1 + ma -1];
+        }
+    }
+}
+```
