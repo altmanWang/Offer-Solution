@@ -1085,3 +1085,35 @@ class Solution {
     }
 }
 ```
+
+55. Jump Game （数组）
+
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Determine if you are able to reach the last index.
+
+解题思路：遍历数组时，每一步保存能跳的最大步数。1）如果max_length小于等于nums[i]，则更新下；2）否则max_length-1。当i+max_length大于数组长度时，则可以到达数组最后一位。如果max_length等于0，代表已经不能再往前走了，所以返回false。
+
+
+```python
+class Solution {
+    public boolean canJump(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return false;
+        int index = 0;
+        for(int i = 0; i < nums.length; i++){
+            if (index <= nums[i])
+                index = nums[i];
+            else
+                index -=1;
+            if(i + index >= nums.length -1)
+                return true;
+            if(index == 0)
+                return false;
+        }
+        return false;
+    }
+}
+```
