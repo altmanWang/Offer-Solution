@@ -1117,3 +1117,49 @@ class Solution {
     }
 }
 ```
+
+54. Spiral Matrix（数组）
+Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+
+解题思路:设定上边界、下边界、左边界、右边界。每一次遍历，在上边界，从左到右；在右边界，从上到下；在下边界，从左到右；在左边界，从下到上。在遍历依次四周后，缩小各个边界值。
+
+```python
+import java.util.List;
+import java.util.LinkedList;
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> lists = new LinkedList<Integer>();
+        if(matrix == null || matrix.length == 0 || matrix[0].length == 0)
+            return lists;
+        int top = 0;
+        int bottom = matrix.length - 1;
+        int left = 0;
+        int right = matrix[0].length - 1;
+
+        while(lists.size() < (matrix.length*matrix[0].length)){
+            spiralOrder(matrix, top, bottom, left,right,lists);
+            top +=1;
+            bottom -=1;
+            left +=1;
+            right -=1;
+        }
+
+        return lists;
+    }
+    public void spiralOrder(int[][] matrix, int top, int bottom, int left, int right, List<Integer> lists){
+        for(int i = left; i <= right; i++)
+            lists.add(matrix[top][i]);
+        for(int i = top+1; i < bottom; i++)
+            lists.add(matrix[i][right]);
+        if(top < bottom){
+            for(int i = right; i >= left; i--)
+                lists.add(matrix[bottom][i]);
+        }
+        if(left < right){
+            for(int i = bottom-1; i > top; i--)
+                lists.add(matrix[i][left]);
+        }
+
+    }
+}
+```
