@@ -1163,3 +1163,46 @@ class Solution {
     }
 }
 ```
+
+56. Merge Intervals
+Given a collection of intervals, merge all overlapping intervals.
+
+解题思路：先排序，再排序。
+
+合并：如果合并集合为空或者选择合并集中最后一区间的end与当前区间的start比较，如果小于，则直接将当前区间放入合并集合中；如果大于，则更新当前区间end的值。
+
+```python
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+import java.util.LinkedList;
+class Solution {
+    private class IntervalComparator implements Comparator<Interval> {
+        @Override
+        public int compare(Interval a, Interval b) {
+            return a.start - b.start;
+        }
+    }
+    public List<Interval> merge(List<Interval> intervals) {
+        List<Interval> lists = new LinkedList<Interval>();
+        if(intervals == null)
+            return lists;
+        Collections.sort(intervals, new IntervalComparator());
+        for(Interval interval : intervals){
+            if(lists.isEmpty() || lists.get(lists.size() - 1).end < interval.start){
+                lists.add(interval);
+            }else{
+                lists.get(lists.size() - 1).end = Math.max(lists.get(lists.size() - 1).end, interval.end);
+            }
+
+        }
+        return lists;
+    }
+}
+```
