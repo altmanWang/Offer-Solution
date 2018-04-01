@@ -1232,3 +1232,116 @@ class Solution {
     }
 }
 ```
+
+5. Longest Palindromic Substring
+
+Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+
+
+解题思路：
+这道题是比较常考的题目，求回文子串，一般有两种方法。 第一种方法比较直接，实现起来比较容易理解。基本思路是对于每个子串的中心（可以是一个字符，或者是两个字符的间隙，比如串abc,中心可以是a,b,c,或者是ab的间隙，bc的间隙）往两边同时进行扫描，直到不是回文串为止。假设字符串的长度为n,那么中心的个数为2*n-1(字符作为中心有n个，间隙有n-1个）。对于每个中心往两边扫描的复杂度为O(n),所以时间复杂度为O((2*n-1)*n)=O(n^2),空间复杂度为O(1)，代码如下：
+```python
+class Solution {
+    public String longestPalindrome(String s) {
+        if(s == null || s.length() == 0)
+            return s;
+        String max_str = "";
+        for(int i = 0; i < s.length()*2; i++){
+            int left = i/2;
+            int right = i/2;
+            if(i%2==1){
+                right +=1; 
+            }
+            String tmp = longestPalindrome(s, left, right);
+            if(tmp.length() > max_str.length()){
+                max_str = tmp;
+            }
+        }
+        return max_str;
+    }
+    public String longestPalindrome(String s, int left, int right){
+        while(left >=0 && right < s.length() && s.charAt(left) == s.charAt(right)){
+            left -=1;
+            right += 1;
+        }
+        return s.substring(left+1,right);  
+    }
+}
+```
+解题思路：动态规划
+
+假定字符串s为回文字符串，则在s头部和尾部分别添加相同字符串[x]，所得结果s'=[x]s[x]也为回文字符串（论述1）。可使用动态规划方法解决此问题，递推公式便基于此特性。
+创建一个布尔二维数组plain，plain[i][j]为true表示原字符串从索引i到索引j这一段子串为回文。而plain[i][j]为true的前提是s.charAt(i)与s.charAt(j)相同，且以下两个条件满足其一：
+1. j-i<=2, j=i时必然成立，j-i=1则表示i与j相邻，"aa"、"bb"满足条件
+2. j-i>2, 此时须plain[i+1][j-1]为true，即论述1所述
+核心算法分析完毕，写一双重循环，索引i由字符串尾部向前遍历，索引j由i向后遍历，每次发现回文字符串时设置二维数组相应的值，并比较其长度是否大于当前的maxLen。若大于，则更新用于记录当前最长回文子串起始和终止位置的start和end
+
+```python
+class Solution {
+    public String longestPalindrome(String s) {
+        if(s == null || s.length() == 0)
+            return s;
+        int max_len = 0;
+        int start=0, end=0; 
+        boolean[][] plain = new boolean[s.length()][s.length()];
+        for(int i = s.length()-1; i >=0; i--){
+            for(int j = i; j < s.length(); j++){
+                if(s.charAt(i) == s.charAt(j) && (j-i<=2 || plain[i+1][j-1])){
+                    plain[i][j] = true;
+                    if(max_len < (j-i+1)){
+                        start = i;
+                        end = j;
+                        max_len = j-i + 1;
+                    }
+                }
+            }
+        }
+        return s.substring(start, end+1);  
+    }
+}
+```
+
+516. Longest Palindromic Subsequence
+Given a string s, find the longest palindromic subsequence's length in s. You may assume that the maximum length of s is 1000.
+
+注意：这个是子序列，不是子字符串。
+
+解题思路：动态规划 + 递归。
+
+当已知一个序列是回文时，添加首尾元素后的序列存在两种情况，一种是首尾元素相等，则最长回文的长度加2，当首尾元素不相等，则最长回文序列为仅添加首元素时的最长回文与仅添加尾元素时的最长回文之间的最大值。
+
+我们可以用dp[i][j]表示s[i…j]中的最长回文序列，而状态转移方程则是 
+
+```python
+1. i > j，dp[i][j] = 0； 
+2. i == j，dp[i][j] = 1； 
+3. i < j且s[i] == s[j]，dp[i][j] = dp[i + 1][j - 1] + 2； 
+4. i < j且s[i]！= s[j]，dp[i][j] = max(dp[i + 1][j]，dp[i][j - 1])；
+```
+
+```python
+class Solution {
+    public int longestPalindromeSubseq(String s) {
+        if(s == null || s.length() == 0)
+            return 0;
+        int[][] dp = new int[s.length()][s.length()];
+        return longestPalindromeSubseq(s, 0, s.length()-1,dp);
+    }
+    public int longestPalindromeSubseq(String s, int left, int right, int[][] dp){
+        if(left > right)
+            return 0;
+        if(dp[left][right] != 0)
+            return dp[left][right];
+        if(left == right){
+            dp[left][right] = 1;
+        }else{
+            if(s.charAt(left) == s.charAt(right)){
+                dp[left][right] += longestPalindromeSubseq(s,left+1, right-1,dp)+2;
+            }else{
+                dp[left][right] = Math.max(longestPalindromeSubseq(s,left+1, right,dp),longestPalindromeSubseq(s,left, right-1,dp));
+            }
+        }
+        return dp[left][right];
+    }
+}
+```
