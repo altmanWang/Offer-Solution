@@ -1086,7 +1086,7 @@ class Solution {
 }
 ```
 
-55. Jump Game （数组）
+#### 55. Jump Game （数组）
 
 Given an array of non-negative integers, you are initially positioned at the first index of the array.
 
@@ -1118,7 +1118,7 @@ class Solution {
 }
 ```
 
-54. Spiral Matrix（数组）
+#### 54. Spiral Matrix（数组）
 Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
 
 解题思路:设定上边界、下边界、左边界、右边界。每一次遍历，在上边界，从左到右；在右边界，从上到下；在下边界，从左到右；在左边界，从下到上。在遍历依次四周后，缩小各个边界值。
@@ -1164,7 +1164,7 @@ class Solution {
 }
 ```
 
-56. Merge Intervals
+#### 56. Merge Intervals
 Given a collection of intervals, merge all overlapping intervals.
 
 解题思路：先排序，再排序。
@@ -1207,7 +1207,7 @@ class Solution {
 }
 ```
 
-198. House Robber
+#### 198. House Robber
 You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
 
 Given a list of non-negative integers representing the amount of money of each house, determine the maximum amount of money you can rob tonight without alerting the police.
@@ -1233,7 +1233,7 @@ class Solution {
 }
 ```
 
-5. Longest Palindromic Substring
+#### 5. Longest Palindromic Substring
 
 Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
 
@@ -1300,8 +1300,8 @@ class Solution {
     }
 }
 ```
+#### 516. Longest Palindromic Subsequence
 
-516. Longest Palindromic Subsequence
 Given a string s, find the longest palindromic subsequence's length in s. You may assume that the maximum length of s is 1000.
 
 注意：这个是子序列，不是子字符串。
@@ -1343,5 +1343,93 @@ class Solution {
         }
         return dp[left][right];
     }
+}
+```
+#### 46. Permutations
+
+Given a collection of distinct numbers, return all possible permutations.
+
+解题思路：全排列
+
+```python
+import java.util.LinkedList;
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> lists = new LinkedList<List<Integer>>();
+        if(nums == null || nums.length == 0)
+            return lists;
+        permute(nums, 0, lists);
+        return lists;
+    }
+    public void permute(int[] nums, int start, List<List<Integer>> lists){
+        if(start >= nums.length){
+            LinkedList<Integer> list = new LinkedList<Integer>();
+            for(int i = 0; i < nums.length; i++)
+                list.add(nums[i]);
+            lists.add(list);
+            return;
+            
+        }
+        for(int i = start; i < nums.length; i++){
+            int tmp = nums[start];
+            nums[start] = nums[i];
+            nums[i] = tmp;
+            
+            permute(nums, start+1, lists);
+            
+            tmp = nums[start];
+            nums[start] = nums[i];
+            nums[i] = tmp;
+        }
+    }
+}
+```
+
+
+#### 47. Permutations II
+
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+解题思路：保证唯一性。
+方法就是对与重复的元素循环时跳过递归的调用只对第一个未被使用的进行递归，那么这一次的结果将会唯一出现在结果集中，而后重复的元素将会被略过。如果第一个重复元素还没在当前结果中，那么我们就不需要进行递归。
+
+```python
+import java.util.LinkedList;
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> lists = new LinkedList<List<Integer>>();
+        if(nums == null || nums.length == 0)
+            return lists;
+        Arrays.sort(nums);
+        dfs(lists, new ArrayList<Integer>(), nums, new boolean[nums.length]);  
+        return lists;
+    }
+    private void dfs(List<List<Integer>> res, List<Integer> temp, int[] nums, boolean[] used) {  
+        if(temp.size() == nums.length) {  
+            res.add(new ArrayList<>(temp));  
+            return;  
+        }  
+        for(int i = 0; i < nums.length; i++) {  
+            if(used[i] || i > 0  && nums[i] == nums[i-1] && used[i-1]==false) continue;  
+            /* 
+            上面这一连串判断条件，重点在于要能理解!used(i-1) 
+            要理解这个，首先要明白i作为数组内序号，i是唯一的 
+            给出一个排好序的数组，[1,2,2] 
+            第一层递归            第二层递归            第三层递归 
+            [1]                    [1,2]                [1,2,2] 
+            序号:[0]                 [0,1]            [0,1,2] 
+            这种都是OK的，但当第二层递归i扫到的是第二个"2"，情况就不一样了 
+            [1]                    [1,2]                [1,2,2]             
+            序号:[0]                [0,2]                [0,2,1] 
+            所以这边判断的时候!used(1)就变成了true，不会再继续递归下去，跳出循环 
+            步主要就是为了去除连续重复存在的，很神奇反正 = =|| 
+        */  
+            used[i] = true;  
+            temp.add(nums[i]);  
+            dfs(res, temp, nums, used);  
+            temp.remove(temp.size() - 1);  
+            used[i] = false;  
+        }  
+    } 
 }
 ```
