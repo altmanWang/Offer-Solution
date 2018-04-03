@@ -123,6 +123,37 @@ def postOrder(root):
 **题目二**：青蛙跳台阶问题，一只青蛙可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个n级台阶总共有多少种跳法。
 解题思路：类似。当n>2时，第一跳有两种选择：第一种是跳1级台阶，此时跳法数目等于后面剩下的n-1级台阶的跳法数目；第二种是跳2级台阶，此时跳法数目等于后面剩下的n-2级台阶的跳法数目。f(n)=f(n-1)+f(n-2)
 
+**746. Min Cost Climbing Stairs** （动态规划）
+
+On a staircase, the i-th step has some non-negative cost cost[i] assigned (0 indexed).
+
+Once you pay the cost, you can either climb one or two steps. You need to find minimum cost to reach the top of the floor, and you can either start from the step with index 0, or the step with index 1.
+
+解题思路：f(t) = min(f(t-1)+cost[t],f(t-2)+cost[t])
+
+```python
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        if(cost == null || cost.length == 0)
+            return 0;
+        if(cost.length == 1)
+            return cost[0];
+        if(cost.length == 2)
+            return cost[0] > cost[1] ? cost[1] : cost[0];
+        int n = cost.length;
+        int[] total_cost = new int[n];
+        total_cost[0] = cost[0];
+        total_cost[1] = cost[1];
+        for(int i = 2; i < n; i++){
+            total_cost[i] = cost[i] + (total_cost[i-1] > total_cost[i-2] ? total_cost[i-2] : total_cost[i-1]);
+        }
+        return total_cost[n-1] > total_cost[n-2] ? total_cost[n-2] : total_cost[n-1];
+    }
+}
+ ```
+
+
+
 **题目三**：覆盖矩阵，我们可以用2*1的小矩形横着或者竖着去覆盖更大的矩形。请问用n个2*1的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？
 当第一次覆盖2*1的小矩阵（竖着放），则后面的覆盖方法为f(n-1);
 当第一次覆盖2*2的小矩阵（两个横着放），对应下方的2*(n-2)的小矩阵摆放必然是确定的，所以后面的覆盖方法为f(n-2)。
@@ -181,9 +212,9 @@ def hashPathCore(matrix, i, j, chars, index, visited):
 		hashPathCore(matrix, i-1, j , chars, index+1, visited) or
 		hashPathCore(matrix, i, j+1 , chars, index+1, visited) or
 		hashPathCore(matrix, i, j-1 , chars, index+1, visited)
-	if result == false:
-	    visited[i][j] = false
-	return ture
+    	if result == false:
+    	    visited[i][j] = false
+	    return result
     return false
  ```
 
