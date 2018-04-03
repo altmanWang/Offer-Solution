@@ -214,7 +214,7 @@ def hashPathCore(matrix, i, j, chars, index, visited):
 		hashPathCore(matrix, i, j-1 , chars, index+1, visited)
     	if result == false:
     	    visited[i][j] = false
-	    return result
+	return result
     return false
  ```
 
