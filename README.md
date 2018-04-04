@@ -42,6 +42,37 @@ class Solution {
     }
 }
 ```
+
+##### 442. Find All Duplicates in an Array
+Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
+
+Find all the elements that appear twice in this array.
+
+解题思路：与leetcode 448类似。首先将数字放到其下标对应的位置，即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。
+```python
+class Solution {
+    public List<Integer> findDuplicates(int[] nums) {
+        List<Integer> lists = new LinkedList<Integer>();
+        if(nums == null || nums.length == 0)
+            return lists;
+        for(int i = 0; i < nums.length; i++){
+            while(nums[i] != nums[nums[i]-1]){
+                int tmp = nums[i];
+                nums[i] = nums[tmp - 1];
+                nums[tmp-1] = tmp;
+            }
+        }
+        for(int i = 0; i < nums.length; i++){
+            if(i+1 != nums[i])
+                lists.add(nums[i]);
+        }
+        return lists;
+    }
+}
+```
+
+
+
 ##### 面试题4：二维数组中的查找
 **题目**：在一个二维数组众，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序，请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
 
