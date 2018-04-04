@@ -13,7 +13,35 @@
 - 在可以改变原始数组的情况下，可以利用改变数组，使其按顺序排序，当发现num[i]==num[num[i]]时，则说明有重复数字。时间复杂度O(n),空间复杂度O(1)。(DuplicationInArray)
 - 在不可以改变原始数组时，可以利用辅助数组。空间复杂度O(n),时间复杂度O(n)。
 - 在不可以改变原始数组时，也可以利用二分查找的思想，将数值范围不断切分，并查找数值范围内数字出现的个数，当出现的个数大于数值范围时，则说明在该范围内存在重复数字。**但，这种方法无法保证找出所有重复的数字。例如在1~2范围内，2重复出现两次，1不出现，则计数等于2，并且不大于该范围，此时该算法不能确定每个数字出现的次数，所以不能保证找到所有重复的数字**。(DuplicationInArrayNoEdit)
+- 
 
+##### 448. Find All Numbers Disappeared in an Array
+Given an array of integers where 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
+
+Find all the elements of [1, n] inclusive that do not appear in this array.
+
+解题思路：这道题与剑指offer中的面试3类似。这道题需要找不存在的数字。那么我可以让已有的数字在其应在的位置。即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。
+```python
+class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> lists = new LinkedList<Integer>();
+        if(nums == null || nums.length == 0)
+            return lists;
+        for(int i = 0; i < nums.length; i++){
+            while(nums[i] != nums[nums[i]-1]){
+                int tmp = nums[i];
+                nums[i] = nums[tmp - 1];
+                nums[tmp-1] = tmp;
+            }
+        }
+        for(int i = 0; i < nums.length; i++){
+            if(i+1 != nums[i])
+                lists.add(i+1);
+        }
+        return lists;
+    }
+}
+```
 ##### 面试题4：二维数组中的查找
 **题目**：在一个二维数组众，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序，请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
 
@@ -212,9 +240,9 @@ def hashPathCore(matrix, i, j, chars, index, visited):
 		hashPathCore(matrix, i-1, j , chars, index+1, visited) or
 		hashPathCore(matrix, i, j+1 , chars, index+1, visited) or
 		hashPathCore(matrix, i, j-1 , chars, index+1, visited)
-    	if result == false:
-    	    visited[i][j] = false
-	return result
+        if result == false:
+            visited[i][j] = false
+        return result
     return false
  ```
 
