@@ -20,7 +20,7 @@ Given an array of integers where 1 ≤ a[i] ≤ n (n = size of array), some elem
 
 Find all the elements of [1, n] inclusive that do not appear in this array.
 
-解题思路：这道题与剑指offer中的面试3类似。这道题需要找不存在的数字。那么我可以让已有的数字在其应在的位置。即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。
+解题思路：这道题与剑指offer中的面试3类似。这道题需要找不存在的数字。那么我可以让已有的数字在其应在的位置。即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。当排序后，遍历数组，如果下标不等于下标索引，则保存下标。
 ```python
 class Solution {
     public List<Integer> findDisappearedNumbers(int[] nums) {
@@ -48,7 +48,7 @@ Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements 
 
 Find all the elements that appear twice in this array.
 
-解题思路：与leetcode 448类似。首先将数字放到其下标对应的位置，即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。
+解题思路：与leetcode 448类似。首先将数字放到其下标对应的位置，即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。当排序后，遍历数组，如果下标不等于下标索引，则保存下标索引。
 ```python
 class Solution {
     public List<Integer> findDuplicates(int[] nums) {
