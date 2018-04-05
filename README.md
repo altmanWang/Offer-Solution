@@ -20,7 +20,7 @@ Given an array of integers where 1 ≤ a[i] ≤ n (n = size of array), some elem
 
 Find all the elements of [1, n] inclusive that do not appear in this array.
 
-解题思路：这道题与剑指offer中的面试3类似。这道题需要找不存在的数字。那么我可以让已有的数字在其应在的位置。即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。当排序后，遍历数组，如果下标不等于下标索引，则保存下标。
+解题思路：这道题与剑指offer中的面试3类似。这道题需要找不存在的数字。那么我可以让已有的数字在其应在的位置。即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。
 ```python
 class Solution {
     public List<Integer> findDisappearedNumbers(int[] nums) {
@@ -48,7 +48,7 @@ Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements 
 
 Find all the elements that appear twice in this array.
 
-解题思路：与leetcode 448类似。首先将数字放到其下标对应的位置，即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。当排序后，遍历数组，如果下标不等于下标索引，则保存下标索引。
+解题思路：与leetcode 448类似。首先将数字放到其下标对应的位置，即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。
 ```python
 class Solution {
     public List<Integer> findDuplicates(int[] nums) {
@@ -1100,6 +1100,64 @@ class Solution {
     }
 }
 ```
+
+#### 445. Add Two Numbers II
+You are given two non-empty linked lists representing two non-negative integers. The most significant digit comes first and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
+
+Output: 7 -> 8 -> 0 -> 7
+
+```python
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        LinkedList<Integer> list1 = new LinkedList<Integer>();
+        LinkedList<Integer> list2 = new LinkedList<Integer>();
+        ListNode head = new ListNode(-1);
+        ListNode index = head;
+        while(l1!=null){
+            list1.addLast(l1.val);
+            l1 = l1.next;
+        }
+        while(l2!=null){
+            list2.addLast(l2.val);
+            l2 = l2.next;
+        }
+        int flag = 0;
+        while(!list2.isEmpty() || !list1.isEmpty()){
+            int a = list1.isEmpty() ? 0 : list1.removeLast();
+            int b = list2.isEmpty() ? 0 : list2.removeLast();
+            index.next = new ListNode((a+b+flag)%10);
+            if(a + b + flag >= 10){
+                flag = 1;
+            }else{
+                flag = 0;
+            }
+            index = index.next;
+        }     
+        if(flag == 1)
+            index.next = new ListNode(1);
+        head = reverse(head.next);
+        return head;
+    }
+    public ListNode reverse(ListNode head){
+        ListNode pre = null;
+        ListNode next = null;
+        while(head != null){
+            next = head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        return pre;
+    }
+}
+```
+
+
+
 #### 3. Longest Substring Without Repeating Characters
 Given a string, find the length of the longest substring without repeating characters.
 
