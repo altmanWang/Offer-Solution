@@ -278,6 +278,41 @@ def hashPathCore(matrix, i, j, chars, index, visited):
  ```
 
 
+#### 62. Unique Paths
+A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).
+
+How many possible unique paths are there?
+
+解题思路：用一个矩阵counts[m][n]来存储到达i，j时存在不同路径的个数。
+counts[0][0] = 1
+
+counts[i][j] = counts[i-1][j] + counts[i][j-1]
+
+如果用递归的方法，会存在超时问题。
+
+```python
+class Solution {
+    public int uniquePaths(int m, int n) {
+        if(m == 0 || n == 0)
+            return 0;
+        int[][] count = new int[m][n];
+        for(int i =0 ; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(i == 0 && j == 0)
+                    count[i][j] = 1;
+                if(j > 0)
+                    count[i][j] += count[i][j-1];
+                if(i > 0)
+                    count[i][j] += count[i-1][j];
+            }
+        }
+        return count[m-1][n-1];
+    }
+
+}
+ ```
 #### 面试题 13： 机器人的运动范围
 **题目**：地上有一个m行n列的方格。一个机器人从坐标(0,0)的格子开始移动，他每次可以向左，右，上和下移动一格，但不能进入坐标和列坐标的数位之和大于k的格子。例如，给定k=18时，机器人可以进入（35,37），因为3+5+3+7=18；
 但是不能进入(35,38),因为3+5+3+8=19。
@@ -1003,6 +1038,7 @@ O(n+m*(n/m)log(n/m))
 快排排序 | O(nlogn) | O(1)
 计数排序 | O(n) | O(n)
 桶排序   | O(n+m*(n/m)log(n/m)) | O(m+n)
+堆排序 | O(nlogn) | O(nlogn)
 
 #### 3.Trie树
 Trie树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。典型应用是用于统计和排序大量的字符串（但不仅限于字符串），所以经常被搜索引擎系统用于文本词频统计。它的优点是：最大限度地减少无谓的字符串比较，查询效率比哈希表高。
