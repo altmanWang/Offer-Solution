@@ -1617,3 +1617,32 @@ class Solution {
     } 
 }
 ```
+#### 78. Subsets
+
+Given a set of distinct integers, nums, return all possible subsets (the power set).
+
+Note: The solution set must not contain duplicate subsets.
+
+解题思路：用一个路径path保存子集。（整体代码结构类似全排列）
+
+
+
+```python
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> lists = new LinkedList<List<Integer>>();
+        if(nums == null || nums.length == 0)
+            return lists;
+        subsets(nums, 0, lists, new LinkedList<Integer>());
+        return lists;
+    }
+    public void subsets(int[] nums, int start, List<List<Integer>> lists, LinkedList<Integer> path){
+        lists.add(new LinkedList<Integer>(path));
+        for(int i = start; i < nums.length; i++){
+            path.addLast(nums[i]);
+            subsets(nums,i+1,lists,path);
+            path.removeLast();
+        }
+    }
+}
+```
