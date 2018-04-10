@@ -1646,3 +1646,36 @@ class Solution {
     }
 }
 ```
+
+#### 424. Longest Repeating Character Replacement
+Given a string that consists of only uppercase English letters, you can replace any letter in the string with another letter at most k times. Find the length of a longest substring containing all repeating letters you can get after performing the above operations.
+
+解题思路：本质滑窗问题。
+用一个滑动窗口，查找最长的subarray，使得其最多包含k个与majority不相同的字符，majority指的是窗口中最多的字符。
+
+length = majority_counts + k
+
+滑动窗口的长度计算如上所示。length是滑动窗口大小，majority_counts是滑窗中出现最多的字符的个数。
+
+length = i - left + 1
+
+令滑窗左侧起始指针为left，当前索引为i。
+如果length - majority_counts > k，则需要缩小滑窗并且left对应的索引字符的出现次数减一因为其已经出了滑窗，counts[s.charAt[left]]，left++。
+
+```python
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int[] counts = new int[26];
+        int max_count = 0, max_length = 0, left = 0;
+        for(int i = 0; i < s.length(); i++){
+            max_count = Math.max(max_count, ++counts[s.charAt(i) - 'A']);
+            if(i - left + 1 - max_count > k){
+                counts[s.charAt(left) - 'A'] -= 1;
+                left +=1;
+            }
+            max_length = Math.max(max_length, i - left + 1);
+        }
+        return max_length;
+    }
+}
+```
