@@ -1,4 +1,5 @@
-# 剑指OFFER面试题编程练习
+# 剑指OFFER与Leetcode编程练习
+前半部分为剑指offer练习题，后半部分为leetcode编程联系。
 ## 2.3数据结构
 - 数组
 - 字符串
