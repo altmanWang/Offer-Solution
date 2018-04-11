@@ -1679,3 +1679,51 @@ class Solution {
     }
 }
 ```
+
+#### 79. Word Search （矩阵中的路径，剑指offer题12）
+
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+解题思路：用一个visited数组来保存是否采用该元素。
+
+遍历矩阵，查看矩阵元素是否与字符串首字母相等。
+
+若想等则，则直接以该元素对应的位置作为起始点在矩阵中搜索给定字符串。在搜索过程中，应该同时搜索位置的上、下、左、右，查看是否匹配。如果匹配，则继续递归地查找。如果不匹配，则停止该方向上的搜索。
+
+```python
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        if(board == null || board.length == 0 || word == null || word.length() == 0)
+            return false;
+        int m = board.length;
+        int n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(word.charAt(0) == board[i][j]){
+                    if(exist(board, visited, word, 0, i, j, m, n))
+                        return true;
+                }
+            }
+        }
+        return false;
+        
+    }
+    public boolean exist(char[][] board, boolean[][] visited, String word, int start, int i, int j, int m, int n){
+        if(start >= word.length())
+            return true;
+        if(i >= 0 && i < m && j >= 0 && j < n && !visited[i][j] && board[i][j] == word.charAt(start)){
+            visited[i][j] = true;
+            boolean flag =  exist(board, visited, word, start+1, i+1, j, m, n) ||
+                            exist(board, visited, word, start+1, i-1, j, m, n) ||
+                            exist(board, visited, word, start+1, i, j+1, m, n) ||
+                            exist(board, visited, word, start+1, i, j-1, m, n);
+            visited[i][j] = false;
+            return flag;
+        }
+        return false;
+    }
+}
+```
