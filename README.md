@@ -536,7 +536,7 @@ def IsSubtree(head1, head2):
 ## 4.2 画图让抽象问题形象化
 有不少与数据结构相关的问题，比如二叉树、二维数组、链表等问题都可以采用画图的方式来分析。
 
-#### 面试题：27 二叉树镜像
+#### 面试题：27 二叉树镜像 （101. Symmetric Tree）
 **题目**:请完成一个函数，输入一颗二叉树，该函数的输出它的镜像。
 
 解题思路：递归地交换左子树和右子树。
@@ -1762,6 +1762,52 @@ class Solution {
         if(values[nums.length][target] == target)
             return true;
         return false;
+    }
+}
+```
+
+#### 102. Binary Tree Level Order Traversal
+Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+
+题目：给定一个二叉树，用List<List<Integer>> lists保存二叉树中的节点值。lists中每一个元素代表二叉树中某一层中所有节点的值。
+
+解题思路：（BFS）用一个LinkedList<TreeNode> path 保存当前层节点。用递归的方式遍历二叉树中所有的节点。在递归时，首先计算path的大小m，首先将path前m个元素逐个弹出并将其左右节点压入path的队尾，用一个LinkList<Integer> values保存前m个元素的值。当前m个元素弹出后，将values压入lists并继续递归。当path大小为0时，则停止递归。
+
+```python
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> lists = new LinkedList<List<Integer>>();
+        if(root == null)
+            return lists;
+        LinkedList<TreeNode> path = new LinkedList<TreeNode>();
+        path.add(root);
+        levelOrder(path, lists);
+        return lists;
+    }
+    public void levelOrder(LinkedList<TreeNode> path, List<List<Integer>> lists){
+        if(path.isEmpty())
+            return;
+        LinkedList<Integer> values = new LinkedList<Integer>();
+        int size = path.size();
+        for(int i = 0; i < size; i++){
+            TreeNode node = path.removeFirst();
+            values.addLast(node.val);
+            if(node.left != null)
+                path.addLast(node.left);
+            if(node.right != null)
+                path.addLast(node.right);
+        }
+        lists.add(values);
+        levelOrder(path, lists);
     }
 }
 ```
