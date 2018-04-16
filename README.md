@@ -1811,3 +1811,76 @@ class Solution {
     }
 }
 ```
+
+#### 148. Sort List （链表归并排序）
+Sort a linked list in O(n log n) time using constant space complexity.
+
+解题思路：归并排序。==需要注意返回每次归并和合并的头节点！！！==
+
+```python
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode sortList(ListNode head) {
+        if(head == null || head.next == null)
+            return head;
+        int length = 0;
+        ListNode index = head;
+        while(index != null){
+            index = index.next;
+            length +=1;
+        }
+        head = sortList(head, 0, length-1);
+        return head;
+    }
+    public ListNode sortList(ListNode node, int start, int end){
+        if(start >= end)
+            return node;
+        int mid = (end - start) / 2;
+        ListNode index = node;
+        for(int i = 0; i < mid; i++){
+            index = index.next;
+        }
+        ListNode next = index.next;
+        index.next = null;
+
+        node = sortList(node, start, start + mid);
+        next = sortList(next, start + mid + 1, end);
+
+        node = merge(node, next);
+
+        return node;
+
+    }
+    public ListNode merge(ListNode left, ListNode right){
+        ListNode pLeft = left;
+        ListNode pRight = right;
+
+        ListNode head = new ListNode(-1);
+        ListNode cur = null;
+        ListNode index = head;
+        while (pLeft != null && pRight != null){
+            if(pLeft.val < pRight.val){
+                cur = pLeft;
+                pLeft = pLeft.next;
+            }else{
+                cur = pRight;
+                pRight = pRight.next;
+            }
+            index.next = cur;
+            index = index.next;
+        }
+        if(pLeft != null)
+            index.next = pLeft;
+        if(pRight != null)
+            index.next = pRight;
+        return head.next;
+    }
+}
+```
