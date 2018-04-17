@@ -137,11 +137,48 @@ def postOrder(root):
 - 堆分为最大堆和最小堆。在最大堆中根节点最大，在最小堆中根节点最小。有很多需要快速找到最大值和最小值的问题都可以用堆来解决。
 - 红黑树是把树中的节点定义为红、黑两种颜色，并通过规则确保从根节点到叶子节点的最长路径的长度不超过最路径的两倍。
 
-##### 面试题7：重建二叉树
+##### 面试题7：重建二叉树 （105. Construct Binary Tree from Preorder and Inorder Traversal）
 **题目**：输入某二叉树的前序遍历和中序遍历的结果。请重建该二叉树。
 
-解题思路：在二叉树的前序遍历中，第一数字总是树的根节点的值。但在中序遍历中，根节点的中再序列的中间。左子树位于其左边，右子树位于其右边。通过遍历前序，可以在中序中判断出哪一部分为左子树和右子树。从而通过递归，重建出二叉树。
+解题思路：在二叉树的前序遍历中，第一数字总是树的根节点的值。但在中序遍历中，根节点的在中序遍历中的中间。左子树位于其左边，右子树位于其右边。通过遍历前序，可以在中序遍历中判断出哪一部分为左子树和右子树。计算左子树与右子树的个数，通过个数设置前序遍历与中序遍历的上下界。从而通过递归，重建出二叉树。
 
+
+```python
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if(preorder == null || inorder == null || preorder.length == 0 || inorder.length == 0 || preorder.length != inorder.length)
+            return null;
+        int length = preorder.length;
+        return buildTree(preorder, 0, length-1, inorder, 0, length-1);
+    }
+    public TreeNode buildTree(int[] preorder, int pStart, int pEnd, int[] inorder, int iStart, int iEnd){
+        if(pStart > pEnd || iStart > iEnd)
+            return null;
+        int val = preorder[pStart];
+        int index;
+        for(index = iStart; index <= iEnd; index++){
+            if(inorder[index] == val)
+                break;
+        }
+        TreeNode node = new TreeNode(val);
+        int nums = index - iStart;
+        
+        node.left = buildTree(preorder, pStart+1, pStart+nums, inorder, iStart, iStart+nums-1);
+        node.right = buildTree(preorder, pStart+nums+1, pEnd, inorder, iStart+nums+1, iEnd);
+        
+        return node;
+    }
+}
+ ``` 
 
 #### 面试题8：二叉树的下一个节点
 **题目**：给定一棵二叉树和其中的节点，如何找出中序遍历的下一个节点？树中的节点除了两个分别指向左和右子节点的指针，还有一个指向父节点的指针。
@@ -791,7 +828,7 @@ def Merge(nums, aux, start, mid, end):
 
 解题思路：用中序遍历的书序遍历一颗二叉树，则遍历序列的数值是递增排序的。从而可以获得第k大节点。
 
-#### 面试题：55 二叉树的深度
+#### 面试题：55 二叉树的深度 （104. Maximum Depth of Binary Tree）
 **题目**:输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
 
 解题思路：分别递归地计算左子树与右子树深度，并且比较两个子树的深度，选择深度较大的为返回值。
