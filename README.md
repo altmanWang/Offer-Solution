@@ -505,18 +505,45 @@ def DeleteDuplication(ListNode pHead):
 - 快指针先走m步；然后快慢指针一起走，相遇时的节点即为入口节点。设总长度为n。（n-m=l，第l个节点即为入口节点）
 
 
-#### 面试题：24 反转列表（多指针，3个指针）
+#### 面试题：24 反转列表（多指针，3个指针，206. Reverse Linked List）
 **题目**:定义一个函数，输入一链表的头节点，反转该链表并输出反转后链表的头节点。
 
 解题思路：定义三个指针，即前指针（preNode）指向前一个节点，当前指针（curNode）指向当前节点和后指针（nexNode）指向后一个节点。
 反转的过程如下（收敛依据，curNodex！=null）：
-- 首先用nexNode保存curNode.next；
-- 然后断开连接，curNode.next = preNode;
-- 其次反转连接，用preNode保存curNode，preNode=curNode；
-- 最后替换curNode，curNode = nexNode.
+- 首先用nextNode保存index.next；
+- 然后断开连接，index.next = preNode;
+- 其次反转连接，用preNode保存index，preNode=index；
+- 最后替换curNode，curNode = nextNode.
 - 返回preNode；
+- 
 
-
+```python
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head == null || head.next == null)
+            return head;
+        ListNode index = head;
+        ListNode preNode = null;
+        ListNode nextNode = null;
+        while(index != null){
+            nextNode = index.next;
+            
+            index.next = preNode;
+            preNode = index;
+            index = nextNode;
+        }
+        return preNode;
+    }
+}
+'''
 
 #### 面试题：25 合并两个排序的链表
 **题目**:输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序。
@@ -1918,6 +1945,56 @@ class Solution {
         if(pRight != null)
             index.next = pRight;
         return head.next;
+    }
+}
+```
+
+#### 蘑菇街一面：求两数组的交集，并且去重。
+
+解题思路：先排序nums1和nums2，在用index1和index2来分别指向nums1和nums2的第一个元素。然后，在同时遍历。如果nums1[index1]==nums2[index2]，则找到交集元素，并且两指针自加，紧接着判断下一个元素是否还是相等，如果相等则继续自加，跳过下一个元素；如果果nums1[index1]<nums2[index2]，则index1自加；否则，index2自加。
+
+
+```python
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+public class Solution {
+    public static int[] core(int[] nums1, int[] nums2){
+        if(nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0){
+            return null;
+        }
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int index1 = 0;
+        int index2 = 0;
+        List<Integer> lists = new LinkedList<Integer>();
+        while(index1 < nums1.length && index2 < nums2.length){
+            if(nums1[index1] == nums2[index2]){
+                lists.add(nums1[index1]);
+                index1 +=1;
+                index2 +=1;
+                if(index1 < nums1.length && index2 < nums2.length && nums1[index1] == nums1[index1-1] && nums1[index1] == nums2[index2]){
+                    index1 +=1;
+                    index2 +=1;
+                }
+            }else if(nums1[index1] < nums2[index2]){
+                index1 +=1;
+            }else{
+                index2 +=1;
+            }
+        }
+        int[] res = new int[lists.size()];
+        for(int i = 0; i < lists.size(); i++){
+            res[i] = lists.get(i);
+        }
+        return res;
+    }
+    public static void main(String[] args){
+        int[] nums1 = {2,1,3,10,9,8};
+        int[] nums2 = {0,2,3,10};
+        int[] res = core(nums1, nums2);
+        for(int i = 0; i < res.length; i++)
+            System.out.print(res[i] + " ");
     }
 }
 ```
