@@ -1998,3 +1998,45 @@ public class Solution {
     }
 }
 ```
+
+
+#### 203. Remove Linked List Elements
+
+Remove all elements from a linked list of integers that have value val.
+
+```python
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        if(head == null)
+            return head;
+        ListNode index = head;
+        ListNode preNode = null;
+        while(index!=null && index.val == val){
+            index = index.next;
+        }
+        preNode = index;
+        ListNode res = preNode;
+        while(index!=null){
+            if(index.val == val){
+                while(index != null && index.val == val){
+                    index = index.next;
+                }
+                preNode.next = index;
+                preNode = index;
+            }else{
+                preNode = index;
+                index = index.next;
+            }
+        }
+        return res;
+    }
+}
+```
