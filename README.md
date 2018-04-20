@@ -2040,3 +2040,36 @@ class Solution {
     }
 }
 ```
+
+#### 125. Valid Palindrome
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+For example,
+"A man, a plan, a canal: Panama" is a palindrome.
+"race a car" is not a palindrome.
+
+解题思路：题目要求判断字母数字字符串是否是回文。所以先把字符串toLowerCase，再用两个指针分别指向头和尾，判断索引的字符是否是数字或者字母，如果不是则指针移动，否则判断两个索引字符是否相等。
+
+```python
+class Solution {
+    public boolean isPalindrome(String s) {
+        if(s == null || s.length() == 0)
+            return true;
+        s = s.toLowerCase();
+        int left = 0;
+        int right = s.length() - 1;
+        while(left < right){
+            while(left < right && (s.charAt(left) - 'a' < 0 || s.charAt(left) - 'a' > 26) && (s.charAt(left) - '0' < 0 || s.charAt(left) - '0' > 9))
+                left +=1;
+            while(left < right && (s.charAt(right) - 'a' < 0 || s.charAt(right) - 'a' > 26)&& (s.charAt(right) - '0' < 0 || s.charAt(right) - '0' > 9))
+                right -=1;
+
+            if(left < right && s.charAt(left)  != s.charAt(right))
+                return false;
+            left +=1;
+            right -=1;
+        }
+        return true;
+    }
+}
+```
