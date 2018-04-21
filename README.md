@@ -1949,55 +1949,7 @@ class Solution {
 }
 ```
 
-#### 蘑菇街一面：求两数组的交集，并且去重。
 
-解题思路：先排序nums1和nums2，在用index1和index2来分别指向nums1和nums2的第一个元素。然后，在同时遍历。如果nums1[index1]==nums2[index2]，则找到交集元素，并且两指针自加，紧接着判断下一个元素是否还是相等，如果相等则继续自加，跳过下一个元素；如果果nums1[index1]<nums2[index2]，则index1自加；否则，index2自加。
-
-
-```python
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-public class Solution {
-    public static int[] core(int[] nums1, int[] nums2){
-        if(nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0){
-            return null;
-        }
-        Arrays.sort(nums1);
-        Arrays.sort(nums2);
-        int index1 = 0;
-        int index2 = 0;
-        List<Integer> lists = new LinkedList<Integer>();
-        while(index1 < nums1.length && index2 < nums2.length){
-            if(nums1[index1] == nums2[index2]){
-                lists.add(nums1[index1]);
-                index1 +=1;
-                index2 +=1;
-                if(index1 < nums1.length && index2 < nums2.length && nums1[index1] == nums1[index1-1] && nums1[index1] == nums2[index2]){
-                    index1 +=1;
-                    index2 +=1;
-                }
-            }else if(nums1[index1] < nums2[index2]){
-                index1 +=1;
-            }else{
-                index2 +=1;
-            }
-        }
-        int[] res = new int[lists.size()];
-        for(int i = 0; i < lists.size(); i++){
-            res[i] = lists.get(i);
-        }
-        return res;
-    }
-    public static void main(String[] args){
-        int[] nums1 = {2,1,3,10,9,8};
-        int[] nums2 = {0,2,3,10};
-        int[] res = core(nums1, nums2);
-        for(int i = 0; i < res.length; i++)
-            System.out.print(res[i] + " ");
-    }
-}
-```
 
 
 #### 203. Remove Linked List Elements
@@ -2073,3 +2025,82 @@ class Solution {
     }
 }
 ```
+
+# 公司面试题
+
+#### 蘑菇街一面：求两数组的交集，并且去重。
+
+解题思路：先排序nums1和nums2，在用index1和index2来分别指向nums1和nums2的第一个元素。然后，在同时遍历。如果nums1[index1]==nums2[index2]，则找到交集元素，并且两指针自加，紧接着判断下一个元素是否还是相等，如果相等则继续自加，跳过下一个元素；如果果nums1[index1]<nums2[index2]，则index1自加；否则，index2自加。
+
+
+```python
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+public class Solution {
+    public static int[] core(int[] nums1, int[] nums2){
+        if(nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0){
+            return null;
+        }
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int index1 = 0;
+        int index2 = 0;
+        List<Integer> lists = new LinkedList<Integer>();
+        while(index1 < nums1.length && index2 < nums2.length){
+            if(nums1[index1] == nums2[index2]){
+                lists.add(nums1[index1]);
+                index1 +=1;
+                index2 +=1;
+                if(index1 < nums1.length && index2 < nums2.length && nums1[index1] == nums1[index1-1] && nums1[index1] == nums2[index2]){
+                    index1 +=1;
+                    index2 +=1;
+                }
+            }else if(nums1[index1] < nums2[index2]){
+                index1 +=1;
+            }else{
+                index2 +=1;
+            }
+        }
+        int[] res = new int[lists.size()];
+        for(int i = 0; i < lists.size(); i++){
+            res[i] = lists.get(i);
+        }
+        return res;
+    }
+    public static void main(String[] args){
+        int[] nums1 = {2,1,3,10,9,8};
+        int[] nums2 = {0,2,3,10};
+        int[] res = core(nums1, nums2);
+        for(int i = 0; i < res.length; i++)
+            System.out.print(res[i] + " ");
+    }
+}
+```
+
+#### 京东面试题：给定一个树，令树中节点值等于其子结构中的节点数总和。
+```python
+class TreeNode{
+    TreeNode left = null;
+    TreeNode right = null;
+    int val = 0;
+    public TreeNode(){}
+}
+public class Solution {
+    public static void countNodeNum(TreeNode node){
+        core(node);
+    }
+    public static int core(TreeNode node){
+        if(node == null)
+            return 0;
+        node.val = core(node.left) + core(node.right);
+        return node.val + 1;
+    }
+}
+```
+
+#### 京东面试题：从原点出发，每次投骰子，根据点数m每次移动m步，问如何求得经过n时的概率？（类似斐波那契数列解法）
+
+解题思路：用数组保存前6次的概率。
+
+递推公式：f(n)=f(n-1)*1/6+f(n-2)*1/6+…+f(n-6)*1/6
