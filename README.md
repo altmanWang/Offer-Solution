@@ -2026,6 +2026,99 @@ class Solution {
 }
 ```
 
+#### 116. Populating Next Right Pointers in Each Node（2017年京东面试题）
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+Initially, all next pointers are set to NULL.
+
+Note:
+
+You may only use constant extra space.
+Recursive approach is fine, implicit stack space does not count as extra space for this problem.
+You may assume that it is a perfect binary tree (ie, all leaves are at the same level, and every parent has two children).
+
+解题思路：递归遍历树的每一层，将每一层中的节点指向其右侧节点。
+
+```python
+/**
+ * Definition for binary tree with next pointer.
+ * public class TreeLinkNode {
+ *     int val;
+ *     TreeLinkNode left, right, next;
+ *     TreeLinkNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        if(root == null)
+            return;
+        LinkedList<TreeLinkNode> lists = new LinkedList<TreeLinkNode>();
+        lists.add(root);
+        connect(lists, 1);
+    }
+    public void connect(LinkedList<TreeLinkNode> lists, int cnt){
+        if(cnt == 0)
+            return;
+        TreeLinkNode lastNode = null;
+        int count = 0 ;
+        for(int i = 0; i < cnt; i++){
+            TreeLinkNode curNode = lists.removeFirst();
+            if(curNode.left != null){
+                lists.add(curNode.left);
+                count +=1;
+            }
+            if(curNode.right != null){
+                lists.add(curNode.right);
+                count +=1;
+            }
+            if(i > 0){
+                lastNode.next = curNode;
+            }
+            lastNode = curNode;
+        }
+        connect(lists, count);
+    }
+}
+```
+
+不用额外空间的版本：
+```python
+/**
+ * Definition for binary tree with next pointer.
+ * public class TreeLinkNode {
+ *     int val;
+ *     TreeLinkNode left, right, next;
+ *     TreeLinkNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        if(root == null) {
+            return;
+        }
+        root.next = null;
+        conn(root);
+        
+    }
+    private void conn(TreeLinkNode root) {
+        if(root == null) {
+            return;
+        }
+        if(root.left != null) {
+            root.left.next = root.right;
+        }
+        if(root.right != null) {
+            if(root.next != null) {
+                root.right.next = root.next.left;
+            } else {
+                root.right.next = null;
+            }
+        }
+        conn(root.left);
+        conn(root.right);
+    }
+}
+```
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
