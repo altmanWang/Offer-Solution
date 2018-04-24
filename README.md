@@ -1488,7 +1488,7 @@ Given a string s, find the longest palindromic substring in s. You may assume th
 
 
 解题思路：
-这道题是比较常考的题目，求回文子串，一般有两种方法。 第一种方法比较直接，实现起来比较容易理解。基本思路是对于每个子串的中心（可以是一个字符，或者是两个字符的间隙，比如串abc,中心可以是a,b,c,或者是ab的间隙，bc的间隙）往两边同时进行扫描，直到不是回文串为止。假设字符串的长度为n,那么中心的个数为2*n-1(字符作为中心有n个，间隙有n-1个）。对于每个中心往两边扫描的复杂度为O(n),所以时间复杂度为O((2*n-1)*n)=O(n^2),空间复杂度为O(1)，代码如下：
+这道题是比较常考的题目，求回文子串，一般有两种方法。 第一种方法比较直接，实现起来比较容易理解。基本思路是对于每个子串的中心（可以是一个字符，或者是两个字符的间隙，比如串abc,中心可以是a,b,c,或者是ab的间隙，bc的间隙）往两边同时进行扫描，直到不是回文串为止。假设字符串的长度为n,那么中心的个数为2\*n-1(字符作为中心有n个，间隙有n-1个）。对于每个中心往两边扫描的复杂度为O(n),所以时间复杂度为O((2*n-1)*n)=O(n^2),空间复杂度为O(1)，代码如下：
 ```python
 class Solution {
     public String longestPalindrome(String s) {
@@ -2119,6 +2119,57 @@ public class Solution {
     }
 }
 ```
+
+
+#### 131. Palindrome Partitioning（回溯论文）
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+解题思路：我们在最外层循环中判断字符串s中的[i,j]是否构成回文。如果构成回文，那么，接着判断s 中j+1及以后的字符是否构成回文；如果不构成回文，那么就不进行下一次递归，直接在本层循环中判断[i,j+1]是否构成回文。
+
+```python
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<List<String>> lists= new LinkedList<List<String>>();
+        if(s == null || s.length() == 0)
+            return lists;
+        partition(s, lists, new LinkedList<String>(), 0);
+        return lists;
+    }
+    public void partition(String s, List<List<String>> lists, LinkedList<String> path, int i){
+        if(i >= s.length()){
+            lists.add(new LinkedList<String>(path));
+            return;
+        }
+        for(int j = i; j < s.length(); j++){
+            if(isPalindrome(s, i, j)){
+                path.addLast(s.substring(i,j+1));
+                partition(s, lists, path, j+1);
+                path.removeLast();
+            }
+        }
+    }
+    public boolean isPalindrome(String s, int start, int end){
+        if(start < 0 || end >= s.length())
+            return false;
+        int i = start;
+        int j = end;
+        
+        while(i <= end && j >= start){
+            if(s.charAt(i)!=s.charAt(j))
+                return false;
+            i +=1;
+            j -= 1;
+        }
+        return true;
+    }
+}
+```
+
+
+
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
