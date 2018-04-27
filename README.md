@@ -2121,7 +2121,7 @@ public class Solution {
 ```
 
 
-#### 131. Palindrome Partitioning（回溯论文）
+#### 131. Palindrome Partitioning（回溯）
 Given a string s, partition s such that every substring of the partition is a palindrome.
 
 Return all possible palindrome partitioning of s.
@@ -2166,9 +2166,39 @@ class Solution {
     }
 }
 ```
+#### 328. Odd Even Linked List
+Given a singly linked list, group all odd nodes together followed by the even nodes. Please note here we are talking about the node number and not the value in the nodes.
 
+You should try to do it in place. The program should run in O(1) space complexity and O(nodes) time complexity.
 
-
+```python
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if(head == null || head.next == null)
+            return head;
+        ListNode odd_head = head;
+        ListNode even_head = head.next;
+        ListNode even_odd = even_head;
+        while(even_head != null && even_head.next != null){
+            odd_head.next = even_head.next;
+            even_head.next = even_head.next.next;
+            
+            odd_head = odd_head.next;
+            even_head = even_head.next;
+        }
+        odd_head.next = even_odd;
+        return head;
+    }
+}
+```
 
 # 公司面试题
 
