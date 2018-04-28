@@ -2200,6 +2200,40 @@ class Solution {
 }
 ```
 
+
+#### 343. Integer Break （动态规划，类似剑指offer面试题14）
+Given a positive integer n, break it into the sum of at least two positive integers and maximize the product of those integers. Return the maximum product you can get.
+
+For example, given n = 2, return 1 (2 = 1 + 1); given n = 10, return 36 (10 = 3 + 3 + 4).
+
+Note: You may assume that n is not less than 2 and not larger than 58.
+
+```python
+class Solution {
+    public int integerBreak(int n) {
+        if(n==2)
+            return 1;
+        if(n==3)
+            return 2;
+        int[] nums = new int[n+1];
+        nums[0] = 0;
+        nums[1] = 1;
+        nums[2] = 2;
+        nums[3] = 3;
+        for(int i = 4; i < n + 1; i++){
+            int tmp=0;
+            for(int j = 1; j <= i/2; j++){
+                tmp = nums[j] * nums[i-j];
+                if(nums[i] < tmp)
+                    nums[i] = tmp;
+            }
+        }
+        return nums[n];
+        
+    }
+}
+```
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
