@@ -2233,6 +2233,46 @@ class Solution {
     }
 }
 ```
+#### 162. Find Peak Element
+A peak element is an element that is greater than its neighbors.
+
+Given an input array nums, where num[i] ≠ num[i+1], find a peak element and return its index.
+
+The array may contain multiple peaks, in that case return the index to any one of the peaks is fine.
+
+You may imagine that num[-1] = num[n] = -∞.
+
+解题思路：该题目要求寻找局部极值点。可以采用二分查找的策略，每次查看中间的数，判断是否是局部极值点。
+
+```python
+class Solution {
+    public int findPeakElement(int[] nums) {
+        if(nums.length == 1)
+            return 0;
+        int[] results = {-1};
+        findPeakElement(nums, 0, nums.length - 1, results);
+        return results[0];
+    }
+    public void findPeakElement(int[] nums, int start, int end, int[] res){
+        if(start > end)
+            return;
+        int mid = start + (end - start) / 2;
+        if((mid == 0 || nums[mid] > nums[mid-1]) && (mid==nums.length-1 || nums[mid] > nums[mid+1])){
+            res[0] = mid;
+            return;
+        }
+        if(mid == 0 || nums[mid] > nums[mid-1])
+            findPeakElement(nums, mid+1, end, res);
+        else
+            findPeakElement(nums, start, mid-1, res);
+    }
+
+    public static void main(String[] args){
+        int[] nums = {3,4,3,2,1};
+        System.out.println(new Solution().findPeakElement(nums));
+    }
+}
+```
 
 # 公司面试题
 
