@@ -2274,6 +2274,57 @@ class Solution {
 }
 ```
 
+#### 215. Kth Largest Element in an Array
+Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+解题思路：排序或者利用快排partion函数寻找第k大的数。
+
+```python
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        return findKthLargest(nums, k, 0, nums.length - 1);
+        
+    }
+    public int findKthLargest(int[] nums, int target, int start, int end){
+        if(start >= end)
+            return nums[start];
+        int j = partion(nums, start, end);
+            
+        if((nums.length - j) > target){
+            return findKthLargest(nums, target, j+1, end);
+        }else if((nums.length - j) < target){
+            return findKthLargest(nums, target, start, j-1);
+        }
+        return nums[j];
+    }
+    public int partion(int[] nums, int start, int end){
+        int i = start;
+        int j = end + 1;
+        int value = nums[start];
+        int tmp = 0;
+        while(true){
+            while(nums[++i] < value){
+                if(i == end)
+                    break;
+            }
+            while(nums[--j] > value){
+                if(j == start)
+                    break;
+            }
+            if(i >= j)
+                break;
+            tmp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = tmp;
+        }
+        nums[start] = nums[j];
+        nums[j] = value;
+        return j;
+    }
+}
+'''
+
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
