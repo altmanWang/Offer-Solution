@@ -2324,6 +2324,36 @@ class Solution {
 }
 '''
 
+#### 454. 4Sum II
+Given four lists A, B, C, D of integer values, compute how many tuples (i, j, k, l) there are such that A[i] + B[j] + C[k] + D[l] is zero.
+
+To make problem a bit easier, all A, B, C, D have same length of N where 0 ≤ N ≤ 500. All integers are in the range of -228 to 228 - 1 and the result is guaranteed to be at most 231 - 1.
+
+解题思路：用空间换时间。用一个HashMap保存前两个数组各个元素对的和。再遍历后面两个数组的，分别计算元素对的和，然后访问HashMap是否有互补的，相加等于0。
+
+```python
+class Solution {
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        HashMap<Integer, Integer> maps = new HashMap<Integer, Integer>();
+        int len = A.length;
+        for(int i = 0; i < len; i++){
+            for(int j = 0; j < len; j++){
+                maps.put(A[i] + B[j], maps.getOrDefault(A[i] + B[j], 0)+1);
+            }
+        }
+        int res = 0;
+        for(int i = 0; i < len; i++){
+            for(int j = 0; j < len; j++){
+                int tmp = -(C[i] + D[j]);
+                res += maps.getOrDefault(tmp,0);
+            }
+        }
+        return res;
+    }
+}
+'''
+
+
 
 # 公司面试题
 
