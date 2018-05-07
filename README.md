@@ -2322,7 +2322,7 @@ class Solution {
         return j;
     }
 }
-'''
+```
 
 #### 454. 4Sum II
 Given four lists A, B, C, D of integer values, compute how many tuples (i, j, k, l) there are such that A[i] + B[j] + C[k] + D[l] is zero.
@@ -2330,6 +2330,8 @@ Given four lists A, B, C, D of integer values, compute how many tuples (i, j, k,
 To make problem a bit easier, all A, B, C, D have same length of N where 0 ≤ N ≤ 500. All integers are in the range of -228 to 228 - 1 and the result is guaranteed to be at most 231 - 1.
 
 解题思路：用空间换时间。用一个HashMap保存前两个数组各个元素对的和。再遍历后面两个数组的，分别计算元素对的和，然后访问HashMap是否有互补的，相加等于0。
+
+
 
 ```python
 class Solution {
@@ -2351,7 +2353,25 @@ class Solution {
         return res;
     }
 }
-'''
+```
+
+#### 136. Single Number
+Given a non-empty array of integers, every element appears twice except for one. Find that single one.
+
+解题思路：剑指offer56题，用异或的方法遍历整个数组，数组中出现两次的数字在异或中会抵消掉，最终异或的结果就是在数组中只出现一次的数字。
+
+
+```python
+class Solution {
+    public int singleNumber(int[] nums) {
+        int res = 0;
+        for(int i = 0; i < nums.length; i++){
+            res ^= nums[i];
+        }
+        return res;
+    }
+}
+```
 
 
 
