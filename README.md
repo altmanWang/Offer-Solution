@@ -2373,7 +2373,38 @@ class Solution {
 }
 ```
 
+#### 414. Third Maximum Number
+Given a non-empty array of integers, return the third maximum number in this array. If it does not exist, return the maximum number. The time complexity must be in O(n).
 
+解题思路：由于时间复杂度O（n）。所以不能再用排序的方法解决该问题。可以设置三个指针，分别指向第一大，第二大和第三大的元素。每次遍历时需要注意该元素与三个指针所指向的元素是否是同一个值，如果是，则跳过，否则依次比较。
+
+```python
+class Solution {
+    public int thirdMax(int[] nums) {
+        if(nums.length == 1)
+            return nums[0];
+        int first = nums[0];
+        int second = nums[0];
+        int third = nums[0];
+        for(int i = 1; i < nums.length; i++){
+            if(nums[i] == first || nums[i] == second || nums[i] == third)
+                continue;
+            if(nums[i] > first){
+                third = second;
+                second = first;
+                first = nums[i];
+            }else if((nums[i] > second || second == first)){
+                third = second;
+                second = nums[i];
+            }else if((nums[i] > third || third == second || third == first)){
+                third = nums[i];
+            }
+        }
+        if (first > second && second > third) return third;
+        return first;
+    }
+}
+```
 
 # 公司面试题
 
@@ -2453,3 +2484,7 @@ public class Solution {
 解题思路：用数组保存前6次的概率。
 
 递推公式：f(n)=f(n-1)*1/6+f(n-2)*1/6+…+f(n-6)*1/6
+
+
+# 实习offer
+蘑菇街、阿里
