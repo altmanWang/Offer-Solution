@@ -2406,6 +2406,55 @@ class Solution {
 }
 ```
 
+#### 332. Reconstruct Itinerary（DFS）
+Given a list of airline tickets represented by pairs of departure and arrival airports [from, to], reconstruct the itinerary in order. All of the tickets belong to a man who departs from JFK. Thus, the itinerary must begin with JFK.
+
+Note:
+If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string. For example, the itinerary ["JFK", "LGA"] has a smaller lexical order than ["JFK", "LGB"].
+All airports are represented by three capital letters (IATA code).
+You may assume all tickets form at least one valid itinerary.
+
+Example 1:
+
+tickets = [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+
+Return ["JFK", "MUC", "LHR", "SFO", "SJC"].
+
+解题思路：应该该题存在环，可以采用DFS。用HashMap存储图结构，key是起始点，value是list对应的目的地集合。用优先队列保存目的地集合，满足题目要求。用DFS遍历图结构，起始节点是JFK。在DFS中，需要注意需要将遍历后节点每次加到路径的头位置。
+
+```python
+class Solution {
+    public List<String> findItinerary(String[][] tickets) {
+        List<String> paths = new LinkedList<String>();
+        if(tickets == null || tickets[0] == null)
+            return paths;
+        HashMap<String, PriorityQueue<String>> maps = new HashMap<String, PriorityQueue<String>>();
+        for(int i =0; i < tickets.length; i++){
+            PriorityQueue<String> lists;
+            if(maps.containsKey(tickets[i][0]))
+                lists = maps.get(tickets[i][0]);
+            else
+                lists = new PriorityQueue<String>();
+            lists.add(tickets[i][1]);
+            maps.put(tickets[i][0], lists);
+        }
+        dfs("JFK", maps, paths);
+        return paths;
+    }
+    public void dfs(String str, HashMap<String, PriorityQueue<String>> maps, List<String> lists){
+        if(maps.get(str) == null){
+            lists.add(0,str);
+            return;
+        }
+        while(maps.get(str).size() > 0){
+            String tmp = maps.get(str).poll();
+            dfs(tmp, maps, lists);
+        }
+        lists.add(0,str);
+    }
+}
+```
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
