@@ -2455,6 +2455,35 @@ class Solution {
 }
 ```
 
+#### 686. Repeated String Match
+Given two strings A and B, find the minimum number of times A has to be repeated such that B is a substring of it. If no such solution, return -1.
+
+For example, with A = "abcd" and B = "cdabcdab".
+
+Return 3, because by repeating A three times (“abcdabcdabcd”), B is a substring of it; and B is not a substring of A repeated two times ("abcdabcd").
+```python
+class Solution {
+    public int repeatedStringMatch(String A, String B) {
+        if(B == null || A == null)
+            return -1;
+        StringBuilder tmp = new StringBuilder(A);
+        int res = 1;
+        while(tmp.length() < B.length()){
+            tmp.append(A);
+            res +=1;
+        }
+        if(tmp.toString().contains(B))
+            return res;
+        tmp.append(A);
+        res +=1;
+        if(tmp.toString().contains(B))
+            return res;
+        return -1;
+
+    }
+}
+```
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
