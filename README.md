@@ -2484,6 +2484,50 @@ class Solution {
 }
 ```
 
+
+#### 110. Balanced Binary Tree（求二叉树每层的高度）
+
+Given a binary tree, determine if it is height-balanced.
+
+For this problem, a height-balanced binary tree is defined as:
+
+a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+
+```python
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root == null)
+            return true;
+        boolean[] res = new boolean[1];
+        res[0] = true;
+        isBalanced(root, res);
+        return res[0];
+    }
+    public int isBalanced(TreeNode node, boolean[] res){
+        if(res[0] == false)
+            return 0;
+        if(node == null)
+            return 1;
+        int left = isBalanced(node.left, res);
+        int right = isBalanced(node.right, res);
+        if(left - right > 1 || right - left > 1){
+            res[0] = false;
+            return 0;
+        }
+        return left > right ? 1 + left : 1 + right;
+    }
+}
+```
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
@@ -2565,4 +2609,4 @@ public class Solution {
 
 
 # 实习offer
-蘑菇街、阿里
+蘑菇街、阿里、华为
