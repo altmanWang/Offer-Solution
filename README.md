@@ -2493,6 +2493,8 @@ For this problem, a height-balanced binary tree is defined as:
 
 a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
 
+解题思路：利用递归的方法求二叉树每层的高度，计算左右子树的差值。
+
 ```python
 /**
  * Definition for a binary tree node.
@@ -2524,6 +2526,47 @@ class Solution {
             return 0;
         }
         return left > right ? 1 + left : 1 + right;
+    }
+}
+```
+
+#### 814. Binary Tree Pruning（二叉树）
+We are given the head node root of a binary tree, where additionally every node's value is either a 0 or a 1.
+
+Return the same tree where every subtree (of the given tree) not containing a 1 has been removed.
+
+(Recall that the subtree of a node X is X, plus every node that is a descendant of X.)
+
+解题思路：需要将二叉树中全部包含0的子树删除掉。可以通过递归遍历的方式，从低到上一次判断该子树是否全部为0。
+
+
+```python
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode pruneTree(TreeNode root) {
+        pruneTreeCore(root);
+        return root;
+    }
+    public boolean pruneTreeCore(TreeNode node){
+        if(node == null)
+            return true;
+        boolean lRes = pruneTreeCore(node.left);
+        boolean rRes = pruneTreeCore(node.right);
+        if(lRes == true)
+            node.left = null;
+        if(rRes == true)
+            node.right = null;
+        if(node.val == 0 && rRes == true && lRes == true)
+            return true;
+        return false;
     }
 }
 ```
