@@ -2355,6 +2355,64 @@ class Solution {
 }
 ```
 
+#### 18. 4Sum
+
+Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
+
+
+解题思路：利用3sum和2sum的思路，注意通过两个相邻元素相等时则跳过。
+
+
+```python
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> res = new LinkedList<List<Integer>>();
+        if(nums == null || nums.length < 4)
+            return res;
+        Arrays.sort(nums);
+        for(int i = 0; i < nums.length - 3; i++){
+            if(i > 0 && nums[i] == nums[i-1])
+                continue;
+            threeSum(nums, i+1, res, nums[i], target);
+        }
+        return res;
+    }
+    public void threeSum(int[] nums, int start, List<List<Integer>> res, int first, int target){
+        for(int i = start; i < nums.length - 2; i ++){
+            if(i > start && nums[i] == nums[i-1])
+                continue;
+            twoSum(nums, i+1, res, first, nums[i], target);
+        }
+    }
+    public void twoSum(int[] nums, int start, List<List<Integer>> res, int first, int second, int target){
+        int i = start;
+        int j = nums.length - 1;
+        while(i < j){
+            if(nums[i] + nums[j] + first + second == target){
+                LinkedList<Integer> path = new LinkedList<Integer>();
+                path.add(first);
+                path.add(second);
+                path.add(nums[i]);
+                path.add(nums[j]);
+                res.add(path);
+                while(i<j && nums[i]==nums[i+1]) 
+                    i +=1;  
+                while(i<j && nums[j]==nums[j-1]) 
+                    j -= 1; 
+                i += 1;
+                j -= 1;
+            }else if(nums[i] + nums[j] + first + second < target){
+                i += 1;
+            }else{
+                j -= 1;
+            }
+        }
+    }
+    
+}
+```
+
+
 #### 136. Single Number
 Given a non-empty array of integers, every element appears twice except for one. Find that single one.
 
