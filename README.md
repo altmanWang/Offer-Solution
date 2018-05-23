@@ -2629,6 +2629,31 @@ class Solution {
 }
 ```
 
+
+##### 35. Search Insert Position
+Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+
+You may assume no duplicates in the array.
+
+```python
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        return searchInsert(nums, target, 0, nums.length - 1);
+    }
+    public int searchInsert(int[] nums, int target, int start, int end){
+        if(start > end)
+            return start;
+        int middle = start + (end - start)/2;
+        if(nums[middle] == target)
+            return middle;
+        if(nums[middle] > target)
+            return searchInsert(nums, target, start, middle-1);
+        else
+            return searchInsert(nums, target, middle+1, end);
+    }
+}
+```
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
