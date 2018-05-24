@@ -2630,7 +2630,7 @@ class Solution {
 ```
 
 
-##### 35. Search Insert Position
+#### 35. Search Insert Position
 Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
 
 You may assume no duplicates in the array.
@@ -2654,6 +2654,56 @@ class Solution {
 }
 ```
 
+#### 228. Summary Ranges
+Given a sorted integer array without duplicates, return the summary of its ranges.
+
+Input:  [0,1,2,4,5,7]
+
+Output: ["0->2","4->5","7"]
+
+Explanation: 0,1,2 form a continuous range; 4,5 form a continuous range.
+
+解题思路：用一个容器来保存路径，判断是否连续。注意，在遍历完之后，需要处理最后一组区间字符串。
+
+```python
+class Solution {
+    public List<String> summaryRanges(int[] nums) {
+        List<String> res = new LinkedList<String>();
+        if(nums == null || nums.length == 0)
+            return res;
+        LinkedList<Integer> list = new LinkedList<Integer>();
+        for(int i = 0; i < nums.length; i++){
+            if(list.size() == 0)
+                list.addFirst(nums[i]);
+            else{
+                if(nums[i] == list.getLast() + 1)
+                    list.addLast(nums[i]);
+                else{
+                    String str = "";
+                    int first = list.getFirst();
+                    int last = list.getLast();
+                    if(first != last)
+                        str += first + "->" + last;
+                    else
+                        str += first;
+                    res.add(str);
+                    list.clear();
+                    list.addFirst(nums[i]);
+                }
+            }
+        }
+        String str = "";
+        int first = list.getFirst();
+        int last = list.getLast();
+        if(first != last)
+            str += first + "->" + last;
+        else
+            str += first;
+        res.add(str);
+        return res;
+    }
+}
+```
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
