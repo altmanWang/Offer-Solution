@@ -2744,6 +2744,40 @@ class Solution {
 ```
 
 
+
+
+#### 611. Valid Triangle Number
+Given an array consists of non-negative integers, your task is to count the number of triplets chosen from the array that can make triangles if we take them as side lengths of a triangle.
+
+解题思路：判断三个数字是否满足三角形。先排序，前两个元素之和大于第三个即可。用三个指针，第一个指针指向最后一个元素（最大），第二指针指向第一个元素（最小），第三个指针指向倒数第二元素（第二大）。判断第二个指针与第三个指针元素之和是否大于第一个元素，若大于则计数加（第三个指针-第二个指针）并且更改第三个指针（自减）否则更改第二个指针（自加）。从数组尾，根据上述规则通过第一个指针依次遍历计算三角形个数。
+
+
+
+```python
+class Solution {
+    public int triangleNumber(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int res = 0;
+        Arrays.sort(nums);
+        for(int i = nums.length - 1; i >= 2; i--){
+            int start = 0;
+            int end = i - 1;
+            while(start < end){
+                if(nums[start] + nums[end] > nums[i]){
+                    res += (end - start);
+                    end -=1;
+                }else{
+                    start +=1;
+                }
+            }
+        }
+        return res;
+    }
+}
+```
+
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
