@@ -2777,6 +2777,34 @@ class Solution {
 }
 ```
 
+#### 485. Max Consecutive Ones（数组）
+Given a binary array, find the maximum number of consecutive 1s in this array.
+
+解题思路：依次遍历数组，找到最大连续为1的子数组长度。
+
+```python
+class Solution {
+    public int findMaxConsecutiveOnes(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int max_res = 0;
+        int temp = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] == 1){
+                temp +=1;
+            }else{
+                if(temp > max_res)
+                    max_res = temp;
+                temp = 0;
+            }
+        }
+        if(temp > max_res)
+            max_res = temp;
+        return max_res;
+    }
+}
+```
+
 
 # 公司面试题
 
