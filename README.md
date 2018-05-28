@@ -2806,6 +2806,44 @@ class Solution {
 ```
 
 
+#### 66. Plus One
+Given a non-empty array of digits representing a non-negative integer, plus one to the integer.
+
+The digits are stored such that the most significant digit is at the head of the list, and each element in the array contain a single digit.
+
+You may assume the integer does not contain any leading zero, except the number 0 itself.
+
+```python
+class Solution {
+    public int[] plusOne(int[] digits) {
+        if(digits == null || digits.length == 0)
+            return digits;
+        int flag = 1;
+        for(int i = digits.length - 1; i >= 0; i--){
+            digits[i] += flag;
+            if(digits[i] >= 10){
+                digits[i] %= 10;
+                flag = 1;
+            }else{
+                flag = 0;
+            }
+        }
+        if(flag == 1){
+            int[] res = new int[digits.length + 1];
+            for(int i = 0; i < res.length; i++){
+                if(i == 0)
+                    res[i] = 1;
+                else
+                    res[i] = digits[i-1];
+            }
+            return res;
+        }
+        return digits;
+    }
+}
+```
+
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
