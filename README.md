@@ -1482,7 +1482,7 @@ class Solution {
 }
 ```
 
-#### 5. Longest Palindromic Substring
+#### 5. Longest Palindromic Substring （动态规划重点）
 
 Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
 
@@ -2843,6 +2843,41 @@ class Solution {
 }
 ```
 
+#### 93. Restore IP Addresses（字符串）
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+解题思路：复原IP地址。ip地址应该有4个字节组成，每个字节的数字小于等于255大于等于0，即IP字符串最大含有12个数字，每个字节最多有3个数字，最少有一个1数字。
+
+用递归的方式从最后一位作为起始点开始遍历整个字符串，每次递归需要给定起始位置和当前字节。每次递归中确定一个起始点，分别遍历距离该点分别为1,2,3的子字符串，每个子字符串必须满足该字符串的数值小于255，并且剩余字符串除以剩余字节得到每个字节最少包含的字符数，若该数大于3或者小于1则该遍历不符合条件。需要注意001,01等特殊字符串的判别。
+
+```python
+class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        List<String> res = new LinkedList<String>();
+        if(s == null || s.length() == 0 || s.length() < 4 || s.length() > 12)
+            return res;
+        restoreIpAddresses(s, s.length(), res, 4, "");
+        return res;
+    }
+    public void restoreIpAddresses(String str, int start, List<String> res, int flag, String ip){
+        if(flag == 0) {
+            if((ip.length() - 4 ) == str.length())
+                res.add(ip.substring(0, ip.length() - 1));
+            return;
+        }
+        for(int i = 1; i <= Math.min(3,start) ;i++){
+            String tmp =  str.substring(start - i, start);
+
+            if((flag != 1) && ((start - i) / (flag-1) > 3 || (start - i) / (flag-1)  < 1))
+                continue;
+            if(tmp.length() >= 2 && tmp.charAt(0)=='0')
+                continue;
+            if(Integer.parseInt(tmp) <= 255)
+                restoreIpAddresses(str, start - i, res, flag - 1, tmp +"."+ ip);
+        }
+    }
+}
+```
 
 # 公司面试题
 
