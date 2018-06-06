@@ -2909,6 +2909,40 @@ class Solution {
 }
 ```
 
+#### 205. Isomorphic Strings（字符串）
+Given two strings s and t, determine if they are isomorphic.
+
+Two strings are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.
+
+解题思路：如果字符串s的元素通过映射变换可以转换成字符串t的话，可以返回true，否则返回true。用两个数组保存字符串中元素的对应关系。遍历时，每次比较字符串中两元素是否成对，通过比较对应数组中的值进行判断，若两值相等则说明其是成对出现的，如果不相等则该两元素不是成对出现的。如果两个元素成对出现，则在两个数组中分别在其加（i+1），其中i是下标，用i来带入两元素的位置信息。
+
+例如“aba”和“baa”，如果不添加i，则在判断字符串中第三个元素时无法判断其是否成对，因为a和b在两字符串中都分别出现过两次。如果每次更新是添加i，则在判断第三个元素时，对于第一个字符串中的"a"，其数值是1,对于第二字符串中的"a"，其数值是2,虽然"a"都出现了但位置不一样，所以可判断出该两元素不是成对出现。
+
+
+```python
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        if(s == null || t == null || s.length() != t.length())
+            return false;
+        int[] sMaps = new int[256];
+        int[] tMaps = new int[256];
+        for(int i = 0; i < s.length(); i++){
+            Character sc = s.charAt(i);
+            Character tc = t.charAt(i);
+            if(sMaps[sc] != tMaps[tc])
+                return false;
+            sMaps[sc] = i + 1;
+            tMaps[tc] = i + 1;
+        }
+        return true;
+    }
+}
+```
+
+
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
