@@ -2941,7 +2941,38 @@ class Solution {
 }
 ```
 
+#### 204. Count Primes
+Count the number of prime numbers less than a non-negative number, n.
 
+解题思路：计算小于给定数字n的素数总个数。构建素数表，表内所有数初始都设置为素数。从2开始，2是第一个素数，那么令2的不大于n的所有倍数（1倍、2倍、3倍，直到小于n）都设定为非素数。然后，看表中的下一个素数，把其不大于n的所有倍数都设定为非素数。然后再看表中的下一个素数。一直判定到sqrt(n)+1，此时表中状态仍然为素数的数必定是素数。
+
+注意这里并没有遍历所有小于n的数而是遍历所有小于sqrt(n)+1。对于一个非素数m=A*B，其中一个非素数因数必定小于等于sqrt(m)，另一个则大于等于sqrt(m)。并且一个非素数肯定可以由一个素数及其倍数表示。所以只要判断前sqrt(n)+1个数即可。对于一个大于sqrt(n)+1的非素数，其可以由一个小于sqrt(n)+1的素数及其陪数表示。
+
+
+```python
+class Solution {
+    public int countPrimes(int n) {
+        if(n <= 2)
+            return 0;
+        int res = 0;
+        boolean[] maps = new boolean[n+1];
+        
+        for(int i = 2; i < ((int)Math.sqrt(n) + 1); i++){
+            if(maps[i] == true) continue;
+            int p = 2;
+            while(p * i < n){
+                maps[p * i] = true;
+                p +=1;
+            }
+        }
+        for(int i = 2; i < n; i++){
+            if(maps[i] == false)
+                res +=1;
+        }
+        return res;
+    }
+}
+```
 
 # 公司面试题
 
