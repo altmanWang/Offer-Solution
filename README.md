@@ -2974,6 +2974,44 @@ class Solution {
 }
 ```
 
+#### 
+
+
+解题思路：10ms Solution：先将两个字符串转换成数组再排序。最后通过遍历的方式找到不同的字符。
+
+```python
+class Solution {
+    public char findTheDifference(String s, String t) {
+        char[] sArray = s.toCharArray();
+        char[] tArray = t.toCharArray();
+        Arrays.sort(sArray);
+        Arrays.sort(tArray);
+        for(int i = 0; i < sArray.length; i++){
+            if(sArray[i] != tArray[i])
+                return tArray[i];
+        }
+        return tArray[tArray.length - 1];
+    }
+}
+```
+
+参考答案：8ms Solution：利用异或找到两个字符串中的不同字符。
+
+```python
+class Solution {
+    public char findTheDifference(String s, String t) {
+        char r =0;
+        for(int i =0;i<t.length();i++){
+          r^=t.charAt(i);
+        } 
+        for(int i=0; i<s.length(); i++){
+            r^=s.charAt(i);
+        }
+        return r;
+    }
+}
+```
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
