@@ -3045,13 +3045,15 @@ class Solution {
 }
 ```
 
-这道题的follow up leetcode 275。
+这道题follow up leetcode 275。
 
 
 #### 275. H-Index II
 与题274题一样，只不过输入时有些的。时间上有限制，logn。
 
-解题思路：用二分查找。找到s - i = citations[i]时，则返回s-i。其中s是输入数组的长度,i为元素下标s - i=citations[i]，，即y=x中的某一点。若一直找不到，在二分查找递归结束时返回s-start，即y=x附近的某一点。
+![image](https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/H-index-en.svg/425px-H-index-en.svg.png)
+
+解题思路：用二分查找。观察上图，可以发现，另papers数量为x，paper的引用量为y，我们需要找到y=x线上的某一点即可，如果找不到，则在该直线附近找最邻近一点。找到s - i = citations[i]时，则返回s-i。其中s是输入数组的长度,i为元素下标s - i=citations[i]，，即y=x中的某一点。若一直找不到，在二分查找递归结束时返回s-start，即y=x附近的某一点。
 
 ```python
 class Solution {
