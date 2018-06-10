@@ -3047,6 +3047,33 @@ class Solution {
 
 这道题的follow up leetcode 275。
 
+
+#### 275. H-Index II
+与题274题一样，只不过输入时有些的。时间上有限制，logn。
+
+解题思路：用二分查找。找到s - i = citations[i]时，则返回s-i。其中s是输入数组的长度,i为元素下标s - i=citations[i]，，即y=x中的某一点。若一直找不到，在二分查找递归结束时返回s-start，即y=x附近的某一点。
+
+```python
+class Solution {
+    public int hIndex(int[] citations) {
+        if(citations == null || citations.length == 0)
+            return 0;
+        return hIndex(citations, 0, citations.length - 1, citations.length);
+    }
+    public int hIndex(int[] citations, int start, int end, int length){
+        if(start > end)
+            return length - start;
+        int mid = start + (end - start) / 2;
+        if(length - mid == citations[mid])
+            return length - mid;
+        if(length - mid >= citations[mid])
+            return hIndex(citations, mid + 1, end, length);
+        else
+            return hIndex(citations, start, mid - 1, length);
+    }
+}
+```
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
