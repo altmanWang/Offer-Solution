@@ -3017,6 +3017,36 @@ class Solution {
 }
 ```
 
+
+#### 274. H-Index
+Given an array of citations (each citation is a non-negative integer) of a researcher, write a function to compute the researcher's h-index.
+
+According to the [of h-index on Wikipedia](https://en.wikipedia.org/wiki/H-index)：  "A scientist has index h if h of his/her N papers have at least h citations each, and the other N − h papers have no more than h citations each."
+
+![image](https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/H-index-en.svg/425px-H-index-en.svg.png)
+
+解题思路：找到一个点使得h个paper至少有h个引用。对于本思路，先将数组排序，降序。然后对于每个引用次数，取适当的i使得min(f(i),i)最大化，其中f(i)是第i个论文的应用次数。
+
+
+```python
+import java.util.Arrays;
+import java.util.Collections;
+class Solution {
+    public int hIndex(int[] citations) {
+        if(citations == null || citations.length == 0)
+            return 0;
+        Arrays.sort(citations);  
+        int count = 0;  
+        for(int i = 0; i < citations.length; i++)  
+            count = Math.max(count,Math.min(citations.length - i,citations[i]));  
+        return count;  
+        
+    }
+}
+```
+
+这道题的follow up leetcode 275。
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
