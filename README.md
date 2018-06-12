@@ -3076,6 +3076,41 @@ class Solution {
 }
 ```
 
+#### 16. 3Sum Closest
+Given an array nums of n integers and an integer target, find three integers in nums such that the sum is closest to target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+
+解题思路：先排序，再利用三个指针搜索元素和最接近target的值。
+
+
+```python
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int res = nums[0] + nums[1] + nums[nums.length - 1];
+        for(int i = 0; i < nums.length - 2; i++){
+            int start = i + 1;
+            int end = nums.length - 1;
+            int tmp;
+            while(start < end){
+                tmp = nums[i] + nums[start] + nums[end];
+                if(target - tmp == 0)
+                    return tmp;
+                if(tmp < target){
+                    start +=1;
+                }else{
+                    end -=1;
+                }
+                if(Math.abs(target - res) > Math.abs(target - tmp))
+                    res = tmp;
+            }
+        }
+        return res;
+    }
+}
+```
+
+
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
