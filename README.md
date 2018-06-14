@@ -3110,6 +3110,50 @@ class Solution {
 ```
 
 
+#### 283. Move Zeroes
+Given an array nums, write a function to move all 0's to the end of it while maintaining the relative order of the non-zero elements.
+
+解题思路：找到0元素，与最近的非0元素交换位置。 23 ms
+```python
+class Solution {
+    public void moveZeroes(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return;
+        int tmp;
+        for(int i = 0; i < nums.length - 1; i++){
+            if(nums[i] == 0){
+                int j = i + 1;
+                while(j < nums.length && nums[j] == 0){
+                    j +=1;
+                }
+                if(j < nums.length){
+                    tmp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = tmp;
+                }
+            }
+        }
+    }
+}
+```
+
+参考答案：4 ms
+
+```python
+class Solution {
+    public void moveZeroes(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return;
+        int pos = 0;
+        for(Integer num : nums){
+            if(num != 0)
+                nums[pos++] = num;
+        }
+        while(pos < nums.length)
+            nums[pos++] = 0;
+    }
+}
+```
 
 # 公司面试题
 
