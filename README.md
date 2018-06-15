@@ -3155,6 +3155,52 @@ class Solution {
 }
 ```
 
+
+#### 844. Backspace String Compare（字符串）
+Given two strings S and T, return if they are equal when both are typed into empty text editors. # means a backspace character.
+
+解题思路：用两个额外的辅助双向链表，分别保存两字符串字符，如果遇到#则退出最后一位，否则添加字符到最后一位。最后将两链表中的字符取出依次比较。如果全部一致则返回true，否则返回false。
+
+```python
+class Solution {
+    public boolean backspaceCompare(String S, String T) {
+        if((S == null || S.length() == 0) && (T == null || T.length() == 0))
+            return true;
+        if(S == null || S.length() == 0)
+            return false;
+        if(T == null || T.length() == 0)
+            return false;
+        LinkedList<Character> listS = new LinkedList<Character>();
+        LinkedList<Character> listT = new LinkedList<Character>();
+        for(int i = 0; i < S.length(); i++){
+            Character tmp = S.charAt(i);
+            if(tmp != '#')
+                listS.addLast(tmp);
+            else{
+                if(listS.size()!=0)
+                    listS.removeLast();
+            }
+        }
+        for(int i = 0; i < T.length(); i++){
+            Character tmp = T.charAt(i);
+            if(tmp != '#')
+                listT.addLast(tmp);
+            else{
+                if(listT.size()!=0)
+                    listT.removeLast();
+            }
+        }
+        if(listT.size()!=listS.size())
+            return false;
+        for(int i = 0; i < listT.size(); i++){
+            if(listT.get(i) != listS.get(i))
+                return false;
+        }
+        return true;
+    }
+}
+```
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
