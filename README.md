@@ -1148,20 +1148,21 @@ You may assume that each input would have exactly one solution, and you may not 
 ```python
 class Solution {
     public int[] twoSum(int[] nums, int target) {
+        int[] res = new int[2];
         if(nums == null || nums.length == 0)
-            return null;
-        HashMap<Integer, Integer> maps = new HashMap<Integer, Integer>();
-        int[] results = new int[2];
+            return res;
+        HashMap<Integer,Integer> maps = new HashMap<Integer,Integer>();
         for(int i = 0; i < nums.length; i++){
-            if(!maps.containsKey(nums[i]))
-                maps.put(nums[i],i);
-            if(maps.containsKey(target-nums[i]) && maps.get(target-nums[i])!=i){
-                results[0] = maps.get(target-nums[i]);
-                results[1] = i;
-                return results;
+            int diff = target - nums[i];
+            if(maps.containsKey(diff)){
+                res[0] = maps.get(diff);
+                res[1] = i;
+                return res;
+            }else{
+                maps.put(nums[i], i);
             }
         }
-        return results;
+        return res;
     }
 }
 ```
@@ -3201,6 +3202,61 @@ class Solution {
 }
 ```
 
+
+#### 532. K-diff Pairs in an Array（数组）
+Given an array of integers and an integer k, you need to find the number of unique k-diff pairs in the array. Here a k-diff pair is defined as an integer pair (i, j), where i and j are both numbers in the array and their absolute difference is k.
+
+解题思路：先排序，再一次遍历每个元素寻找差值绝对值等于k的对数。当遍历元素时，从当前元素开始向后遍历寻找符合条件的元素对，若找到则停止；若元素差值绝对值大于给定值时，也跳出当前子遍历。
+
+```python
+class Solution {
+    public int findPairs(int[] nums, int k) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int res = 0;
+        Arrays.sort(nums);
+        for(int i = 0; i < nums.length - 1; i++){
+            if(i ==0 || nums[i] != nums[i-1]){
+                int j = i + 1;
+                while(j < nums.length && Math.abs(nums[j] - nums[i]) <= k){
+                    if(Math.abs(nums[j] - nums[i]) == k){
+                        res +=1;   
+                        break;
+                    }
+                    j +=1;
+                }
+            }
+        }
+        return res;
+    }
+}
+```
+
+另一种解题思路：参考twosum，用空间换时间。用一个HashMap存储每一个元素及其出现的次数。再一次遍历HashMap中的元素，如果k=0，则若元素出现次数大于2次则res+1；如果k>0，如果HashMap中存在 entry.getKey() - k，则res+1；如果k<0，则返回res=0。
+```python
+import java.util.Map.Entry;  
+class Solution {
+    public int findPairs(int[] nums, int k) {
+        if(nums == null || nums.length == 0 || k < 0)
+            return 0;
+        int res = 0;
+        HashMap<Integer, Integer> maps = new HashMap<Integer, Integer>();
+        for(Integer i : nums){
+            maps.put(i, maps.getOrDefault(i,0)+1);
+        }
+        for(Entry<Integer, Integer> entry : maps.entrySet()){
+            if(k == 0){
+                if(entry.getValue() >= 2)
+                    res +=1;
+            }else{
+                if(maps.containsKey(entry.getKey() + k))
+                   res +=1;
+            }
+        }
+        return res;
+    }
+}
+```
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
