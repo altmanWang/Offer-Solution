@@ -3257,6 +3257,60 @@ class Solution {
     }
 }
 ```
+
+
+#### 713. Subarray Product Less Than K
+Your are given an array of positive integers nums.
+
+Count and print the number of (contiguous) subarrays where the product of all the elements in the subarray is less than k.
+
+解题思路：维护滑动窗口，满足窗口内数组的乘积小于k即可。
+
+```python
+class Solution {
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k <= 1) 
+            return 0;
+        int pros = 1;
+        int j = 0, total = 0;
+        for (int i = 0; i < nums.length; i++){
+            pros *= nums[i];
+            while (pros >= k){
+                pros /= nums[j++];
+            }
+            total += (i - j + 1);
+        }
+        return total;
+    }
+}
+```
+
+
+#### 152. Maximum Product Subarray（动态规划）
+Given an integer array nums, find the contiguous subarray within an array (containing at least one number) which has the largest product.
+
+
+解题思路：与最大和连续子数组相似，最大乘积连续子数组具有相同的思想，只是需要考虑负数的情况，因为两个负数相乘时，最后得到正值。所以一方面我们在保存乘积最大的值的同时，也要保存最小值（乘负数就是最小），然后比较最小值乘当前值、最大值乘当前值、当前值三者之间的最大和最小值，最大值和全局值比较。
+```python
+class Solution {
+    public int maxProduct(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int[] maxs = new int[nums.length];
+        int[] mins = new int[nums.length];
+        maxs[0] = nums[0];
+        mins[0] = nums[0];
+        int res = nums[0];
+        for(int i = 1; i < nums.length; i++){
+            maxs[i] = Math.max(Math.max(nums[i], nums[i] * maxs[i-1]), mins[i - 1] * nums[i]);
+            mins[i] = Math.min(Math.min(nums[i], nums[i] * mins[i-1]), maxs[i - 1] * nums[i]);
+            res = Math.max(res, maxs[i]);
+        }
+        return res;
+        
+    }
+}
+```
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
