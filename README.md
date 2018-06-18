@@ -14,7 +14,33 @@
 - 在可以改变原始数组的情况下，可以利用改变数组，使其按顺序排序，当发现num[i]==num[num[i]]时，则说明有重复数字。时间复杂度O(n),空间复杂度O(1)。(DuplicationInArray)
 - 在不可以改变原始数组时，可以利用辅助数组。空间复杂度O(n),时间复杂度O(n)。
 - 在不可以改变原始数组时，也可以利用二分查找的思想，将数值范围不断切分，并查找数值范围内数字出现的个数，当出现的个数大于数值范围时，则说明在该范围内存在重复数字。**但，这种方法无法保证找出所有重复的数字。例如在1~2范围内，2重复出现两次，1不出现，则计数等于2，并且不大于该范围，此时该算法不能确定每个数字出现的次数，所以不能保证找到所有重复的数字**。(DuplicationInArrayNoEdit)
-- 
+
+```python
+public class Solution {
+    // Parameters:
+    //    numbers:     an array of integers
+    //    length:      the length of array numbers
+    //    duplication: (Output) the duplicated number in the array number,length of duplication array is 1,so using duplication[0] = ? in implementation;
+    //                  Here duplication like pointor in C/C++, duplication[0] equal *duplication in C/C++
+    //    这里要特别注意~返回任意重复的一个，赋值duplication[0]
+    // Return value:       true if the input is valid, and there are some duplications in the array number
+    //                     otherwise false
+    public boolean duplicate(int numbers[],int length,int [] duplication) {
+        if(numbers == null || numbers.length == 0)
+            return false;
+        boolean[] visited = new boolean[length];
+        for(int i = 0; i < numbers.length; i++){
+            if(visited[numbers[i]] == true){
+                duplication[0] = numbers[i];
+                return true;
+            }
+            visited[numbers[i]] = true;
+        }
+        return false;
+    }
+}
+```
+
 
 ##### 448. Find All Numbers Disappeared in an Array
 Given an array of integers where 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
@@ -3259,7 +3285,7 @@ class Solution {
 ```
 
 
-#### 713. Subarray Product Less Than K
+#### 713. Subarray Product Less Than K（滑动窗口）
 Your are given an array of positive integers nums.
 
 Count and print the number of (contiguous) subarrays where the product of all the elements in the subarray is less than k.
