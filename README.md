@@ -42,12 +42,12 @@ public class Solution {
 ```
 
 
-##### 448. Find All Numbers Disappeared in an Array
+##### 448. Find All Numbers Disappeared in an Array（数组）
 Given an array of integers where 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
 
 Find all the elements of [1, n] inclusive that do not appear in this array.
 
-解题思路：这道题与剑指offer中的面试3类似。这道题需要找不存在的数字。那么我可以让已有的数字在其应在的位置。即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。
+解题思路：这道题与剑指offer中的面试3类似。利用数组元素与其小标对应的关系解决该问题。这道题需要找不存在的数字。那么我可以让已有的数字在其应在的位置。即nums[i]==nums[nums[i]-1]，如果不存在则一直交换。
 ```python
 class Solution {
     public List<Integer> findDisappearedNumbers(int[] nums) {
@@ -70,7 +70,7 @@ class Solution {
 }
 ```
 
-##### 442. Find All Duplicates in an Array
+##### 442. Find All Duplicates in an Array（数组）
 Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
 
 Find all the elements that appear twice in this array.
@@ -209,8 +209,49 @@ class Solution {
 #### 面试题8：二叉树的下一个节点
 **题目**：给定一棵二叉树和其中的节点，如何找出中序遍历的下一个节点？树中的节点除了两个分别指向左和右子节点的指针，还有一个指向父节点的指针。
 
-解题思路：注重前序遍历、中序遍历和后序遍历！！！从中找规律，即可解题。
+解题思路：该题目给定二叉树中某个节点pNode，找到其中序遍历中的下一个节点。需要分情况考虑。首先确定在中序遍历中找到某个节点的下一个节点时不需要考虑该节点的左子树。接下来分两种情况讨论：
 
+- 如果该节点有右子树，则该右子树中最左子节点即是中序遍历中该节点的下一个节点。
+- 如果该节点没有右子树，但是由左子树，则需要通过遍历其父节点pRoot，直到找到一个节点，其是父节点的左子节点时，停止寻找。中序遍历中给定节点的下一个节点即是该节点的父节点。
+
+
+```python
+/*
+public class TreeLinkNode {
+    int val;
+    TreeLinkNode left = null;
+    TreeLinkNode right = null;
+    TreeLinkNode next = null;
+
+    TreeLinkNode(int val) {
+        this.val = val;
+    }
+}
+*/
+public class Solution {
+    public TreeLinkNode GetNext(TreeLinkNode pNode)
+    {
+        if(pNode == null)
+            return pNode;
+        TreeLinkNode pNext = null;
+        if(pNode.right != null){
+            pNode = pNode.right;
+            while(pNode != null && pNode.left != null)
+                pNode = pNode.left;
+            pNext = pNode;
+        }else if(pNode.next != null){
+            TreeLinkNode pCurrent = pNode;
+            TreeLinkNode pRoot = pNode.next;
+            while(pRoot != null && pRoot.right == pCurrent){
+                pCurrent = pRoot;
+                pRoot = pRoot.next;
+            }
+            pNext = pRoot;
+        }
+        return pNext;
+    }
+}
+``` 
 
 ### 2.3.5 栈和队列
 
