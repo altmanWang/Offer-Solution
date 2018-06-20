@@ -284,8 +284,53 @@ public class Solution {
 解题思路：这道题用递归效率低。因为在计算数列时，有很多重复的数据。
 采用循环，每一次循环保存中间项，方便下一次计算。f(n)=f(n-1)+f(n-2)
 
+
+```python
+public class Solution {
+    public int Fibonacci(int n) {
+        if(n == 0)
+            return 0;
+        if(n == 1)
+            return 1;
+        int[] nums = new int[n+1];
+        nums[0] = 0;
+        nums[1] = 1;
+        for(int i = 2; i < n + 1; i++){
+            nums[i] = nums[i - 1] + nums[i - 2];
+        }
+        return nums[n];
+    }
+}
+ ```
+ 
 **题目二**：青蛙跳台阶问题，一只青蛙可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个n级台阶总共有多少种跳法。
 解题思路：类似。当n>2时，第一跳有两种选择：第一种是跳1级台阶，此时跳法数目等于后面剩下的n-1级台阶的跳法数目；第二种是跳2级台阶，此时跳法数目等于后面剩下的n-2级台阶的跳法数目。f(n)=f(n-1)+f(n-2)
+
+
+**70. Climbing Stairs**
+You are climbing a stair case. It takes n steps to reach to the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+```python
+class Solution {
+    public int climbStairs(int n) {
+        if(n == 0)
+            return 0;
+        if(n == 1)
+            return 1;
+        if(n == 2)
+            return 2;
+        int[] nums = new int[n];
+        nums[0] = 1;
+        nums[1] = 2;
+        for(int i = 2; i < n; i++){
+            nums[i] = nums[i-1] + nums[i-2];
+        }
+        return nums[n-1];
+    }
+}
+ ```
+
 
 **746. Min Cost Climbing Stairs** （动态规划）
 
