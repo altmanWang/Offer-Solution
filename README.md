@@ -396,7 +396,7 @@ b.)如果num[middle]<=num[right],则说明middle在右子数组中，所以应�
 
 
 #### 面试题 12： 矩阵中的路径
-**题目**：设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串的所有字符的路径。路劲可以从矩阵的任意一格开始，每一步可以在矩阵中向上，左，右和下移动。如果一条路径经过了矩阵的某一格子，则不能再次进入。
+**题目**：设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串的所有字符的路径。路径可以从矩阵的任意一格开始，每一步可以在矩阵中向上，左，右和下移动。如果一条路径经过了矩阵的某一格子，则不能再次进入。
 
 
 解题思路：在每一步中，都访问节点附近的邻近4个节点，查找下一个字符是否等于字符串中的字符。
@@ -463,6 +463,44 @@ class Solution {
 
 }
  ```
+ 
+#### 63. Unique Paths II
+A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).
+
+Now consider if some obstacles are added to the grids. How many unique paths would there be?
+
+解题思路:与62题类似，额外需要给定二维数组元素判断其是否为1，如果为1则表示为障碍需要跳过该元素。
+
+```python
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if(obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0)
+            return 0;
+        
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        int[][] counts = new int[m][n];
+        if(obstacleGrid[0][0] == 1)
+            return 0;
+        counts[0][0] = 1;
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(obstacleGrid[i][j] == 1)
+                    continue;
+                if(i - 1>= 0)
+                    counts[i][j] += counts[i - 1][j];
+                if(j - 1>= 0)
+                    counts[i][j] += counts[i][j - 1];                
+            }
+        }
+        return counts[m - 1][n - 1];
+    }
+}
+```
+
+ 
 #### 面试题 13： 机器人的运动范围
 **题目**：地上有一个m行n列的方格。一个机器人从坐标(0,0)的格子开始移动，他每次可以向左，右，上和下移动一格，但不能进入坐标和列坐标的数位之和大于k的格子。例如，给定k=18时，机器人可以进入（35,37），因为3+5+3+7=18；
 但是不能进入(35,38),因为3+5+3+8=19。
