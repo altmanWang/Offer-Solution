@@ -537,11 +537,11 @@ def maxProductAfterCutting(int length):
     prodcuts[3] = 3
     for i in range(4,length+1):
         max = -1
-	for j in range(1,i/2+1):
-	    score = prodcuts[j]*prodcuts[i-j]
-	    if score > max:
-	        max = score
-	    prodcuts[i] = max
+    	for j in range(1,i/2+1):
+    	    score = prodcuts[j]*prodcuts[i-j]
+    	    if score > max:
+    	        max = score
+    	    prodcuts[i] = max
     return prodcuts[length]
  ```
 
@@ -611,27 +611,41 @@ def NumberOf1(int n):
 ##### 题目二：删除链表中重复的节点
 
 解题思路: 遇到重复的节点，跳过，直到遇见空节点或者不相等节点.
+
 ```python
-def DeleteDuplication(ListNode pHead):
-    if pHead == null or pHead.next == null:
-        return pHead
-    ListNode curNode = pHead
-    ListNode preNode = null
-    while(curNode == None or curNode.next == None):
-        if(curNode.val != curNode.next.val):
-            preNode = curNode
-	    curNode = curNode.next
-	else:
-	    val = curNode.val
-	    curNode = curNode.next
-	    while(curNode != None and curNode.val == val):
-                curNode = curNode.next
-	    if preNode == null:
-	        pHead = curNode
-	    else:
-	        preNode.next = curNode
-    
-    return pHead
+/*
+ public class ListNode {
+    int val;
+    ListNode next = null;
+
+    ListNode(int val) {
+        this.val = val;
+    }
+}
+*/
+public class Solution {
+    public ListNode deleteDuplication(ListNode pHead)
+    {
+        if(pHead == null || pHead.next == null)
+            return pHead;
+        ListNode curNode = pHead;
+        ListNode preNode = new ListNode(-1);
+        ListNode index = preNode;
+        while(curNode != null){
+            if(curNode.next != null && curNode.next.val == curNode.val){
+                while(curNode.next != null && curNode.next.val == curNode.val){
+                    curNode = curNode.next;
+                }
+            }else{
+                preNode.next = curNode;
+                preNode = preNode.next;
+            }
+            curNode = curNode.next;
+        }
+        preNode.next = curNode;
+        return index.next;
+    }
+}
  ```
 
 #### 面试题：19 正则表达式匹配
@@ -654,8 +668,54 @@ def DeleteDuplication(ListNode pHead):
 - 计算环长m
 - 快指针先走m步；然后快慢指针一起走，相遇时的节点即为入口节点。设总长度为n。（n-m=l，第l个节点即为入口节点）
 
+```python
+/*
+ public class ListNode {
+    int val;
+    ListNode next = null;
 
-#### 面试题：24 反转列表（多指针，3个指针，206. Reverse Linked List）
+    ListNode(int val) {
+        this.val = val;
+    }
+}
+*/
+public class Solution {
+    public ListNode EntryNodeOfLoop(ListNode pHead)
+    {
+        if(pHead == null || pHead.next == null)
+            return null;
+        int len = GetLoopLength(pHead);
+        ListNode fastNode = pHead;
+        ListNode slowNode = pHead;
+        for(int i = 0; i < len; i++){
+            fastNode = fastNode.next;
+        }
+        while(slowNode.val != fastNode.val){
+            slowNode = slowNode.next;
+            fastNode = fastNode.next;
+        }
+        return slowNode;
+    }
+    public int GetLoopLength(ListNode pHead){
+        ListNode fastNode = pHead.next;
+        ListNode slowNode = pHead;
+        while(fastNode.val != slowNode.val){
+            slowNode = slowNode.next;
+            fastNode = fastNode.next.next;
+        }
+        int len = 1;
+        ListNode index = fastNode;
+        while(index.next.val != fastNode.val){
+            index = index.next;
+            len +=1;
+        }
+        return len;
+    }
+}
+ ```
+
+
+#### 面试题：24 反转链表（多指针，3个指针，206. Reverse Linked List）
 **题目**:定义一个函数，输入一链表的头节点，反转该链表并输出反转后链表的头节点。
 
 解题思路：定义三个指针，即前指针（preNode）指向前一个节点，当前指针（curNode）指向当前节点和后指针（nexNode）指向后一个节点。
@@ -665,17 +725,9 @@ def DeleteDuplication(ListNode pHead):
 - 其次反转连接，用preNode保存index，preNode=index；
 - 最后替换curNode，curNode = nextNode.
 - 返回preNode；
-- 
+
 
 ```python
-/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */
 class Solution {
     public ListNode reverseList(ListNode head) {
         if(head == null || head.next == null)
@@ -693,12 +745,13 @@ class Solution {
         return preNode;
     }
 }
-'''
+ ```
 
 #### 面试题：25 合并两个排序的链表
 **题目**:输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序。
 
 例子：
+
 ```python
 def Merge(head1, head2):
     if(head1 == null)
@@ -714,6 +767,7 @@ def Merge(head1, head2):
 	mergeNode.next = Merge(head1, head2.next)
     return mergeNode
  ```
+ 
 #### 面试题：26 树的子结构
 **题目**:输入两颗二叉树A和B，判断B是不是A的子结构。
 
