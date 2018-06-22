@@ -3595,5 +3595,40 @@ public class Solution {
 递推公式：f(n)=f(n-1)*1/6+f(n-2)*1/6+…+f(n-6)*1/6
 
 
+#### 深信服笔试题：给定n份试卷，每份试卷对应一个分数，从n份试卷中选择m份试卷使得分数总和等于100。保证存在唯一解。（二维动态规划）
+
+
+解题思路：利用二维动态规划解题。这里的cost和value相等即都是每份试卷的分数，背包大小为分数100。求解背包问题，使得m份试卷和为100，并回溯法找到选择的试卷编号并打印出来。
+```python
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class Solution {
+    public void dp(int[] cost, int value[], int m, int n){
+        int[][] weights = new int[m + 1][n + 1];
+        for(int i = 1; i <= m; i++){
+            for(int j = 1; j <= n; j++){
+                if(j >= cost[i - 1])
+                    weights[i][j] = Math.max(weights[i - 1][j], weights[i - 1][j - cost[i - 1]] + value[i - 1]);
+                else
+                    weights[i][j] = weights[i-1][j];
+            }
+        }
+        int j = n;
+        LinkedList<Integer> lists = new LinkedList<Integer>();
+        for(int i = m; i >0; i--){
+            if(weights[i][j] != weights[i-1][j]){
+                j -= cost[i - 1];
+                lists.add(i);
+            }
+        }
+        System.out.println(lists.size());
+
+        for(int i = lists.size() - 1; i >=0; i--){
+            System.out.println(lists.get(i));
+        }
+    }
+}
+```
 # 实习offer
 蘑菇街、阿里、华为
