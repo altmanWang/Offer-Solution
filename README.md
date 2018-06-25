@@ -1,5 +1,5 @@
 # 剑指OFFER与Leetcode编程练习
-前半部分为剑指offer练习题，后半部分为leetcode编程联系。
+前半部分为剑指offer练习题，后半部分为leetcode编程练习。
 ## 2.3数据结构
 - 数组
 - 字符串
@@ -915,6 +915,49 @@ public class Solution {
 **题目**：输入一颗二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
 
 解题思路：可以利用先序遍历，先跟，后左，再右。创建一个辅助stack用以保存路径，当所走路径满足要求后遍历打印stack中节点的值。记得在利用完节点后，在stack中删除该节点。
+
+```python
+import java.util.ArrayList;
+/**
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+public class Solution {
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root,int target) {
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<ArrayList<Integer>>();
+        if(root == null || root.val > target)
+            return lists;
+        FindPath(root, target, lists, new ArrayList<Integer>(), 0);
+        return lists;
+    }
+    public void FindPath(TreeNode root, int target, ArrayList<ArrayList<Integer>> lists, ArrayList<Integer> path, int sum){
+        if(root == null){
+            return;
+        }
+        if(root.left == null && root.right == null && sum + root.val == target){
+            ArrayList<Integer> res = new ArrayList<Integer>(path);
+            res.add(root.val);
+            lists.add(res);
+        }
+        if(sum + root.val > target)
+            return;
+        path.add(root.val);
+        FindPath(root.left, target, lists, path, sum + root.val);
+        FindPath(root.right, target, lists, path, sum + root.val);
+        path.remove(path.size()-1);
+    }
+}
+```
+
 
 #### 面试题35:复杂链表的复制
 **题目**：输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
