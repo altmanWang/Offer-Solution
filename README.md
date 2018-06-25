@@ -848,15 +848,21 @@ def isSymmetricalCore(root1, root2):
  ```
  
 #### 面试题：29 顺时针打印矩阵
-**题目**:输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
+**题目**:输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下矩阵： 
+
+1 2 3 4 
+
+5 6 7 8 
+
+9 10 11 12 
+
+13 14 15 16 
+
+则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
 
 解题思路：注意边界条件。
 
 ## 4.3 举例让抽象问题具体化
-#### 面试题：29 顺时针打印矩阵
-**题目**:输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，例如，如果输入如下矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10.
-
-解题思路：注意边界条件。
  
 #### 面试题：30 包含min函数的栈
 **题目**:定义栈的数据结构，请在该类型中实现一个能够得到栈最小元素的min函数。
@@ -880,6 +886,30 @@ def isSymmetricalCore(root1, root2):
 
 Trick：如果右子树中存在小于root的节点则直接返回false。
 
+```python
+public class Solution {
+    public boolean VerifySquenceOfBST(int [] sequence) {
+        if(sequence == null || sequence.length == 0)
+            return false;
+        return VerifySquenceOfBST(sequence, 0, sequence.length - 1);
+    }
+    public boolean VerifySquenceOfBST(int[] nums, int start, int end){
+        if(start >= end)
+            return true;
+        int rootVal = nums[end];
+        int i;
+        for(i = start; i < end; i++){
+            if(nums[i] > rootVal)
+                break;
+        }
+        for(int j = i; j < end; j++){
+            if(nums[j] < rootVal)
+                return false;
+        }
+        return VerifySquenceOfBST(nums, start, i - 1) && VerifySquenceOfBST(nums, i, end - 1);
+    }
+}
+```
 
 #### 面试题:34 二叉树中和为某一值的路径
 **题目**：输入一颗二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
