@@ -972,6 +972,49 @@ public class Solution {
 
 解题思路：利用中序遍历。通过中序遍历可以得到按顺序排列的链表。在遍历根节点的左子树时，左子树形成的链表最后一位是最大的，将根节点left指向该节点并且该节点的right指向根节点。根节点的右子树构成的链表第一位是最小的，将根节点的left指向该节点并且该节点的right指向根节点。
 
+
+```python
+/**
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+public class Solution {
+    public TreeNode Convert(TreeNode pRootOfTree) {
+        if(pRootOfTree == null)
+            return null;
+        TreeNode DeLinkedListLast = null;
+        TreeNode root = pRootOfTree;
+        Convert(root, DeLinkedListLast);
+        while(pRootOfTree != null && pRootOfTree.left != null)
+            pRootOfTree = pRootOfTree.left;
+        return pRootOfTree;
+    }
+    public TreeNode Convert(TreeNode node, TreeNode DeLinkedListLast){
+        TreeNode current = node;
+        if(node.left != null)
+            DeLinkedListLast = Convert(node.left, DeLinkedListLast);
+        node.left = DeLinkedListLast;
+        if(DeLinkedListLast != null)
+            DeLinkedListLast.right = node;
+        DeLinkedListLast = node;
+        if(node.right != null)
+            DeLinkedListLast = Convert(node.right, DeLinkedListLast);
+        return DeLinkedListLast;
+    }
+}
+```
+
+
+
 #### 面试题：38 字符串的排列 （求全排列）
 **题目**：输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
 
@@ -979,6 +1022,43 @@ public class Solution {
 1. 把字符串分成两部分，一部分是第一个字符，另一个部分是后面其余的字符串.
 2. 拿第一个字符和后面的字符串依次交换，再递归后，需要将两个交换的字符交换回来。
 3. 注意：在递归里第一次交换是自身和自身的交换，保证不缺少字符串
+
+```python
+import java.util.ArrayList;
+import java.util.Collections;
+public class Solution {
+    public ArrayList<String> Permutation(String str) {
+        ArrayList<String> lists = new ArrayList<String>();
+        if(str == null || str.length() == 0)
+            return lists;
+        Permutation(str.toCharArray(), 0, lists);
+        Collections.sort(lists);
+        return lists;
+    }
+    public void Permutation(char[] chars, int start, ArrayList<String> lists){
+        if(start == chars.length - 1){
+            String str = String.valueOf(chars);
+            if (lists.indexOf(str) < 0) {
+                lists.add(str);
+            }
+            return;
+        }
+        for(int i = start; i < chars.length; i++){
+            Character tmp = chars[start];
+            chars[start] = chars[i];
+            chars[i] = tmp;
+            
+            Permutation(chars, start + 1, lists);
+            
+            tmp = chars[start];
+            chars[start] = chars[i];
+            chars[i] = tmp;
+        }
+    }
+}
+```
+
+
 
 
 # 优化时间和空间效率
