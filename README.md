@@ -999,15 +999,20 @@ public class Solution {
         return pRootOfTree;
     }
     public TreeNode Convert(TreeNode node, TreeNode DeLinkedListLast){
-        TreeNode current = node;
+        //先左
         if(node.left != null)
             DeLinkedListLast = Convert(node.left, DeLinkedListLast);
+        //将节点的左节点指向双向链表的尾部
         node.left = DeLinkedListLast;
+        //将双向链表的尾部指向当前节点
         if(DeLinkedListLast != null)
             DeLinkedListLast.right = node;
+        //更新双向链表ode尾部
         DeLinkedListLast = node;
-        if(node.right != null)
+        //后右
+        if(node.right != null){
             DeLinkedListLast = Convert(node.right, DeLinkedListLast);
+        }
         return DeLinkedListLast;
     }
 }
@@ -1076,14 +1081,88 @@ public class Solution {
 
 解题思路：
 1. 利用空间换时间。创建一个额外的Map来存储数组中各个数字出现的个数。遍历完数组后，遍历Map查看是否有超过一半的数字。
-2. 书中推荐的方法，在不使用额外空间的情况下时间复杂度为O(n)。若数组中存在一个出现次数超过一半的数字，那么它出现的次数比其他所有数字出现的和都多。因此，我们可以在遍历的过程中保存两个值：一直是数组中的数字和出现次数（times）。当下一次遍历的数字和之前保存的数字相同时，则times++；否则times--；如果times等于0,我们需要保存下一个数字，并且另times等于1。遍历之后，重新检查保存的数字是否超过一半。
-3. 
+2. 书中推荐的方法，在不使用额外空间的情况下时间复杂度为O(n)。若数组中存在一个出现次数超过一半的数字，那么它出现的次数比其他所有数字出现的和都多。因此，我们可以在遍历的过程中保存两个值：数组中的数字和出现次数（times）。当下一次遍历的数字和之前保存的数字相同时，则times++；否则times--；如果times等于0,我们需要保存下一个数字，并且另times等于1。遍历之后，重新检查保存的数字是否超过一半。
+
+```python
+public class Solution {
+    public int MoreThanHalfNum_Solution(int [] array) {
+        if(array == null || array.length == 0)
+            return 0;
+        int num = array[0];
+        int times = 1;
+        for(int i = 1; i < array.length; i++){
+            if(array[i] != num)
+                times -=1;
+            else
+                times +=1;
+            if(times == 0){
+                num = array[i];
+                times = 1;
+            }
+        }
+        times = 0;
+        for(int i = 0; i < array.length; i++){
+            if(array[i] == num)
+                times +=1;
+            if(times > array.length / 2)
+                return num;
+        }
+        return 0;
+    }
+}
+```
 
 #### 面试题 40:数组中最小的k个数
 **题目**：输入n个整数，找出其中最小的K个数。例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4。
 
 解题思路：nlog(k)。用一个PriorityQueue额外空间存储k个最小的数集合。我们需要自定义一个PriorityQueue用的Compotor。遍历数组时，如果队列的大小小于k，则直接将该数存入队列中；如果队列大小等于k，则比较队列的第一个数字是否比该数大，如果大于则删除队列第一个数，并将数组中的数字加入到队列中。
 
+
+```python
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
+        ArrayList<Integer> lists = new ArrayList<Integer>();
+        if(input == null || input.length == 0 || k <= 0 || k > input.length)
+            return lists;
+        int start = 0;
+        int end = input.length - 1;
+        int j = 0;
+        while(start < end){
+            j = Partition(input, start, end);
+            if(j == k - 1)
+                break;
+            if(j < k)
+                start = j + 1;
+            else
+                end = j -1;
+        }
+        for(int i = 0; i < k; i++){
+            lists.add(input[i]);
+        }
+        return lists;
+    }
+    public int Partition(int[] input, int left, int right){
+        int i = left;
+        int j = right + 1;
+        int num = input[i];
+        int swap;
+        while(i < j){
+            while(input[++i] <= num) if(i >= right) break;
+            while(input[--j] > num) if(j <= left) break;
+            if(i >= j)
+                break;
+            swap = input[i];
+            input[i] = input[j];
+            input[j] = swap;
+        }
+        swap = input[j];
+        input[j] = num;
+        input[left] = swap;
+        return j;
+    }
+}
+```
 
 #### 面试题：45 把数组排成最小的数
 **题目**：输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
