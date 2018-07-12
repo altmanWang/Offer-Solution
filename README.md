@@ -1169,6 +1169,51 @@ public class Solution {
 
 解题思路：参考面试题38. 需要注意的是，拼接数字时有可能溢出，所以我们将拼接后的数字转化为字符串，直接比较字符串即可。
 
+后返回二维数组的右下角的值即可。
+```python
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Solution {
+    public String PrintMinNumber(int [] numbers) {
+       if(numbers == null || numbers.length == 0)
+           return "";
+        ArrayList<String> lists = new ArrayList<String>();
+        PrintMinNumber(numbers, lists, 0);
+        Collections.sort(lists);
+        return lists.get(0);
+        
+    }
+    public void PrintMinNumber(int[] nums, ArrayList<String> lists, int start){
+        if(start >= nums.length){
+            StringBuilder str = new StringBuilder();
+            str.append("");
+            for(int i = 0; i < nums.length; i++){
+                str.append(nums[i]);
+            }
+            lists.add(str.toString());
+            return;
+        }
+        
+        int swap;
+        for(int i = start; i < nums.length; i++){
+            swap = nums[i];
+            nums[i] = nums[start];
+            nums[start] = swap;
+            
+            PrintMinNumber(nums, lists, start + 1);
+            
+            swap = nums[i];
+            nums[i] = nums[start];
+            nums[start] = swap;
+        }
+    }
+
+}
+ ```
+
+
+
 #### 面试题：47 礼物最大价值（动态规划，数组+循环）
 **题目**：在一个m*n的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（大于0）。你可以从棋盘上的左上角开始拿格子里的礼物，并每一次可以向下或者向右移动一格，直到到达棋盘的右下角。给定一个棋盘及上面的礼物，请计算你最多拿多少价值的礼物？
 
@@ -1210,7 +1255,7 @@ def longestSubstringWithoutDuplication(str):
             maxLength = max(maxLength, curLength)
             curLength = i - position[str[i]-'a']
         position[str[i]-'a'] = i
-        maxLength = max(maxLength, curLength)
+    maxLength = max(maxLength, curLength)
     return maxLength
  ```  
 
@@ -1235,37 +1280,46 @@ def longestSubstringWithoutDuplication(str):
 归并排序是能够保证任意长度为N的数组排序所要时间和NlogN成正比；它的主要缺点是需要额外的空间O(N)。
 
 ```python
-def InversePair(nums):
-    if nums == None:
-        return 0
-    aux = None
-    count = InversePair(nums, aux, 0, len(nums)-1)
-    return count
-def InversePair(nums, aux, start, end):
-    if start >= end:
-        return 0
-    length = (end-start)/2
-    left = InversePair(nums, aux, start, start+length)
-    right = InversePair(nums, aux, start+length+1, end)
-    count = Merge()
-    return count + left + right
-def Merge(nums, aux, start, mid, end):
-    for i in range(start, end+1):
-        aux = nums[i]
-    i = mid
-    j = end
-    count = 0
-    for k in range(start, end+1):
-        if i < start:
-            nums[k] = aux[i--]
-        elif j < mid+1:
-            nums[k] = aux[j--]
-        elif aux[i] > aux[j]:
-            nums[k] = aux[i--]
-            count += (j - mid)
-        else:
-            nums[k] = aux[j--]
-    return count
+public class Solution {
+    public int InversePairs(int [] array) {
+        if(array == null || array.length == 0)
+            return 0;
+        int[] copy = new int[array.length];
+        int count = InversePairs(array, copy, 0, array.length - 1);
+        return count;
+    }
+    public int InversePairs(int[] array, int[] copy, int start, int end){
+        if(start == end){
+            return 0;
+        }
+        int length = (end - start) / 2;
+        int left = InversePairs(array, copy, start, start + length);
+        int right = InversePairs(array, copy, start + length + 1, end);
+        int count = merge(array, copy, start, start + length, end);
+        return count + left + right;
+    }
+    public int merge(int[] array, int[] copy, int start, int mid, int end){
+        for(int i =  start; i <= end; i++){
+            copy[i] = array[i];
+        }
+        int i = mid;
+        int j = end;
+        int count = 0;
+        for(int k = end; k >= start; k--){
+            // 若右边用尽，则左侧直接复制
+            if(j < mid+1) array[k] = copy[i--];
+            // 若左边用尽，则右侧直接复制
+            else if(i < start) array[k] = copy[j--];
+            else if(copy[i] > copy[j]){
+                array[k] = copy[i--];
+                count += (j - mid);
+            }else{
+                array[k] = copy[j--];
+            }
+        }
+        return count;
+    }
+}
  ```
  
  
@@ -1274,6 +1328,58 @@ def Merge(nums, aux, start, mid, end):
 
 解题思路：若两个链表存在公共节点，则一定m>=n或者m<=n。所以依次遍历两个链表，分别记录链表长度m和n。通过m和n可知两个链表的长短，让快指针指向长链表的头并且先走abs(m-n)步，再令慢指针指向短链表。最后快慢指针同时遍历两个链表，检测是否含有公共节点。时间复杂度O(m+n)。
 
+
+```python
+/*
+public class ListNode {
+    int val;
+    ListNode next = null;
+
+    ListNode(int val) {
+        this.val = val;
+    }
+}*/
+public class Solution {
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+         if(pHead1 == null || pHead1 == null)
+             return null;
+        int length1 = CountLength(pHead1);
+        int length2 = CountLength(pHead2);
+        int k = length1 - length2;
+        
+        ListNode index1 = pHead1;
+        ListNode index2 = pHead2;
+        
+        if(k < 0){
+            k = -k;
+            for(int i = 0; i < k; i++){
+                index2 = index2.next;
+            }
+        }else{
+            for(int i = 0; i < k; i++){
+                index1 = index1.next;
+            }
+        }
+        
+        while(index1 != null && index2 !=null){
+            if(index1 == index2)
+                return index1;
+            index1 = index1.next;
+            index2 = index2.next;
+        }
+        return null;
+    }
+    public int CountLength(ListNode pHead){
+        ListNode index = pHead;
+        int cnt = 0;
+        while(index != null){
+            cnt +=1;
+            index = index.next;
+        }
+        return cnt;
+    }
+}
+ ```
 
 # 面试中的各项技能
 ## 6.3 知识迁移能力
@@ -1713,7 +1819,7 @@ public class Solution {
         int left = 0;
         for(int i = 0 ; i < str.length; i++){
             if(chars[str[i]] == 0 ||  chars[str[i]] < left){
-                max_length = max_length > i - left + 1 ? max_length : i - left +1;
+                max_length = max_length > i - left + 1 ? max_length : i - left + 1;
             }else{
                 left = chars[str[i]];
             }
