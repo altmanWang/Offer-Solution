@@ -1388,6 +1388,46 @@ public class Solution {
 **题目**：统计一个数字在排序数组中出现的次数。
 解题思路：利用二分查找，找到目标数字出现的第一个位置和目标数字出现的最后一个位置。
 
+
+```python
+public class Solution {
+    public int GetNumberOfK(int [] array , int k) {
+        if(array == null || array.length == 0)
+            return 0;
+        int first_position = GetNumberOfKFirst(array, k, 0, array.length - 1);
+        int last_position = GetNumberOfKLast(array, k, 0, array.length - 1);
+        if(first_position == -1 || last_position == -1)
+            return 0;
+        return last_position - first_position +1;
+    }
+    public int GetNumberOfKFirst(int[] array, int target, int start, int end){
+        if(start > end)
+            return -1;
+        int mid = start + (end - start) / 2;
+        if(array[mid] < target)
+            return GetNumberOfKFirst(array, target, mid + 1, end);
+        else if(array[mid] > target)
+            return GetNumberOfKFirst(array, target, start, mid - 1);
+        if(mid > start && array[mid - 1] == target)
+            return GetNumberOfKFirst(array, target, start, mid - 1);
+        return mid;
+    }
+    public int GetNumberOfKLast(int[] array, int target, int start, int end){
+        if(start > end)
+            return 0;
+        int mid = start + (end - start) / 2;
+        if(array[mid] < target)
+            return GetNumberOfKLast(array, target, mid + 1, end);
+        else if(array[mid] > target)
+            return GetNumberOfKLast(array, target, start, mid - 1);
+        if(mid < end && array[mid + 1] == target)
+            return GetNumberOfKLast(array, target, mid + 1, end);
+        return mid;
+    }
+}
+ ```
+
+
 **题目**：数组中数值和下标相等的元素。（二分查找）
 
 **题目**：0~n-1中缺失的数字。（二分查找，第一个下标与数字不同）
@@ -1396,6 +1436,53 @@ public class Solution {
 **题目**：给定一颗二叉搜索树，请找出其中的第k大的结点。
 
 解题思路：用中序遍历的书序遍历一颗二叉树，则遍历序列的数值是递增排序的。从而可以获得第k大节点。
+
+
+```python
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+public class Solution {
+    TreeNode KthNode(TreeNode pRoot, int k)
+    {
+        if(pRoot == null || k == 0)
+            return null;
+        int[] depth = {k};
+        TreeNode res = KthNode(pRoot, depth);
+        return res;
+    }
+    public TreeNode KthNode(TreeNode node, int[] depth){
+        if(node == null)
+            return null;
+        TreeNode res = null;
+        res = KthNode(node.left, depth);
+        if(res != null)
+            return res;
+        else{
+            depth[0] -=1;
+            if(depth[0] == 0)
+                return node;
+        }
+        res = KthNode(node.right, depth);
+        return res;
+        
+    }
+
+}
+ ```
+
+
+
 
 #### 面试题：55 二叉树的深度 （104. Maximum Depth of Binary Tree）
 **题目**:输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
