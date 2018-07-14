@@ -1490,46 +1490,98 @@ public class Solution {
 解题思路：分别递归地计算左子树与右子树深度，并且比较两个子树的深度，选择深度较大的为返回值。
 
 ```python
-def TreeDepth(root):
-    if root == None:
-        return 0
-    leftHigh = TreeDepth(root.left)
-    rightHigh = TreeDepth(root.right)
-    return leftHigh >= rightHigh : leftHigh + 1 : rightHigh + 1
+/**
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+    public TreeNode(int val) {
+        this.val = val;
+    }
+}
+*/
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+        if(root == null)
+            return 0;
+        return TreeDepthCore(root);
+    }
+    public int TreeDepthCore(TreeNode node){
+        if(node == null)
+            return 0;
+        int leftDepth = TreeDepthCore(node.left);
+        int rightDepth = TreeDepthCore(node.right);
+        int depth = Math.max(leftDepth, rightDepth) + 1;
+        return depth;
+    }
+}
  ```
  
 **题目**:输入一棵二叉树，判断该二叉树是否是平衡二叉树。如果二叉树中任意节点的左、右子树的深度相差不超过1，那么它就是二叉树。
 
 解题思路：后续遍历，在遍历的过程中返回各个子树的深度，进行比较。
 ```python
-def IsBalanced_Solution(root):
-    if root == None:
-        return True
-    return IsBalanced_SolutionCore(root)!=-1
-def IsBalanced_SolutionCore(root):
-    if root == None:
-        return 0
-    left = IsBalanced_SolutionCore(root.left)
-    right = IsBalanced_SolutionCore(root.right)
-    
-    if left!=-1 and right!=-1:
-        diff = abs(left-right)
-        if(diff <= 1):
-            return 1 + (left>right?left:right)
-    return -1
+public class Solution {
+    public boolean IsBalanced_Solution(TreeNode root) {
+        if(root == null)
+            return true;
+        return IsBalanced_SolutionCore(root) != -1;
+    }
+    public int IsBalanced_SolutionCore(TreeNode node){
+        if(node == null)
+            return 0;
+        int left = IsBalanced_SolutionCore(node.left);
+        int right = IsBalanced_SolutionCore(node.right);
+        if(left != -1 && right != -1){
+            if(left - right <= 1 && left - right >= -1)
+                return left > right ? left + 1 : right + 1;
+        }
+        return -1;
+    }
+}
  ```
 
- 
- 
 #### 面试题：56 数组中数字出现的次数
 **题目**:一个整型数组里除了两个数字之外，其他的数字都出现了两次。请写程序找出这两个只出现一次的数字。
 
 解题思路：如果数组中只有一个出现一次，其他均出现两次。则遍历地异或整个数组的结果，即为出现一次的数。这是因为，其他数都是成对出现通过异或为0，只有出现一次的数被保留下来。所以我们先将数组分为两个子数组，每个子数组只有一个出现一次的数其余均出现两次。我们根据从头到尾异或数组的结果中的第一个为1的位置m，将数组分位两组，第一组中的数的第m位为1，第二组中的数第m位为2.然后再依次遍历两个数组并且进行异或，两次结果即为在数组中出现一次的数。
 
+```python
+//num1,num2分别为长度为1的数组。传出参数
+//将num1[0],num2[0]设置为返回结果
+public class Solution {
+    public void FindNumsAppearOnce(int [] array, int num1[] , int num2[]) {
+        if(array == null || array.length == 0)
+            return;
+        int res = 0;
+        for(int i = 0; i < array.length; i++){
+            res ^= array[i];
+        }
+        int index = FintFirstOne(res);
+        num1[0] = 0;
+        num2[0] = 0;
+        for(int i = 0; i < array.length; i++){
+            if((array[i] >> index & 1) == 0)
+                num1[0] ^= array[i];
+            else
+                num2[0] ^= array[i];
+        }
+    }
+    public int FintFirstOne(int res){
+        int index = 0;
+        while(res >=0 && (res & 1) == 0){
+            res = res >> 1;
+            index +=1;
+        }
+        return index;
+    }
+}
+ ```
+
 **题目**:一个整型数组里除了一个数字之外，其他的数字都出现了三次。请写程序找出这只出现一次的数字。时间复杂度O(n)，空间复杂度O(1)
 
 
-解题思路：利用辅助数组长度为32，空间复杂度O(1)。遍历给定数组中的每一个数字，计算其二进制表达式中哪些位置为1，将其在辅助数组中的位置加一。遍历整个数组后，如果一个数字出现三次，则它的二级制表达式的每一位也出现了三次。如果把所有出现三次的数字的二进制表示的每一位都分别加起来，那么每一位的和都能被3整除。只出现一次的数字，其对应的二进制表达式每一位对3取余数肯定不为0。通过对辅助数组的每一位对3取余数，即可得到在数组中只出现一次的数字。
+解题思路：利用辅助数组长度为32，空间复杂度O(1)。遍历给定数组中的每一个数字，计算其二进制表达式中哪些位置为1，将其在辅助数组中的位置加一。遍历整个数组后，如果一个数字出现三次，则它的二进制表达式的每一位也出现了三次。如果把所有出现三次的数字的二进制表示的每一位都分别加起来，那么每一位的和都能被3整除。只出现一次的数字，其对应的二进制表达式每一位对3取余数肯定不为0。通过对辅助数组的每一位对3取余数，即可得到在数组中只出现一次的数字。
 
 
 
