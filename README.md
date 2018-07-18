@@ -1624,9 +1624,67 @@ public class Solution {
 
 解题思路：双指针。第一个index1指针指向数组第一位，第二个指针指向数组第二位index2。因为是排序的数组，所以num[index1]+num[index2]若小于给定数，则index1加1；若大于给定数，则index2减1；若想等，则找到数组中两个数之和为给定数。
 
+
+```python
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+        ArrayList<Integer> results = new ArrayList<Integer>();
+        if(array == null || array.length == 0 || array.length == 1)
+            return results;
+        FindNumbersWithSum(array, sum, 0, array.length - 1, results);
+        return results;
+
+    }
+    public void FindNumbersWithSum(int[] array, int sum, int left, int right, ArrayList<Integer> res){
+        if(left >= right)
+            return;
+        if(array[left] + array[right] == sum){
+            res.add(array[left]);
+            res.add(array[right]);
+            return;
+        }
+        if(array[left] + array[right] < sum)
+            FindNumbersWithSum(array, sum, left + 1, right, res);
+        else
+            FindNumbersWithSum(array, sum, left, right - 1, res);
+    }
+
+}
+ ```
+
 **题目二**:和为s的连续正数序列。输入一个正数s，打印出所有和为s的连续正数序列（至少含有两个）。例如，输入15，由于1+2+3+4+5=4+5+6=7+8=15，所以打印出3个连续序列。
 
-解题思路：big和small两个数。固定small，big=small+1.采用递归的方式获得连续序列，利用ArrayList保存递归计算中的连续正数序列。tmp=samll+big,若tmp==s，则找到序列;若tmp<s，则small=tmp,big+1，递归调用该方法；若tmp>s则停止递归调用，找不到该连续正数序列。
+解题思路：根据给定数n，从1分别遍历到n-1.每次遍历时，调用递归函数查找连续整数序列和为S。在递归函数中，每次需要穿入累加和sum，和当前数m。根据当前数m，我们可以得到下一个数位m+1，当sum+m+1等于S时，则停止递归；若小于，则下一次递归的sum为sum+m+1，m为m+1；如果大于，则停止递归查找。在递归过程中用一个ArrayList保存遍历的路径。
+
+```python
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<ArrayList<Integer> > FindContinuousSequence(int sum) {
+       ArrayList<ArrayList<Integer>> results = new ArrayList<ArrayList<Integer>>();
+        if(sum<=1)
+            return results;
+        for(int i = 1; i < sum; i++){
+            FindContinousSequence(results, new ArrayList<Integer>(), sum, i, i);
+        }
+        return results;
+    }
+    public void FindContinousSequence(ArrayList<ArrayList<Integer>> res, ArrayList<Integer> path, int target, int small, int sum){
+        int big = small + 1;
+        path.add(small);
+        if(sum + big == target){
+            path.add(big);
+            res.add(path);
+        }
+        else if(sum + big < target){
+            sum += big;
+            small = big;
+            FindContinousSequence(res, path, target, small, sum);
+        }
+        return;
+    }
+}
+ ```
 
 #### 面试题：58 翻转字符串
 **题目一**：输入一个英文句子，翻转句子中的单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。例如，输入字符串"I am a student.",输出应该是"student. a am I"。
@@ -1641,6 +1699,36 @@ public class Solution {
 **题目一**：给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}。
 
 解题思路：用一个两端开口的队列（LinkedList）来存储。队头存储滑窗中最大的值，队尾存储滑窗中可能的最大值。即队头存储最大值，队尾存储次大值。注意，队列存储的是数组的下标，因为要比较下标，来判断队列中的数字是否已经超出滑窗大小。
+
+```python
+import java.util.ArrayList;
+import java.util.LinkedList;
+public class Solution {
+    public ArrayList<Integer> maxInWindows(int [] num, int size)
+    {
+        ArrayList<Integer> lists = new ArrayList<Integer>();
+        if(num == null || num.length ==0 || size <=0 || size > num.length)
+            return lists;
+        for(int i = 0; i < size; i++){
+            while(!lists.isEmpty() && num[i] > num[lists.get(0)])
+                lists.remove(0);
+            lists.add(i);
+        }
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        res.add(num[lists.get(0)]);
+        for(int i = size; i < num.length; i++){
+            while(!lists.isEmpty() && num[i] > num[lists.get(lists.size()-1)])
+                lists.remove(lists.size()-1);
+            while(!lists.isEmpty() && i - lists.get(0) >= size)
+                lists.remove(0);
+            lists.add(i);
+            res.add(num[lists.get(0)]);
+        }
+        return res;
+    }
+}
+ ```
+
 
 # 附加：
 #### 1.BitMap算法
