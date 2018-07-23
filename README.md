@@ -4113,6 +4113,38 @@ class Solution {
         
     }
 }
+
+#### 674. Longest Continuous Increasing Subsequence
+Given an unsorted array of integers, find the length of longest continuous increasing subsequence (subarray).
+
+解题思路：动态规划。用一个dp数组来保存当前元素的连续单调递增序列的长度。当发现是递增时，dp[i] += dp[i-1] +1；若不是，则dp[i]=1。最后返回dp中最大值。
+
+```python
+class Solution {
+    public int findLengthOfLCIS(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int[] dp = new int[nums.length];
+        dp[0] = 1;
+        for(int i = 1; i < nums.length; i++){
+            if(nums[i] > nums[i - 1]){
+                dp[i] += dp[i-1] +1;
+            }else{
+                dp[i] = 1;
+            }
+        }
+        int max_length = Integer.MIN_VALUE;
+        for(int i = 0; i < nums.length; i++){
+            if(dp[i] > max_length)
+                max_length = dp[i];
+        }
+        return max_length;
+    }
+}
+```、
+
+Follow up：找到数组中连续最长波谷。即先下降，再递增。可以利用两个数组，第一次遍历确定连续递减序列的长度；第二册遍历，从后往前遍历，确定连续递减序列的长度。最后同时遍历两个数组，找到元素和最大的即可，即数组中连续最长波谷。
+
 ```
 # 公司面试题
 
