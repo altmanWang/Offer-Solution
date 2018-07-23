@@ -4117,7 +4117,8 @@ class Solution {
 #### 674. Longest Continuous Increasing Subsequence
 Given an unsorted array of integers, find the length of longest continuous increasing subsequence (subarray).
 
-解题思路：动态规划。用一个dp数组来保存当前元素的连续单调递增序列的长度。当发现是递增时，dp[i] += dp[i-1] +1；若不是，则dp[i]=1。最后返回dp中最大值。
+解题思路：动态规划。用一个dp数组来保存当前元素的连续单调递增子数组的长度。当发现是递增时，dp[i] += dp[i-1] +1；若不是，则dp[i]=1。最后返回dp中最大值。
+
 
 ```python
 class Solution {
@@ -4141,9 +4142,45 @@ class Solution {
         return max_length;
     }
 }
-```、
+```
 
 Follow up：找到数组中连续最长波谷。即先下降，再递增。可以利用两个数组，第一次遍历确定连续递减序列的长度；第二册遍历，从后往前遍历，确定连续递减序列的长度。最后同时遍历两个数组，找到元素和最大的即可，即数组中连续最长波谷。
+
+#### 300. Longest Increasing Subsequence（动态规划+二分查找）
+Given an unsorted array of integers, find the length of longest increasing subsequence.
+
+解题思路：利用动态规划+二分查找。思路是先建立一个空的dp数组，然后开始遍历原数组，对于每一个遍历到的数字，我们用二分查找法在dp数组找第一个不小于它的数字，如果这个数字不存在，那么直接在dp数组后面加上遍历到的数字，如果存在，则将这个数字更新为当前遍历到的数字，最后返回dp数字的长度即可，注意的是，跟上面的方法一样，特别注意的是dp数组的值可能不是一个真实的LIS。
+
+
+```python
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        if(nums.length == 1)
+            return 1;
+        int[] dp = new int[nums.length];
+        int size = 0;
+        for(int i = 0; i < nums.length; i++){
+            int left = 0;
+            int right = size;
+            while(left < right){
+                int mid = left + (right - left) / 2;
+                if(dp[mid] == nums[i]){
+                    right = mid;
+                    break;
+                }
+                if(dp[mid] < nums[i]) left = mid + 1;
+                else right = mid;
+            }
+            if(right >= size)
+                size +=1;
+            dp[right] = nums[i];
+        }
+        return size;
+    }
+}
+```
 
 ```
 # 公司面试题
