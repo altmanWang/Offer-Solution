@@ -4113,7 +4113,7 @@ class Solution {
         
     }
 }
-
+```
 #### 674. Longest Continuous Increasing Subsequence
 Given an unsorted array of integers, find the length of longest continuous increasing subsequence (subarray).
 
@@ -4182,7 +4182,40 @@ class Solution {
 }
 ```
 
+#### 409. Longest Palindrome
+Given a string which consists of lowercase or uppercase letters, find the length of the longest palindromes that can be built with those letters.
+
+解题思路：统计出现次数为偶数的字符个数。如果遇到出现为奇数的字符，减去1，使其出现次数为偶数个。最后输出时，判断，该字符串是否存在有出现次数为奇数的字符，如果存在，则结果加1.
+
+
+```python
+class Solution {
+    public int longestPalindrome(String s) {
+        if(s == null || s.length() == 0)
+            return 0;
+        HashMap<Character, Integer> maps = new HashMap<Character, Integer>();
+        for(int i = 0; i < s.length(); i++){
+            if(maps.containsKey(s.charAt(i))){
+                maps.put(s.charAt(i), maps.get(s.charAt(i)) + 1);
+            }else
+                maps.put(s.charAt(i), 1);
+        }
+        int res = 0;
+        boolean flag = false;
+        for(Map.Entry<Character, Integer> entry : maps.entrySet()){
+            int nums = entry.getValue();
+            res += nums;
+            if(nums % 2 == 1){
+                res -=1;
+                flag = true;
+            }
+        }
+        return flag ? res + 1 : res;
+    }
+}
 ```
+
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
