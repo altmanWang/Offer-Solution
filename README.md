@@ -2260,6 +2260,39 @@ class Solution {
 }
 ```
 
+
+#### 617. Merge Two Binary Trees
+Given two binary trees and imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not.
+
+You need to merge them into a new binary tree. The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be used as the node of new tree.
+
+解题思路：递归遍历两个二叉树，构建新的合并的二叉树新节点。
+
+```python
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if(t1 == null && t2 == null)
+            return null;
+        if(t1 == null)
+            return t2;
+        if(t2 == null)
+            return t1;
+        TreeNode node = new TreeNode(t1.val + t2.val);
+        node.left = mergeTrees(t1.left, t2.left);
+        node.right = mergeTrees(t1.right, t2.right);
+        return node;
+    }
+}
+```
 #### 198. House Robber
 You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
 
@@ -4215,10 +4248,51 @@ class Solution {
 }
 ```
 
+#### 572. Subtree of Another Tree
+Given two non-empty binary trees s and t, check whether tree t has exactly the same structure and node values with a subtree of s. A subtree of s is a tree consists of a node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
+
+解题思路：深度优先匹配相等的节点，再利用递归方式判断是否是子树。
+
+```python
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if(s == null && t == null)
+            return true;
+        if(s == null || t == null)
+            return false;
+        if(s.val == t.val){
+            boolean res = isSubtreeCore(s, t);
+            if(res == true)
+                return res;
+        }
+        return isSubtree(s.left,t) || isSubtree(s.right, t);
+    }
+    public boolean isSubtreeCore(TreeNode s, TreeNode t){
+        if(s == null && t == null)
+            return true;
+        if(s == null || t == null)
+            return false;
+        if(s.val == t.val)
+            return isSubtreeCore(s.left, t.left) && isSubtreeCore(s.right, t.right);
+        return false;
+    }
+}
+```
+
 
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
+leetcode 349
 
 解题思路：先排序nums1和nums2，在用index1和index2来分别指向nums1和nums2的第一个元素。然后，在同时遍历。如果nums1[index1]==nums2[index2]，则找到交集元素，并且两指针自加，紧接着判断下一个元素是否还是相等，如果相等则继续自加，跳过下一个元素；如果果nums1[index1]<nums2[index2]，则index1自加；否则，index2自加。
 
