@@ -4288,6 +4288,36 @@ class Solution {
 }
 ```
 
+#### 矩阵中最大子矩阵元素之和
+
+解题思路：类似最长字段问题。将二维问题转变成一维问题中的最长字段元素之和问题。用一维数组b代表矩阵S中第i行到第j行，列元素之和。并利用最长字段问题中的动态规划找到最大值。经过n*n次遍历后，即可超出最大子矩阵元素之和。时间复杂度N*N*M。矩阵大小N*M。
+
+```python
+public class Solution {
+    public static int maxSumOfSubMatrix(int[][] matrix){
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int max = Integer.MIN_VALUE;
+        for(int i = 0; i < n; i++){
+            int[] nums = new int[m];
+            for(int j = i; j < n; j++){
+                int sum = 0;
+                for(int k = 0; k < m; k++){
+                    nums[k] += matrix[j][k];
+                    sum += nums[k];
+                    if(sum < 0) sum = nums[k];
+                    if(sum > max) max = sum;
+                }
+            }
+        }
+        return max;
+    }
+}
+```
+
+
+
+
 
 # 公司面试题
 
