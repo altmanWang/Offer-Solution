@@ -3070,7 +3070,7 @@ class Solution {
     }
 }
 ```
-#### 162. Find Peak Element
+#### 162. Find Peak Element(局部极值点)
 A peak element is an element that is greater than its neighbors.
 
 Given an input array nums, where num[i] ≠ num[i+1], find a peak element and return its index.
@@ -4290,7 +4290,7 @@ class Solution {
 
 #### 矩阵中最大子矩阵元素之和
 
-解题思路：类似最长字段问题。将二维问题转变成一维问题中的最长字段元素之和问题。用一维数组b代表矩阵S中第i行到第j行，列元素之和。并利用最长字段问题中的动态规划找到最大值。经过n*n次遍历后，即可超出最大子矩阵元素之和。时间复杂度N*N*M。矩阵大小N*M。
+解题思路：类似最长字段问题。将二维问题转变成一维问题中的最长字段元素之和问题。用一维数组b代表矩阵S中第i行到第j行，列元素之和。并利用最长字段问题中的动态规划找到最大值。经过n\*n次遍历后，即可超出最大子矩阵元素之和。时间复杂度N\*N\*M。矩阵大小N\*M。
 
 ```python
 public class Solution {
@@ -4316,8 +4316,64 @@ public class Solution {
 ```
 
 
+#### 815. Bus Routes
+We have a list of bus routes. Each routes[i] is a bus route that the i-th bus repeats forever. For example if routes[0] = [1, 5, 7], this means that the first bus (0-th indexed) travels in the sequence 1->5->7->1->5->7->1->... forever.
 
+We start at bus stop S (initially not on a bus), and we want to go to bus stop T. Travelling by buses only, what is the least number of buses we must take to reach our destination? Return -1 if it is not possible.
 
+解题思路：求最短路径，可以用BFS。BFS广度优先搜索，先进后出；DFS深度优先搜索，先进先出。
+
+利用一个HashMap保存每个站点可以通往的公交路线。利用一个队列保存每次遍历的站点，利用BFS搜素策略，每次从队列头取出元素（站点，当前路径长度），遍历到一个站点时，根据HashMap得到其可以前往的公交路线，再一次遍历公交路线中的站点，如果达到终点则返回当前路径长度加1，否则将站点以及此时路径长度加1一起加入到队列尾部。在遍历时，利用一个set保存已经遍历过得公交路线，如果为遍历过则继续搜索；否则直接跳过该路线。
+
+```python
+class Solution {
+    class Pair<L, R>{
+        L key;
+        R value;
+        public Pair(L key, R value){
+            this.key = key;
+            this.value = value;
+        }
+        public L getKey(){
+            return this.key;
+        }
+        public R getValue(){
+            return this.value;
+        }
+    }
+    public int numBusesToDestination(int[][] routes, int S, int T) {
+        if(S == T)
+            return 0;
+        HashMap<Integer, LinkedList<Integer>> maps = new HashMap<Integer, LinkedList<Integer>>();
+        for(int i = 0; i < routes.length; i++){
+            for(int j = 0; j < routes[i].length; j++){
+                LinkedList<Integer> list = maps.getOrDefault(routes[i][j], new LinkedList<Integer>());
+                list.add(i);
+                maps.put(routes[i][j], list);
+            }
+        }
+        HashSet<Integer> visited = new HashSet<Integer>();
+        LinkedList<Pair<Integer, Integer>> queue = new LinkedList<Pair<Integer, Integer>>();
+        queue.addLast(new Pair(S, 0));
+        while(!queue.isEmpty()){
+            Pair<Integer, Integer> pair = queue.removeFirst();
+            int stationIdx = pair.getKey();
+            int step = pair.getValue();
+            LinkedList<Integer> list = maps.get(stationIdx);
+            for(Integer routeIdx : list){
+                if(visited.contains(routeIdx)) continue;
+                visited.add(routeIdx);
+                for(int j =0; j < routes[routeIdx].length; j++){
+                    if(routes[routeIdx][j] == T)
+                        return step + 1;
+                    queue.addLast(new Pair(routes[routeIdx][j], step + 1));
+                }
+            }
+        }
+        return -1;
+    }
+}
+```
 
 # 公司面试题
 
