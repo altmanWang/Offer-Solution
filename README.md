@@ -4375,6 +4375,61 @@ class Solution {
 }
 ```
 
+#### 787. Cheapest Flights Within K Stops
+There are n cities connected by m flights. Each fight starts from city u and arrives at v with a price w.
+
+Now given all the cities and fights, together with starting city src and the destination dst, your task is to find the cheapest price from src to dst with up to k stops. If there is no such route, output -1.
+
+解题思路：使用BFS和最小堆解决最短路径问题。每次取出最小堆的堆顶，即费用最短的路径，添加新的元素入最小堆中。当遍历时，取出的堆顶刚好是终点时，则停止遍历，返回费用。当遍历时，取出的堆顶的路径长度大于约束，则跳过此次遍历。
+
+
+```python
+class Solution {
+    class Pair{
+        int flight;
+        int cost;
+        int step;
+        public Pair(int flight, int cost, int step){
+            this.flight = flight;
+            this.cost = cost;
+            this.step = step;
+        }
+    }
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
+        if(src >= n || dst >= n)
+            return -1;
+        HashMap<Integer, LinkedList<Integer>> maps = new HashMap<Integer, LinkedList<Integer>>();
+        for(int i = 0; i < flights.length; i++){
+            LinkedList<Integer> list = maps.getOrDefault(flights[i][0], new LinkedList<Integer>());
+            list.add(i);
+            maps.put(flights[i][0], list);
+        }
+        
+        PriorityQueue<Pair> deque = new PriorityQueue<Pair>(10, new Comparator<Pair>(){
+            @Override
+            public int compare(Pair x, Pair y){
+                return x.cost - y.cost;
+            }
+        });
+        deque.offer(new Pair(src, 0, 0));
+        int min_cost = Integer.MAX_VALUE;
+        while(!deque.isEmpty()){
+            Pair ele = deque.poll();
+            if(ele.flight == dst) return ele.cost;
+            if(ele.step > K)
+                continue;
+            LinkedList<Integer> list = maps.getOrDefault(ele.flight, new LinkedList<Integer>());
+            for(Integer index : list){
+                int cur_cost = ele.cost + flights[index][2];
+                deque.offer(new Pair(flights[index][1], cur_cost, ele.step + 1));   
+            }
+        }
+        return -1;
+    }
+}
+```
+
+
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
