@@ -4429,6 +4429,32 @@ class Solution {
 }
 ```
 
+#### Dijkstra算法
+
+(1) 初始时，S只包含起点s；U包含除s外的其他顶点，且U中顶点的距离为"起点s到该顶点的距离"[例如，U中顶点v的距离为(s,v)的长度，然后s和v不相邻，则v的距离为∞]。
+
+(2) 从U中选出"距离最短的顶点k"，并将顶点k加入到S中；同时，从U中移除顶点k。
+
+(3) 更新U中各个顶点到起点s的距离。之所以更新U中顶点的距离，是由于上一步中确定了k是求出最短路径的顶点，从而可以利用k来更新其它顶点的距离；例如，(s,v)的距离可能大于(s,k)+(k,v)的距离。
+
+(4) 重复步骤(2)和(3)，直到遍历完所有顶点。
+```python
+function Dijkstra(G, w, s)
+  for each vertex v in V[G]        // 初始化
+        d[v] := infinity           // 将各点的已知最短距离先设成无穷大
+        previous[v] := undefined   // 各点的已知最短路径上的前趋都未知
+  d[s] := 0                        // 因为出发点到出发点间不需移动任何距离，所以可以直接将s到s的最小距离设为0
+  S := empty set
+  Q := set of all vertices
+  while Q is not an empty set      // Dijkstra算法主体
+        u := Extract_Min(Q)
+       S.append(u)
+       for each edge outgoing from u as (u,v)
+              if d[v] > d[u] + w(u,v)             // 拓展边（u,v）。w(u,v)为从u到v的路径长度。
+                    d[v] := d[u] + w(u,v)         // 更新路径长度到更小的那个和值。
+                    previous[v] := u              // 纪录前趋顶点
+```
+
 
 # 公司面试题
 
