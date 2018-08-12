@@ -4455,6 +4455,90 @@ function Dijkstra(G, w, s)
                     previous[v] := u              // 纪录前趋顶点
 ```
 
+#### 线段树
+树上的每个节点对应于一个线段(还是叫“区间”更容易理解，区间的起点和终点通常为整数)，同一层的节点所代表的区间，相互不会重叠。叶子节点的区间是单位长度，不能再分了。
+
+可以在非叶子节点上存储区间信息和该区间内最大值、最小值、累积和等信息。
+
+分析：树的特征不超过logL（L是最大区间长度），从而可以保证在O（logL）的时间内完成一线段的插入、删除、查找等工作。
+
+应用场景：
+查询数组内任意区间内的最大值与最小值。在查找时，分情况讨论。
+用递归的方式遍历线段树，并判断当前区间与目标区间的匹配程度。
+- 如果完全匹配，则直接返回结果，判断是否为最小值；
+- 如果部分匹配，则将原目标区间划分为两个区间，再分别向左和右子节点递归查找；
+- 如果目标区间，只包含在左子节点区间或者右子节点区间，则直接在对应的区间内查找。
+
+
+```python
+public class SegmentTree {
+    //定义线段树数据结构
+    class TreeNode{
+        int l, r;
+        int val;
+        int min_val, max_val;
+        TreeNode left_node, right_node;
+        public TreeNode(int l, int r){
+            this.l = l;
+            this.r = r;
+        }
+    }
+    //用递归的方法构造线段树
+    public TreeNode buildSegmentTree(int[] nums, int left, int right){
+        if(left >= right){
+            TreeNode leaf = new TreeNode(left, right);
+            leaf.val = nums[left];
+            leaf.min_val = nums[left];
+            leaf.max_val = nums[left];
+            return leaf;
+        }
+
+        TreeNode node = new TreeNode(left, right);
+        int mid = left + (right - left) / 2;
+        node.left_node = buildSegmentTree(nums, left, mid);
+        node.right_node = buildSegmentTree(nums, mid + 1, right);
+
+        node.min_val = Math.min(node.left_node.min_val, node.right_node.min_val);
+        node.max_val = Math.max(node.left_node.max_val, node.right_node.max_val);
+
+        return node;
+    }
+    //查找线段树内，任意区间内的最小值
+    public static void searchSegmentTree(TreeNode node, int left, int right, int[] res){
+        if(node == null)
+            return;
+        //完全匹配
+        if(left == node.l && right == node.r){
+            System.out.println("min:" + node.min_val);
+            res[0] = Math.min(res[0], node.min_val);
+            return;
+        }
+        //通过根据中间值，判断目标区间所在位置。
+        int mid = node.l + (node.r - node.l) / 2;
+        if(mid >= right){
+            //目标区间，则左子节点的区间内
+            searchSegmentTree(node.left_node, left, right, res);
+        }else if(mid < left){
+            //目标区间，则右子节点的区间内
+            searchSegmentTree(node.right_node, left, right, res);
+        }else if(mid >= left && mid <= right){
+            //分割目标区间，在两个子节点内分别查找
+            searchSegmentTree(node.left_node, left, mid, res);
+            searchSegmentTree(node.right_node, mid +1, right, res);
+        }
+    }
+    public static void main(String[] args){
+        int[] nums = {3,-10,2,3,10,1,2,3};
+        TreeNode root = new SegmentTree().buildSegmentTree(nums, 0, nums.length - 1);
+        int[] tmp = new int[1];
+        tmp[0] = Integer.MAX_VALUE;
+        searchSegmentTree(root, 1 , 6, tmp);
+        System.out.println(tmp[0]);
+
+    }
+}
+
+```
 
 # 公司面试题
 
