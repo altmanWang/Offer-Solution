@@ -4537,9 +4537,85 @@ public class SegmentTree {
 
     }
 }
-
 ```
 
+#### 307. Range Sum Query - Mutable(线段树)
+
+解题思路：线段树
+
+```python
+class NumArray {
+    class SegmentTreeNode{
+        int start, end;
+        int sum;
+        SegmentTreeNode left, right;
+        public SegmentTreeNode(int start, int end){
+            this.start = start;
+            this.end = end;
+            this.sum = 0;
+        }
+        @Override
+        public String toString() {
+            return "SegmentTreeNode [start=" + start + ", end=" + end + "]";
+        }
+    }
+    SegmentTreeNode root = null;
+    //递归构造线段树
+    public SegmentTreeNode buildTree(int[] nums, int left, int right){
+        if(left >= right){
+            SegmentTreeNode node = new SegmentTreeNode(left, left);
+            node.sum = nums[left];
+            return node;
+        }
+        SegmentTreeNode node = new SegmentTreeNode(left, right); 
+        int mid = left + (right - left) / 2;
+        node.left = buildTree(nums, left, mid);
+        node.right = buildTree(nums, mid + 1, right);
+        node.sum = node.left.sum +node.right.sum;
+        return node;
+    }
+    //递归查找
+    public int searchTree(SegmentTreeNode node, int left, int right){
+        if(left == node.start && right == node.end) return node.sum;
+        int mid = node.start + (node.end - node.start) / 2;
+        if(mid >= right){
+            return searchTree(node.left, left, right);
+        }else if(mid < left){
+            return searchTree(node.right, left, right);
+        }
+        return searchTree(node.left, left, mid) + searchTree(node.right, mid + 1, right);
+        
+    }
+    //递归更新
+    public void updateTree(SegmentTreeNode node, int i, int val){
+        if(i == node.start && i == node.end){
+            node.sum = val;
+            return;
+        }
+        int mid = node.start + (node.end - node.start) / 2;
+        if(i <= mid)
+            updateTree(node.left, i, val);
+        else
+            updateTree(node.right, i , val);
+        
+        node.sum = node.left.sum + node.right.sum;
+        
+    }
+    public NumArray(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return;
+        root = buildTree(nums, 0, nums.length-1);
+    }
+    
+    public void update(int i, int val) {
+        updateTree(root, i , val);
+    }
+    
+    public int sumRange(int i, int j) {
+        return searchTree(root, i, j);
+    }
+}
+```
 # 公司面试题
 
 #### 蘑菇街一面：求两数组的交集，并且去重。
