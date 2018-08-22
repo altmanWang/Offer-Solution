@@ -2549,6 +2549,38 @@ class Solution {
 }
 ```
 
+#### 90. SubsetII
+Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).
+
+Note: The solution set must not contain duplicate subsets.
+
+解题思路：注意数组里存在重复的数字，所以先对数组排序再利用递归的方法寻找组合方式，在递归的过程中需要比对当前数字是否去前一个数字相同，如果相同则跳过此次遍历，否则继续遍历。
+
+```python
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> lists = new LinkedList<List<Integer>>();
+        Arrays.sort(nums);
+        subsetsWithDup(nums, 0, lists, new LinkedList<Integer>());
+        return lists;
+        
+    }
+    public void subsetsWithDup(int[] nums, int start, List<List<Integer>> lists, LinkedList<Integer> path){
+        lists.add(new LinkedList<Integer>(path));
+        if(start >= nums.length)
+            return;
+        for(int i = start; i <nums.length; i++){
+            if((i - start) > 0 && nums[i-1] == nums[i])
+                continue;
+            path.addLast(nums[i]);
+            subsetsWithDup(nums, i + 1, lists, path);
+            path.removeLast();
+        }
+    }
+}
+```
+
+
 #### 424. Longest Repeating Character Replacement
 Given a string that consists of only uppercase English letters, you can replace any letter in the string with another letter at most k times. Find the length of a longest substring containing all repeating letters you can get after performing the above operations.
 
@@ -4744,3 +4776,6 @@ public class Solution {
 
 # 实习offer
 蘑菇街、阿里、华为
+
+# 秋招offer
+深信服、科大讯飞、京东AI
