@@ -4650,7 +4650,9 @@ class NumArray {
 ```
 # 公司面试题
 
-#### 蘑菇街一面：求两数组的交集，并且去重。
+##蘑菇街
+
+####一面：求两数组的交集，并且去重。
 leetcode 349
 
 解题思路：先排序nums1和nums2，在用index1和index2来分别指向nums1和nums2的第一个元素。然后，在同时遍历。如果nums1[index1]==nums2[index2]，则找到交集元素，并且两指针自加，紧接着判断下一个元素是否还是相等，如果相等则继续自加，跳过下一个元素；如果果nums1[index1]<nums2[index2]，则index1自加；否则，index2自加。
@@ -4700,8 +4702,9 @@ public class Solution {
     }
 }
 ```
+## 京东
 
-#### 京东面试题：给定一个树，令树中节点值等于其子结构中的节点数总和。
+#### 面试题：给定一个树，令树中节点值等于其子结构中的节点数总和。
 ```python
 class TreeNode{
     TreeNode left = null;
@@ -4722,7 +4725,7 @@ public class Solution {
 }
 ```
 
-#### 京东面试题：从原点出发，每次投骰子，根据点数m每次移动m步，问如何求得经过n时的概率？（类似斐波那契数列解法）
+#### 面试题：从原点出发，每次投骰子，根据点数m每次移动m步，问如何求得经过n时的概率？（类似斐波那契数列解法）
 
 解题思路：用数组保存前6次的概率。
 
@@ -4765,14 +4768,165 @@ public class Solution {
 }
 ```
 
-#### 深信服面试题：第K大数？
+#### 深信服面试题
+#### 第K大数？
 
 解题思路：partition，时间复杂度O(n)，利用最小堆,时间复杂度O(nlogk)。
 
-一个整数可以最多由多少个素数累加等于？
+#### 一个整数可以最多由多少个素数累加等于？
 
 解题思路：一个整数可以由一个偶数加一个奇数表示。所以利用m个2和0或1个3组成。
 
+#### 今日头条面试
+
+#### 一面：给定数组A，找到A[i]-A[j]最大的值，其中i<j。（DP）
+
+解题思路：每次遍历时，首先更新最大差值并且更新前i个元素的最大值。
+```python
+public class MaxDiff {
+    public static int cmpMaxDiff(int[] nums){
+        int max_diff = Integer.MIN_VALUE;
+        int max_val = nums[0];
+        for(int i = 1; i < nums.length; i++){
+            max_diff = max_diff > max_val - nums[i] ? max_diff : max_val - nums[i];
+            max_val = max_val > nums[i] ? max_val : nums[i];
+        }
+        return max_diff;
+    }
+}
+```
+#### 二面：给定数组A[4,5,1,2,3]，如何找到指定数字对应的下标？(利用二分查找找到旋转点，在利用二分查找指定数字对应的下标)
+
+解题思路：二分查找。每次查找时，如果A[mid]等于target则返回mid。如果不相等，分情况讨论。我们可以根据A[left]与A[mid]或者A[mid]与A[right]做比较，可以判断哪一边部分有序，判断出某一边部分有序后，在将target与该部分有序的区间进行比较，如果在此区间则进入该区间进行二分查找，如果不是则在另一边无序的区间进行查找。
+
+```python
+public class FindTargetInRotationArray {
+    public static int findTarget(int[] nums, int target){
+        int left = 0;
+        int right = nums.length - 1;
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            if(nums[mid] == target){
+                return mid;
+            }
+            if(nums[mid] >= nums[left]){
+                if(nums[left] <= target && nums[mid] > target)
+                    right = mid - 1;
+                else
+                    left = mid  + 1;
+            }else{
+                if(nums[mid] < target && nums[right] >= target)
+                    left = mid + 1;
+                else
+                    right = mid - 1;
+            }
+        }
+        return -1;
+    }
+}
+```
+#### 三面：给定数组A和B，数组内的元素不能对比，数组间的元素可以任意比较，找出A数组与B数组内元素一一对应的关系。(快排+二叉搜索树)
+
+解题思路：构建二叉树，二叉树保存区间的left，mid，right。每次遍历A[i]元素时，遍历二叉树的节点，比较A[i]与B[mid]的关系，判断其搜索方向。直到遇到没有子节点时，则在此区间[left,mid-1]或者[mid+1,right]利用partition使其内部部分有序，每次比较A[i]与B[j]，其中j是partition(nums,left,right,target)函数返回的切分点，直到相等时，构造新的叶子节点。
+
+先构建根节点，再根据根节点和paritition方法构造二叉搜索树。
+
+```python
+public class MathEleInTwoArray {
+    static class TreeNode{
+        int mid;
+        int start;
+        int end;
+        TreeNode left;
+        TreeNode right;
+        public TreeNode(int start, int end, int mid){
+            this.start = start;
+            this.end = end;
+            this.mid = mid;
+        }
+    }
+    public static int partition(int[] nums, int left, int right, int ele){
+        int i = left - 1;
+        int j = right + 1;
+        int idx = -1;
+        int tmp;
+        while (i < j){
+            while (ele > nums[++i]) if(i >= right) break;
+            while (nums[--j] > ele) if(j <= left) break;
+            if(i >= j){
+                break;
+            }
+            if(nums[j] == ele)
+                idx = i;
+            tmp = nums[j];
+            nums[j] = nums[i];
+            nums[i] = tmp;
+        }
+        if(idx != -1){
+            tmp = nums[j];
+            nums[j] = nums[idx];
+            nums[idx] = tmp;
+        }
+        return j;
+    }
+    public static int sort(int[] nums, int left, int right, int target){
+        int j = partition(nums, left, right, target);
+
+        if(nums[j] == target)
+            return j;
+        if(nums[j] > target)
+            return sort(nums, left, j - 1, target);
+        return sort(nums, j + 1, right, target);
+    }
+    public static void searchTree(TreeNode node, int[] nums, int target){
+
+        if(node == null)
+            return;
+        int mid = node.mid;
+        int start = node.start;
+        int end = node.end;
+        if(nums[mid] > target){
+            if(node.left == null){
+                node.left = new TreeNode(start, end, sort(nums, start, mid-1, target));
+                System.out.println(nums[node.left.mid]+":"+target);
+            }else
+                searchTree(node.left, nums, target);
+        }else{
+            if(node.right == null){
+                node.right = new TreeNode(start, end, sort(nums, mid+1, end, target));
+                System.out.println(nums[node.right.mid]+":"+target);
+            } else
+                searchTree(node.right, nums, target);
+        }
+    }
+    public static void matchEle(int[] A, int[] B){
+        int j = sort(B, 0, A.length - 1, A[0]);
+        TreeNode root = new TreeNode(0, A.length - 1, j);
+        System.out.println(A[0]+":"+B[j]);
+        for(int i = 1; i < A.length; i++){
+            searchTree(root, B, A[i]);
+        }
+    }
+    public static void main(String[] args){
+        int[] B = {5,10,7,6,8,9,2,3,1,4,0,-10};
+        int[] A = {9,7,8,6,10,3,2,4,5,1,0,-10};
+        matchEle(A, B);
+        System.out.println();
+        for(int i = 0; i < B.length; i++){
+            System.out.print(B[i] + " ");
+        }
+    }
+}
+```
+
+#### 机试题2：合并区间。
+
+解题思路：56. Merge Intervals
+
+
+#### 概率题：在圆上任意取三点，构成锐角三角形的概率是多少？
+
+答案：1/4
 
 # 实习offer
 蘑菇街、阿里、华为
