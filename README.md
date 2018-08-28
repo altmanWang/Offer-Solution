@@ -4648,6 +4648,55 @@ class NumArray {
     }
 }
 ```
+#### 171. Excel Sheet Column Number
+
+解题思路：26进制
+```python
+class Solution {
+    public int titleToNumber(String s) {
+        if(s == null || s.length() == 0)
+            return 0;
+        char[] chars = s.toCharArray();
+        int res = 0;
+        for(int i = 0; i < chars.length; i++){
+            res = res * 26 + (chars[i] - 'A' + 1);
+        }
+        return res;
+    }
+}
+```
+
+#### 29. Divide Two Integers
+
+Given two integers dividend and divisor, divide two integers without using multiplication, division and mod operator.
+
+Return the quotient after dividing dividend by divisor.
+
+The integer division should truncate toward zero.
+
+解题思路：该题目不准使用乘法、除法或者取余计算。故采用减法的思路计算dividend包含多少个divisor，但这种做法时间复杂度为O(n)。
+
+所以可以采用2分法加速计算，可以对divisor进行左移相当于乘2，直到它比被除数还大为止，加倍的同时，记录下cnt，将被除数减去加倍后的值。注意，cnt应该也同时保持按2倍的速度增加。
+
+```python
+class Solution {
+    public int divide(int dividend, int divisor) {
+        if(dividend == Integer.MIN_VALUE && (divisor == 1 || divisor == -1)){
+            return divisor == 1 ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        }
+        long a = Math.abs((long)dividend);
+        long b = Math.abs((long)divisor);
+        int res = 0;
+        while(a >= b){
+            for(long tmp = b, cnt = 1; a >= tmp; tmp = tmp << 1, cnt = cnt << 1){
+                a -=tmp;
+                res +=cnt;
+            }
+        }
+        return (dividend > 0) ^ (divisor > 0) ? -res : res;
+    }
+}
+```
 # 公司面试题
 
 ## 蘑菇街
