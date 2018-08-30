@@ -1865,7 +1865,7 @@ def quickSort(nums):
     quickSort(nums,0,len(nums)-1)
 def quickSort(nums,start,end):
     if start >= end:
-        return;
+        return
     j = partition(nums, start, end)
     quickSort(nums, start, j-1)
     quickSort(nums, j+1, end)
@@ -4486,6 +4486,41 @@ function Dijkstra(G, w, s)
                     d[v] := d[u] + w(u,v)         // 更新路径长度到更小的那个和值。
                     previous[v] := u              // 纪录前趋顶点
 ```
+
+#### 209. Minimum Size Subarray Sum
+Given an array of n positive integers and a positive integer s, find the minimal length of a contiguous subarray of which the sum ≥ s. If there isn't one, return 0 instead.
+
+Follow up:
+If you have figured out the O(n) solution, try coding another solution of which the time complexity is O(n log n). 
+
+解题思路：
+O（n），利用外部空间，双向链表，实时保存遍历的连续元素，通过一个值保存双向链表的总和，通过该值与目标值比对，判断是否弹出链表第一个元素，通过这种方法可以动态的保存连续元素大于目标值的连续子数组。通过每次对比链表的大小，即可找到长度最小的连续子数组。
+```python
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        LinkedList<Integer> lists =new LinkedList<Integer>();
+        int cnt = 0;
+        int min_size = Integer.MAX_VALUE;
+        for(int i = 0; i < nums.length; i++){
+            lists.addLast(nums[i]);
+            cnt += nums[i];
+            if(cnt >= s){
+                while(lists.size() >=1 && cnt- lists.getFirst() >= s){
+                    cnt -= lists.removeFirst();
+                }
+                min_size = Math.min(min_size, lists.size());
+            }
+
+        }
+        if(min_size == Integer.MAX_VALUE)
+            return 0;
+        return min_size;
+    }
+}
+```
+O(nlogn）：还没想出来。。。
 
 #### 线段树
 树上的每个节点对应于一个线段(还是叫“区间”更容易理解，区间的起点和终点通常为整数)，同一层的节点所代表的区间，相互不会重叠。叶子节点的区间是单位长度，不能再分了。
