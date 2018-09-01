@@ -4520,8 +4520,42 @@ class Solution {
     }
 }
 ```
-O(nlogn）：还没想出来。。。
+O(nlogn）：利用数组存储给定数组的累计和。通过遍历的方式，对起始点和终点利用二分查找的方式找到子数组累积和刚好大于或者等于目标数。根据返回子数组的大小，实时更新长度最小的连续子数组长度。
+```python
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int[] sum = new int[nums.length + 1];
+        sum[0] = 0;
+        for(int i = 1; i < sum.length; i++){
+            sum[i] = sum[i - 1] + nums[i - 1];
+        }
+        if(sum[sum.length - 1] < s)
+            return 0;
+        int tmp;
+        int res = nums.length;
+        for(int i = 0; i < nums.length; i++){
+            tmp = binarySearch(sum, i,i, nums.length, s);
+            if(tmp == 0)
+                continue;
+            res = Math.min(res, tmp - i);
+        }
+        return res;
+    }
+    public int binarySearch(int[] sums, int idx, int left, int right, int target){
+        if(left > right)
+            return 0;
+        int mid = left + (right - left) / 2;
+        if(sums[mid] - sums[idx] == target || (sums[mid] - sums[idx] > target && sums[mid - 1] - sums[idx] < target))
+            return mid;
+        if(sums[mid] - sums[idx] > target)
+            return binarySearch(sums, idx, left, mid - 1, target);
+        return binarySearch(sums, idx, mid + 1, right, target);
 
+    }
+}
+```
 #### 线段树
 树上的每个节点对应于一个线段(还是叫“区间”更容易理解，区间的起点和终点通常为整数)，同一层的节点所代表的区间，相互不会重叠。叶子节点的区间是单位长度，不能再分了。
 
@@ -5018,4 +5052,4 @@ public class MathEleInTwoArray {
 蘑菇街、阿里、华为
 
 # 秋招offer
-深信服、科大讯飞、京东AI
+深信服、科大讯飞、京东AI、阿里巴巴搜索部门
