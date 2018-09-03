@@ -106,6 +106,25 @@ class Solution {
 
 解题思路：**通过具体的例子找到其中的规律**。从一个具体的二维数组的右上角开始分析，就能找到查找的规律，从而解决问题的突破口。
 
+letcode： 74. Search a 2D Matrix
+```python
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if(matrix == null || matrix.length == 0)
+            return false;
+        int i = 0, j = matrix[0].length - 1;
+        while(i < matrix.length && j >=0){
+            if(matrix[i][j] == target)
+                return true;
+            if(matrix[i][j] > target)
+                j -= 1;
+            else
+                i +=1;
+        }
+        return false;
+    }
+}
+```
 ### 2.3.2字符串
 
 
