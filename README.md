@@ -41,7 +41,55 @@ public class Solution {
 }
 ```
 
+leetcode 287. Find the Duplicate Number：
+Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), prove that at least one duplicate number must exist. Assume that there is only one duplicate number, find the duplicate one.
 
+解题思路：在不使用外部空间，可以利用数组的特性。因为元素时1~n，可以利用nums[i]==nums[nums[i]-1]，将数组排序。最后再遍历，即可找到重复元素。
+
+```python
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int swp = 0;
+        for(int i = 0; i < nums.length; i++){
+            while(nums[i] != nums[nums[i] - 1]){
+                swp = nums[nums[i] - 1];
+                nums[nums[i] - 1] = nums[i];
+                nums[i] = swp;
+            }
+        }
+        int res = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] - 1 != i){
+                res = nums[i];
+                break;
+            }
+        }
+        return res;
+    }
+}
+```
+
+解题思路（快慢指针方法）：将数组抽象为一个带有环的链表，环是由重复元素组成，所以利用快慢指针首先找到环，当找到环时再将慢指针指向圆点，在找到环的入口，即可找到重复的元素。
+```python
+class Solution {
+    public int findDuplicate(int[] nums) {
+        if(nums.length<2) return -1;
+        int slow = 0, fast = 0;
+        while(true){
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+            if(slow==fast){
+                fast = 0;
+                while(fast!=slow){
+                    fast = nums[fast];
+                    slow = nums[slow];
+                }
+                return fast;
+            }
+        }
+    }
+}
+```
 ##### 448. Find All Numbers Disappeared in an Array（数组）
 Given an array of integers where 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
 
