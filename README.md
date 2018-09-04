@@ -4900,6 +4900,38 @@ class Solution {
     }
 }
 ```
+#### 845. Longest Mountain in Array(动态规划)
+找到最长子数组--先单调递增再单调递减。
+
+解题思路：分别遍历两次，第一次从左到右计算单调区间；第二次从右到左计算单调递增区间。最后一次同时遍历该两数组，当数组元素都不为0时，即找到峰顶，计算两个单调区间的长度即可。
+
+```python
+class Solution {
+    public int longestMountain(int[] A) {
+        if(A == null || A.length < 3)
+            return 0;
+        int[] preOrder = new int[A.length];
+        int[] postOrder = new int[A.length];
+        for(int i = 1; i < A.length; i++){
+            if(A[i] > A[i-1])
+                preOrder[i] = preOrder[i-1] + 1 ;
+        }
+        for(int i = A.length - 2; i >=0; i--){
+            if(A[i] > A[i+1])
+                postOrder[i] = postOrder[i+1] + 1;
+        }
+        int res = 0;
+        for(int i = 0; i < A.length; i++){
+            if(preOrder[i]  !=0 && postOrder[i] != 0)
+                res = Math.max(res, preOrder[i] + postOrder[i] + 1);
+        }
+        return res;
+    }
+}
+```
+
+
+
 # 公司面试题
 
 ## 蘑菇街
