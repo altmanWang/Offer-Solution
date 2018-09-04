@@ -782,6 +782,73 @@ public class Solution {
  ```
 
 
+leetcode：141. Linked List Cycle(判断是否有环)
+```python
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if(head == null || head.next == null)
+            return false;
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while(slow != fast){
+            if(fast.next == null || fast.next.next == null)
+                return false;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return true;
+
+    }
+}
+ ```
+ 
+leetcode: 142. Linked List Cycle II(找到环的入口)
+```python
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if(head == null || head.next == null)
+            return null;
+        ListNode slow = head;
+        ListNode fast = head;
+        do{
+            if(fast.next == null || fast.next.next == null)
+                return null;
+            slow = slow.next;
+            fast = fast.next.next;
+        }while(slow != fast);
+        
+        slow = head;
+        while(slow != fast){
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return slow;
+    }
+}
+ ```
+
 #### 面试题：24 反转链表（多指针，3个指针，206. Reverse Linked List）
 **题目**:定义一个函数，输入一链表的头节点，反转该链表并输出反转后链表的头节点。
 
