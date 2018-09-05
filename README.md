@@ -42,6 +42,7 @@ public class Solution {
 ```
 
 leetcode 287. Find the Duplicate Number：
+
 Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), prove that at least one duplicate number must exist. Assume that there is only one duplicate number, find the duplicate one.
 
 解题思路：在不使用外部空间，可以利用数组的特性。因为元素时1~n，可以利用nums[i]==nums[nums[i]-1]，将数组排序。最后再遍历，即可找到重复元素。
@@ -714,7 +715,78 @@ public class Solution {
     }
 }
  ```
+ 
+leetcode：83. Remove Duplicates from Sorted List
+```python
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if(head == null)
+            return head;
+        ListNode index = head;
+        while(index !=null && index.next!=null){
+            if(index.val == index.next.val)
+                index.next = index.next.next;
+            else
+                index =index.next;
+        }
+        return head;
+    }
+}
+ ```
+ 
+leetcode：82. Remove Duplicates from Sorted List II（将所有的重复元素都删除）
 
+Example 1：
+
+Input: 1->2->3->3->4->4->5
+
+Output: 1->2->5
+```python
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if(head == null || head.next == null)
+            return head; 
+        ListNode cur = new ListNode(-1);
+        ListNode pre = cur;
+        cur.next = head;
+        ListNode fast = cur.next;
+        while(fast != null){
+            if(fast.next != null && fast.val == fast.next.val){
+                ListNode tmp = fast.next;
+                while(tmp!=null && tmp.val == fast.val)
+                    tmp = tmp.next;
+                fast = tmp;
+            }else{
+                cur.next = fast;
+                cur = cur.next;
+                fast = fast.next;
+            }
+        }
+        if(fast == null)
+            cur.next = fast;
+        return pre.next;
+        
+    }
+}
+ ``` 
+ 
+ 
 #### 面试题：19 正则表达式匹配
 **题目**:请实现一个函数用来匹配包括'.'和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。
 例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配.
@@ -783,6 +855,7 @@ public class Solution {
 
 
 leetcode：141. Linked List Cycle(判断是否有环)
+
 ```python
 /**
  * Definition for singly-linked list.
@@ -814,6 +887,7 @@ public class Solution {
  ```
  
 leetcode: 142. Linked List Cycle II(找到环的入口)
+
 ```python
 /**
  * Definition for singly-linked list.
