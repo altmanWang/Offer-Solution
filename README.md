@@ -5290,8 +5290,49 @@ public class MathEleInTwoArray {
 
 #### 概率题：在圆上任意取三点，构成锐角三角形的概率是多少？
 
+
+#### 欢聚时代
+#### 一面：剑指offer30：包含min函数的栈，利用额外数组
+
 答案：1/4
 
+#### 二面：给定一个有序的数组，计算绝对值不等的元素数目。时间复杂读O(n)，空间复杂度O(1)。
+例如：
+输入[-2,0,1,2]
+输出3
+解释：因为-2和2绝对值相等，所以绝对值不等的元素数目为3，（-2,0,1）或者（0,1,2）
+
+解题思路：由于是有序的，可以设置两个指针，分别指向数组的头部和尾部，通过比对两个指针指向的元素，改变两个指针的移动。
+
+```python
+public class Solution{
+    public int findNumAbsEqu(int[] nums){
+        if(nums == null || nums.length == 0)
+            return 0;
+        int left = 0;
+        int right = nums.length - 1;
+        int cnt = nums.length;
+        while(left < right){
+            int tmpL = nums[left] < 0 ? -nums[left] : nums[left];
+            int tmpR = nums[right] < 0 ? -nums[right] : nums[right];
+            if(tmpL > tmpR){
+                left +=1;
+            }else if(tmpR > tmpL){
+                right -=1;
+            }else{
+                left +=1;
+                right -=1;
+                cnt -=1;
+            }
+        }
+        return cnt;
+    }
+    public static void main(String[] args){
+        int[] nums = {-2,0,1,2};
+        System.out.println(new Solution().findNumAbsEqu(nums));
+    }
+}
+```
 # 实习offer
 蘑菇街、阿里、华为
 
