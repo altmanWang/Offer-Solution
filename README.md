@@ -147,6 +147,74 @@ class Solution {
 }
 ```
 
+#### 217. Contains Duplicate
+Given an array of integers, find if the array contains any duplicates.
+
+Your function should return true if any value appears at least twice in the array, and it should return false if every element is distinct.
+
+解题思路：可以先排序在遍历或者用额外空间辅助。注意这道题元素并不是在1~n之间。
+```python
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return false;
+        HashSet<Integer> sets = new HashSet<Integer>();
+        for(int i = 0; i < nums.length; i++){
+            if(sets.contains(nums[i]))
+                return true;
+            sets.add(nums[i]);
+        }
+        return false;
+    }
+}
+```
+
+#### 219. Contains Duplicate II
+Given an array of integers and an integer k, find out whether there are two distinct indices i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j is at most k.
+
+解题思路：利用HashMap存储nums[i]与i，每次遍历时，先判断HashMap中是否还有nums[i]并且下标差值小于等于k，则返回true。否则在HashMap中添加nums[i]与i。
+```python
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        if(nums == null || nums.length == 0)
+            return false;
+        HashMap<Integer, Integer> maps = new HashMap<Integer, Integer>();
+        for(int i = 0; i < nums.length; i++){
+            if(maps.containsKey(nums[i]) && k >= i - maps.get(nums[i]))
+                return true;
+            maps.put(nums[i], i);
+        }
+        return false;
+
+    }
+}
+```
+
+#### 220. Contains Duplicate III
+Given an array of integers, find out whether there are two distinct indices i and j in the array such that the absolute difference between nums[i] and nums[j] is at most t and the absolute difference between i and j is at most k.
+
+解题思路：顺序扫描数组，每次仅保存size=k的滑动窗口，并用TreeSet存储窗口中现有的元素，加入新元素后判断是否与集合中元素满足difference<=t的条件。注意窗口的更新，如何维护treeset。
+
+TreeSet具有根据value快速查找的能力，若新加入的元素为nums[i]，
+则treeset可以通过floor与ceiling在O(log k)的时间复杂度下查找最相近的元素。
+```python
+class Solution {
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        if(nums == null || nums.length == 0)
+            return false;
+        TreeSet<Long> set = new TreeSet<Long>();
+        for(int i = 0; i < nums.length; i++){
+            if((set.floor((long)nums[i]) != null && nums[i] - set.floor((long)nums[i]) <= t) ||
+              (set.ceiling((long)nums[i]) != null && set.ceiling((long)nums[i]) - nums[i] <= t ))
+                return true;
+            set.add((long)nums[i]);
+            if(i >= k)
+               set.remove((long)nums[i - k]);
+        }
+        return false;
+    }
+}
+```
 
 
 ##### 面试题4：二维数组中的查找
@@ -5337,4 +5405,4 @@ public class Solution{
 蘑菇街、阿里、华为
 
 # 秋招offer
-深信服、科大讯飞、京东AI、阿里巴巴搜索部门
+深信服研发、科大讯飞大数据部门、京东AI、阿里巴巴搜索部门、欢聚时代推荐搜索、华为算法
