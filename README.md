@@ -5076,6 +5076,54 @@ class Solution {
 }
 ```
 
+#### 61. Rotate List
+
+Given a linked list, rotate the list to the right by k places, where k is non-negative.
+
+解题思路：题目要求将列表向右移动k位。若k是列表长度的整数倍，则列表不发生任何变化，所以我们先确定列表的长度len，让后用len对k取余从而确定需要向右移动多少位d。然后利用快慢指针，快指针先走d步，然后快慢指针共同向右移动，将快指针指向的元素下一位指向列表头，慢指针下一位元素对应的是新的列表起始节点，并且令满指针下一位指向空，以免造成链表成环。
+
+```python
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if(head == null || head.next == null)
+            return head;
+        int len = getListLength(head);
+        k = k % len;
+        if(k == 0)
+            return head;
+        ListNode slowIdx = head;
+        ListNode fastIdx = head;
+        for(int i = 0; i < k; i++){
+            fastIdx =fastIdx.next;
+        }
+        while(fastIdx.next != null){
+            slowIdx = slowIdx.next;
+            fastIdx = fastIdx.next;
+        }
+        ListNode newHead = slowIdx.next;
+        fastIdx.next = head;
+        slowIdx.next = null;
+        return newHead;  
+    }
+    public int getListLength(ListNode head){
+        ListNode index = head;
+        int cnt = 0;
+        while(index != null){
+            index = index.next;
+            cnt +=1;
+        }
+        return cnt;
+    }
+}
+```
 
 
 # 公司面试题
