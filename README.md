@@ -5125,6 +5125,77 @@ class Solution {
 }
 ```
 
+#### 112. Path Sum
+
+解题思路：递归
+```python
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if(root == null)
+            return false;
+        return hasPathSum(root, sum, 0);
+    }
+    public boolean hasPathSum(TreeNode node, int target, int sum){
+        if(node == null)
+            return false;
+
+        if(node.left == null && node.right == null && node.val + sum == target)
+            return true;
+        if(hasPathSum(node.left, target, sum + node.val))
+            return true;
+        if(hasPathSum(node.right, target, sum + node.val))
+            return true;
+        return false;
+    }
+}
+```
+
+#### 113. Path Sum II
+
+解题思路：递归，先序遍历。用一个额外空间保存遍历二叉树的顺序，每次遍历一个节点时，先将其加入到列表中，当遍历其左节点和右节点后，将其删除。
+```python
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        if(root == null)
+            return res;
+        pathSum(root, sum, 0, new LinkedList<Integer>(), res);
+        return res;
+    }
+    public void pathSum(TreeNode node, int target, int sum, LinkedList<Integer> path, List<List<Integer>> res){
+        if(node == null)
+            return;
+        if(node.left == null && node.right == null && sum + node.val == target){
+            path.addLast(node.val);
+            res.add(new LinkedList<Integer>(path));
+            path.removeLast();
+            return;
+        }
+        path.addLast(node.val);
+        pathSum(node.left, target, sum + node.val, path, res);
+        pathSum(node.right, target, sum + node.val, path, res);
+        path.removeLast(); 
+    }
+}
+```
 
 # 公司面试题
 
@@ -5246,7 +5317,7 @@ public class Solution {
 }
 ```
 
-#### 深信服面试题
+## 深信服面试题
 #### 第K大数？
 
 解题思路：partition，时间复杂度O(n)，利用最小堆,时间复杂度O(nlogk)。
@@ -5407,7 +5478,7 @@ public class MathEleInTwoArray {
 #### 概率题：在圆上任意取三点，构成锐角三角形的概率是多少？
 
 
-#### 欢聚时代
+## 欢聚时代
 #### 一面：剑指offer30：包含min函数的栈，利用额外数组
 
 答案：1/4
